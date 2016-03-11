@@ -8,7 +8,7 @@ import org.iplantc.de.client.models.apps.AppCategory;
 import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.ListView;
 
 /**
  * This is the primary view for the Apps module. It is a composite of all other views within the
@@ -36,7 +36,7 @@ public interface AppsView extends IsWidget,
 
         void go(HasOneWidget container, HasId selectedAppCategory, HasId selectedApp);
 
-        Grid<App> getAppsGrid();
+        ListView<App, App> getAppsGrid();
 
         Presenter hideAppMenu();
 

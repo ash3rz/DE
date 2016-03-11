@@ -1,8 +1,10 @@
 .apps_icon {
+	cursor: pointer;
 	float: left;
 }
 
 .disabled_unrate_button {
+	cursor: pointer;
 	display: none;
 	float: left;
 }

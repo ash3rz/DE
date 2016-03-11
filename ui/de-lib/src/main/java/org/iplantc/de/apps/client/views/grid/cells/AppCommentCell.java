@@ -1,15 +1,17 @@
 package org.iplantc.de.apps.client.views.grid.cells;
 
-import org.iplantc.de.apps.client.events.selection.AppCommentSelectedEvent;
-import org.iplantc.de.client.models.apps.App;
-import org.iplantc.de.theme.base.client.apps.AppsMessages;
-
 import static com.google.gwt.dom.client.BrowserEvents.CLICK;
 import static com.google.gwt.dom.client.BrowserEvents.MOUSEOUT;
 import static com.google.gwt.dom.client.BrowserEvents.MOUSEOVER;
 
+import org.iplantc.de.apps.client.events.selection.AppCommentSelectedEvent;
+import org.iplantc.de.client.models.apps.App;
+import org.iplantc.de.theme.base.client.apps.AppsMessages;
+
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -21,7 +23,22 @@ import com.google.gwt.user.client.Event;
 /**
  * @author jstroot
  */
-public class AppCommentCell extends AbstractCell<App> {
+public class AppCommentCell extends AbstractCell<App> implements HasCell<App, App> {
+
+    @Override
+    public Cell<App> getCell() {
+        return this;
+    }
+
+    @Override
+    public FieldUpdater<App, App> getFieldUpdater() {
+        return null;
+    }
+
+    @Override
+    public App getValue(App object) {
+        return object;
+    }
 
     public interface AppCommentCellAppearance {
         void render(Context context, App value, SafeHtmlBuilder sb);

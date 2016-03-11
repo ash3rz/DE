@@ -12,12 +12,22 @@ import org.iplantc.de.apps.client.events.selection.AppNameSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
+import org.iplantc.de.apps.client.views.grid.cells.AppCommentCell;
+import org.iplantc.de.apps.client.views.grid.cells.AppHyperlinkCell;
+import org.iplantc.de.apps.client.views.grid.cells.AppInfoCell;
+import org.iplantc.de.apps.client.views.grid.cells.AppIntegratorCell;
+import org.iplantc.de.apps.client.views.grid.cells.AppRatingCell;
+import org.iplantc.de.apps.client.views.grid.cells.AppTileCell;
 import org.iplantc.de.apps.shared.AppsModule;
 import org.iplantc.de.client.models.apps.App;
+import org.iplantc.de.theme.base.client.apps.grid.AppsListViewCellDefaultAppearance;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
@@ -25,13 +35,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
+import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.grid.ColumnModel;
-import com.sencha.gxt.widget.core.client.grid.Grid;
-import com.sencha.gxt.widget.core.client.grid.GridView;
+import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
-import com.sencha.gxt.widget.core.client.tips.QuickTip;
+
+import java.util.List;
 
 /**
  * Created by jstroot on 3/5/15.
@@ -39,42 +49,88 @@ import com.sencha.gxt.widget.core.client.tips.QuickTip;
  * @author jstroot
  */
 public class AppsGridViewImpl extends ContentPanel implements AppsGridView,
-                                                              SelectionChangedEvent.SelectionChangedHandler<App> {
+                                                              SelectionChangedEvent.SelectionChangedHandler<App>,
+                                                              HasHandlers {
+    @Override
+    public ListView<App, App> getGrid() {
+        return null;
+    }
+
+    @Override
+    public void setSearchPattern(String searchPattern) {
+
+    }
+
     interface AppsGridViewImplUiBinder extends UiBinder<Widget, AppsGridViewImpl> { }
 
     private static final AppsGridViewImplUiBinder ourUiBinder = GWT.create(AppsGridViewImplUiBinder.class);
 
-    @UiField(provided = true) final ListStore<App> listStore;
-    @UiField ColumnModel cm;
-    @UiField Grid<App> grid;
-    @UiField GridView<App> gridView;
-    private final AppColumnModel acm; // Convenience class
+    ListStore<App> listStore;
+    @UiField ListView<App, App> grid;
 
     private final AppsGridAppearance appearance;
-    private String searchRegexPattern;
+    private AppsListViewCellDefaultAppearance<App> cellAppearance;
 
     @Inject
     AppsGridViewImpl(final AppsGridView.AppsGridAppearance appearance,
-                     @Assisted final ListStore<App> listStore) {
+                     @Assisted final ListStore<App> listStore,
+                     AppsListViewCellDefaultAppearance<App> cellAppearance) {
         this.appearance = appearance;
         this.listStore = listStore;
+        this.cellAppearance = cellAppearance;
 
         setWidget(ourUiBinder.createAndBindUi(this));
-        this.acm = (AppColumnModel) cm;
-        grid.getSelectionModel().addSelectionChangedHandler(this);
 
-        new QuickTip(grid).getToolTipConfig().setTrackMouse(true);
+        grid.getSelectionModel().addSelectionChangedHandler(this);
+        List<HasCell<App, ?>> cellList = Lists.newArrayList();
+        AppHyperlinkCell appNameCell = new AppHyperlinkCell();
+        AppInfoCell appInfoCell = new AppInfoCell();
+        AppCommentCell appCommentCell = new AppCommentCell();
+//        AppFavoriteCell appFavoriteCell = new AppFavoriteCell();
+        AppRatingCell appRatingCell = new AppRatingCell();
+        AppIntegratorCell appIntegratorCell = new AppIntegratorCell();
+        appNameCell.setHasHandlers(this);
+        appInfoCell.setHasHandlers(this);
+        appCommentCell.setHasHandlers(this);
+//        appFavoriteCell.setHasHandlers(this);
+        appRatingCell.setHasHandlers(this);
+        cellList.add(appNameCell);
+        cellList.add(appInfoCell);
+        cellList.add(appCommentCell);
+//        cellList.add(appFavoriteCell);
+        cellList.add(appRatingCell);
+        cellList.add(appIntegratorCell);
+        AppTileCell appTileCell = new AppTileCell(cellList);
+        grid.setCell(appTileCell);
     }
 
-    //<editor-fold desc="Handler Registrations">
+    @UiFactory ListView<App, App> createListView() {
+        return new ListView<App, App>(listStore, new IdentityValueProvider<App>(), cellAppearance);
+    }
+
+    @Override
+    public HandlerRegistration addAppNameSelectedEventHandler(AppNameSelectedEvent.AppNameSelectedEventHandler handler) {
+        return addHandler(handler, AppNameSelectedEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addAppSelectionChangedEventHandler(AppSelectionChangedEvent.AppSelectionChangedEventHandler handler) {
+        return addHandler(handler, AppSelectionChangedEvent.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addAppInfoSelectedEventHandler(AppInfoSelectedEvent.AppInfoSelectedEventHandler handler) {
+        return addHandler(handler, AppInfoSelectedEvent.TYPE);
+    }
+
     @Override
     public HandlerRegistration addAppCommentSelectedEventHandlers(AppCommentSelectedEvent.AppCommentSelectedEventHandler handler) {
-        return acm.addAppCommentSelectedEventHandlers(handler);
+        return addHandler(handler, AppCommentSelectedEvent.TYPE);
     }
 
     @Override
     public HandlerRegistration addAppFavoriteSelectedEventHandlers(AppFavoriteSelectedEvent.AppFavoriteSelectedEventHandler handler) {
-        return acm.addAppFavoriteSelectedEventHandlers(handler);
+        return addHandler(handler, AppFavoriteSelectedEvent.TYPE);
     }
 
     @Override
@@ -83,34 +139,13 @@ public class AppsGridViewImpl extends ContentPanel implements AppsGridView,
     }
 
     @Override
-    public HandlerRegistration addAppInfoSelectedEventHandler(AppInfoSelectedEvent.AppInfoSelectedEventHandler handler) {
-        return acm.addAppInfoSelectedEventHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addAppNameSelectedEventHandler(AppNameSelectedEvent.AppNameSelectedEventHandler handler) {
-        return acm.addAppNameSelectedEventHandler(handler);
-    }
-
-    @Override
     public HandlerRegistration addAppRatingDeselectedHandler(AppRatingDeselected.AppRatingDeselectedHandler handler) {
-        return acm.addAppRatingDeselectedHandler(handler);
+        return addHandler(handler, AppRatingDeselected.TYPE);
     }
 
     @Override
     public HandlerRegistration addAppRatingSelectedHandler(AppRatingSelected.AppRatingSelectedHandler handler) {
-        return acm.addAppRatingSelectedHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addAppSelectionChangedEventHandler(AppSelectionChangedEvent.AppSelectionChangedEventHandler handler) {
-        return addHandler(handler, AppSelectionChangedEvent.TYPE);
-    }
-    //</editor-fold>
-
-    @Override
-    public Grid<App> getGrid() {
-        return grid;
+        return addHandler(handler, AppRatingSelected.TYPE);
     }
 
     @Override
@@ -120,7 +155,7 @@ public class AppsGridViewImpl extends ContentPanel implements AppsGridView,
 
         if (!event.getAppCategorySelection().isEmpty()) {
             // Reset Search
-            acm.setSearchRegexPattern("");
+            setSearchPattern("");
         }
     }
 
@@ -142,20 +177,8 @@ public class AppsGridViewImpl extends ContentPanel implements AppsGridView,
     }
 
     @Override
-    public void setSearchPattern(final String searchPattern) {
-        this.searchRegexPattern = searchPattern;
-        acm.setSearchRegexPattern(searchRegexPattern);
-    }
-
-    @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
         grid.ensureDebugId(baseID + AppsModule.Ids.APP_GRID);
-        acm.ensureDebugId(baseID + AppsModule.Ids.APP_GRID);
-    }
-
-    @UiFactory
-    ColumnModel<App> createColumnModel() {
-        return new AppColumnModel(appearance);
     }
 }

@@ -92,7 +92,7 @@ public class AdminAppsGridImpl extends ContentPanel implements AdminAppsGridView
 
     @Override
     public void onSelectionChanged(SelectionChangedEvent<App> event) {
-        fireEvent(new AppSelectionChangedEvent(event.getSelection()));
+//        fireEvent(new AppSelectionChangedEvent(event.getSelection()));
     }
 
     @UiFactory

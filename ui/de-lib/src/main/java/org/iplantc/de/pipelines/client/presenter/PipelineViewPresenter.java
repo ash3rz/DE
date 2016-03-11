@@ -128,7 +128,7 @@ public class PipelineViewPresenter implements Presenter, PipelineView.Presenter,
         appSelectView = new AppSelectionDialog();
         appSelectView.setPresenter(this);
 
-        initAppsGridDragHandler(appsPresenter.getAppsGrid());
+//        initAppsGridDragHandler(appsPresenter.getAppsGrid());
         initPipelineBuilderDropHandler(view.getBuilderDropContainer());
 
         // TODO Possibly inject with annotation to replace with a different toolbar impl

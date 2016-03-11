@@ -3,7 +3,16 @@ package org.iplantc.de.apps.client;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.BeforeAppSearchEvent;
-import org.iplantc.de.apps.client.events.selection.*;
+import org.iplantc.de.apps.client.events.selection.AppCategorySelectionChangedEvent;
+import org.iplantc.de.apps.client.events.selection.AppCommentSelectedEvent;
+import org.iplantc.de.apps.client.events.selection.AppFavoriteSelectedEvent;
+import org.iplantc.de.apps.client.events.selection.AppInfoSelectedEvent;
+import org.iplantc.de.apps.client.events.selection.AppNameSelectedEvent;
+import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
+import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
+import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
+import org.iplantc.de.apps.client.events.selection.DeleteAppsSelected;
+import org.iplantc.de.apps.client.events.selection.RunAppSelected;
 import org.iplantc.de.client.models.IsMaskable;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppCategory;
@@ -14,7 +23,7 @@ import com.sencha.gxt.data.shared.event.StoreAddEvent;
 import com.sencha.gxt.data.shared.event.StoreClearEvent;
 import com.sencha.gxt.data.shared.event.StoreRemoveEvent;
 import com.sencha.gxt.data.shared.event.StoreUpdateEvent;
-import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.ListView;
 
 /**
  * This view is responsible for displaying lists of {@link App}s resulting for {@link AppCategory}
@@ -86,7 +95,7 @@ public interface AppsGridView extends IsWidget,
         AppsGridView getView();
     }
 
-    Grid<App> getGrid();
+    ListView<App, App> getGrid();
 
     void setSearchPattern(String searchPattern);
 }

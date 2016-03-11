@@ -1,11 +1,17 @@
 .commentIcon {
-    float:left;
-    cursor:pointer;
-    padding-right: 2px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 55px;
+    left: 5px;
+}
+
+.commentIcon:hover {
+    background-color: rgb(238,238,238);
+    outline: rgb(208,208,208) solid 2px;
 }
 
 .externalAppCommentIcon {
-    float:left;
     cursor:hand;
-    padding-right: 2px;
+    bottom: 55px;
+    left: 5px;
 }

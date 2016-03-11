@@ -12,7 +12,7 @@ import org.iplantc.de.client.models.apps.AppCategory;
 import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.inject.Inject;
 
-import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.ListView;
 
 /**
  * The presenter for the AppsView.
@@ -46,7 +46,6 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
         appsGridPresenter.addStoreClearHandler(categoriesPresenter);
         appsGridPresenter.addAppFavoritedEventHandler(categoriesPresenter);
         appsGridPresenter.getView().addAppSelectionChangedEventHandler(toolbarPresenter.getView());
-
         appsGridPresenter.getView().addAppInfoSelectedEventHandler(categoriesPresenter);
 
         toolbarPresenter.getView().addDeleteAppsSelectedHandler(appsGridPresenter);
@@ -61,7 +60,7 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
     }
 
     @Override
-    public Grid<App> getAppsGrid() {
+    public ListView<App, App> getAppsGrid() {
         // FIXME Too many levels of misdirection
         return appsGridPresenter.getView().getGrid();
     }
