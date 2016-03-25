@@ -74,13 +74,12 @@ public class AppsGridPresenterImpl implements AppsGridView.Presenter,
         this.listStore = listStore;
         this.eventBus = eventBus;
         this.view = viewFactory.create(listStore);
+
         this.view.addAppNameSelectedEventHandler(this);
-        this.view.addAppCommentSelectedEventHandlers(this);
-        this.view.addAppFavoriteSelectedEventHandlers(this);
         this.view.addAppRatingDeselectedHandler(this);
         this.view.addAppRatingSelectedHandler(this);
-
-
+        this.view.addAppCommentSelectedEventHandlers(this);
+        this.view.addAppFavoriteSelectedEventHandlers(this);
 
         eventBus.addHandler(AppUpdatedEvent.TYPE, this);
     }
@@ -121,7 +120,7 @@ public class AppsGridPresenterImpl implements AppsGridView.Presenter,
 
     @Override
     public App getSelectedApp() {
-        return null;
+        return view.getGrid().getSelectionModel().getSelectedItem();
     }
 
     @Override
@@ -162,7 +161,7 @@ public class AppsGridPresenterImpl implements AppsGridView.Presenter,
 
                 } else if (listStore.size() > 0) {
                     // Select first app
-//                    view.getGrid().getSelectionModel().select(listStore.get(0), false);
+                    view.getGrid().getSelectionModel().select(listStore.get(0), false);
                 }
                 setDesiredSelectedApp(null);
                 view.unmask();

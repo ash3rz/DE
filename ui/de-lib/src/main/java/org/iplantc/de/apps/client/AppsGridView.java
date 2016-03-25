@@ -23,7 +23,7 @@ import com.sencha.gxt.data.shared.event.StoreAddEvent;
 import com.sencha.gxt.data.shared.event.StoreClearEvent;
 import com.sencha.gxt.data.shared.event.StoreRemoveEvent;
 import com.sencha.gxt.data.shared.event.StoreUpdateEvent;
-import com.sencha.gxt.widget.core.client.ListView;
+import com.sencha.gxt.widget.core.client.grid.Grid;
 
 /**
  * This view is responsible for displaying lists of {@link App}s resulting for {@link AppCategory}
@@ -35,8 +35,7 @@ import com.sencha.gxt.widget.core.client.ListView;
  * Created by jstroot on 3/5/15.
  * @author jstroot
  */
-public interface AppsGridView extends IsWidget,
-                                      IsMaskable,
+public interface AppsGridView extends IsWidget, IsMaskable,
                                       AppSelectionChangedEvent.HasAppSelectionChangedEventHandlers,
                                       AppInfoSelectedEvent.HasAppInfoSelectedEventHandlers,
                                       AppNameSelectedEvent.HasAppNameSelectedEventHandlers,
@@ -95,7 +94,7 @@ public interface AppsGridView extends IsWidget,
         AppsGridView getView();
     }
 
-    ListView<App, App> getGrid();
+    Grid<App> getGrid();
 
     void setSearchPattern(String searchPattern);
 }

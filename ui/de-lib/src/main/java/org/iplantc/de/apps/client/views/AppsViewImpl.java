@@ -1,7 +1,7 @@
 package org.iplantc.de.apps.client.views;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
 import org.iplantc.de.apps.shared.AppsModule.Ids;
@@ -26,16 +26,16 @@ public class AppsViewImpl extends Composite implements AppsView {
 
     @UiField(provided = true) final AppsToolbarView toolBar;
     @UiField(provided = true) final AppCategoriesView appCategoriesView;
-    @UiField(provided = true) final AppsGridView appsGridView;
+    @UiField(provided = true) final AppsListView appsListView;
 
     private static final MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     @Inject
     protected AppsViewImpl(@Assisted final AppCategoriesView.Presenter categoriesPresenter,
-                           @Assisted final AppsGridView.Presenter gridPresenter,
+                           @Assisted final AppsListView.Presenter gridPresenter,
                            @Assisted final AppsToolbarView.Presenter toolbarPresenter) {
         this.appCategoriesView = categoriesPresenter.getView();
-        this.appsGridView = gridPresenter.getView();
+        this.appsListView = gridPresenter.getView();
         this.toolBar = toolbarPresenter.getView();
 
         initWidget(uiBinder.createAndBindUi(this));
@@ -127,7 +127,7 @@ public class AppsViewImpl extends Composite implements AppsView {
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
         toolBar.asWidget().ensureDebugId(baseID + Ids.MENU_BAR);
-        appsGridView.asWidget().ensureDebugId(baseID);
+        appsListView.asWidget().ensureDebugId(baseID);
         appCategoriesView.asWidget().ensureDebugId(baseID);
     }
 

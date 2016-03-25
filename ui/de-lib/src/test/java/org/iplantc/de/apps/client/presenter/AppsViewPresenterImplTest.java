@@ -1,7 +1,7 @@
 package org.iplantc.de.apps.client.presenter;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.gin.factory.AppsViewFactory;
 
@@ -25,8 +25,8 @@ public class AppsViewPresenterImplTest {
     @Mock AppCategoriesView categoriesViewMock;
     @Mock AppCategoriesView.Presenter categoriesPresenterMock;
 
-    @Mock AppsGridView gridViewMock;
-    @Mock AppsGridView.Presenter gridPresenterMock;
+    @Mock AppsListView gridViewMock;
+    @Mock AppsListView.Presenter gridPresenterMock;
 
     @Mock AppsToolbarView toolbarViewMock;
     @Mock AppsToolbarView.Presenter toolbarPresenterMock;

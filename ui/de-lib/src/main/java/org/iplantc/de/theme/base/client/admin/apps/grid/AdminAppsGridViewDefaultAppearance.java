@@ -6,5 +6,6 @@ import org.iplantc.de.theme.base.client.apps.grid.AppsGridViewDefaultAppearance;
 /**
  * @author jstroot
  */
-public class AdminAppsGridViewDefaultAppearance extends AppsGridViewDefaultAppearance implements AdminAppsGridView.Appearance {
+public class AdminAppsGridViewDefaultAppearance extends AppsGridViewDefaultAppearance
+        implements AdminAppsGridView.Appearance {
 }

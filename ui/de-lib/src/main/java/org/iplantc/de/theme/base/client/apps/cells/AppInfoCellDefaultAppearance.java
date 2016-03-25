@@ -1,6 +1,6 @@
 package org.iplantc.de.theme.base.client.apps.cells;
 
-import org.iplantc.de.apps.client.views.grid.cells.AppInfoCell;
+import org.iplantc.de.apps.client.views.tilesList.cells.AppInfoCell;
 import org.iplantc.de.resources.client.IplantResources;
 import org.iplantc.de.theme.base.client.apps.AppsMessages;
 

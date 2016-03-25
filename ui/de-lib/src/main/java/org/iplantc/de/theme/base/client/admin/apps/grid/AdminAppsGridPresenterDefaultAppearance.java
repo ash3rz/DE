@@ -11,7 +11,8 @@ import com.google.gwt.core.client.GWT;
 /**
  * @author jstroot
  */
-public class AdminAppsGridPresenterDefaultAppearance extends AppsGridViewDefaultAppearance implements AdminAppsGridView.Presenter.Appearance {
+public class AdminAppsGridPresenterDefaultAppearance extends AppsGridViewDefaultAppearance
+        implements AdminAppsGridView.Presenter.Appearance {
     private final BelphegorDisplayStrings displayStrings;
     private final BelphegorErrorStrings errorStrings;
     private final IplantDisplayStrings iplantDisplayStrings;

@@ -78,5 +78,4 @@ public class AppsGridViewDefaultAppearance implements AppsGridView.AppsGridAppea
     public String agaveAuthRequiredMsg() {
         return iplantDisplayStrings.agaveAuthRequiredMsg();
     }
-
 }

@@ -1,15 +1,11 @@
 package org.iplantc.de.apps.client.views.grid.cells;
 
-import static com.google.gwt.dom.client.BrowserEvents.CLICK;
-
 import org.iplantc.de.apps.client.events.selection.AppNameSelectedEvent;
 import org.iplantc.de.apps.shared.AppsModule;
 import org.iplantc.de.client.models.apps.App;
 
+import static com.google.gwt.dom.client.BrowserEvents.CLICK;
 import com.google.gwt.cell.client.AbstractCell;
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -26,22 +22,7 @@ import com.google.gwt.user.client.Event;
  * @author jstroot
  * 
  */
-public class AppHyperlinkCell extends AbstractCell<App> implements HasCell<App, App> {
-
-    @Override
-    public Cell<App> getCell() {
-        return this;
-    }
-
-    @Override
-    public FieldUpdater<App, App> getFieldUpdater() {
-        return null;
-    }
-
-    @Override
-    public App getValue(App object) {
-        return object;
-    }
+public class AppHyperlinkCell extends AbstractCell<App> {
 
     public interface AppHyperlinkCellAppearance {
         String ELEMENT_NAME = "appName";
@@ -52,8 +33,12 @@ public class AppHyperlinkCell extends AbstractCell<App> implements HasCell<App, 
 
         String appUnavailable();
 
-        void render(SafeHtmlBuilder sb, App value, String textClassName, String searchPattern,
-                    String textToolTip, String debugId);
+        void render(SafeHtmlBuilder sb,
+                    App value,
+                    String textClassName,
+                    String searchPattern,
+                    String textToolTip,
+                    String debugId);
 
         String run();
     }
@@ -74,7 +59,7 @@ public class AppHyperlinkCell extends AbstractCell<App> implements HasCell<App, 
     }
 
     @Override
-    public void render(Cell.Context context, App value, SafeHtmlBuilder sb) {
+    public void render(Context context, App value, SafeHtmlBuilder sb) {
         if (value == null) {
             return;
         }
@@ -93,8 +78,8 @@ public class AppHyperlinkCell extends AbstractCell<App> implements HasCell<App, 
     }
 
     @Override
-    public void onBrowserEvent(Cell.Context context, Element parent, App value, NativeEvent event,
-            ValueUpdater<App> valueUpdater) {
+    public void onBrowserEvent(Context context, Element parent, App value, NativeEvent event,
+                               ValueUpdater<App> valueUpdater) {
         Element eventTarget = Element.as(event.getEventTarget());
         if ((value == null) || !parent.isOrHasChild(eventTarget)) {
             return;

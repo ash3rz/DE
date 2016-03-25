@@ -1,6 +1,6 @@
 package org.iplantc.de.apps.client.presenter.grid;
 
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.AppUpdatedEvent;
@@ -13,9 +13,10 @@ import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.DeleteAppsSelected;
 import org.iplantc.de.apps.client.events.selection.RunAppSelected;
-import org.iplantc.de.apps.client.gin.factory.AppsGridViewFactory;
+import org.iplantc.de.apps.client.gin.factory.AppsListViewFactory;
 import org.iplantc.de.apps.client.presenter.callbacks.DeleteRatingCallback;
 import org.iplantc.de.apps.client.presenter.callbacks.RateAppCallback;
+import org.iplantc.de.apps.client.presenter.tilesList.AppsListPresenterImpl;
 import org.iplantc.de.client.events.EventBus;
 import org.iplantc.de.client.models.UserInfo;
 import org.iplantc.de.client.models.apps.App;
@@ -54,10 +55,10 @@ import java.util.List;
  * @author jstroot
  */
 @RunWith(GwtMockitoTestRunner.class)
-public class AppsGridPresenterImplTest {
+public class AppsListPresenterImplTest {
 
-    @Mock AppsGridViewFactory viewFactoryMock;
-    @Mock AppsGridView viewMock;
+    @Mock AppsListViewFactory viewFactoryMock;
+    @Mock AppsListView viewMock;
 
     @Mock ListStore<App> listStoreMock;
     @Mock StoreAddEvent.StoreAddHandler<App> storeAddHandlerMock;
@@ -67,7 +68,7 @@ public class AppsGridPresenterImplTest {
     @Mock Grid<App> gridMock;
     @Mock GridSelectionModel<App> selectionModelMock;
     @Mock AppUserServiceFacade appServiceMock;
-    @Mock AppsGridView.AppsGridAppearance appearanceMock;
+    @Mock AppsListView.AppsListAppearance appearanceMock;
     @Mock UserInfo userInfoMock;
     @Mock AppUserServiceFacade appUserServiceMock;
 
@@ -80,13 +81,13 @@ public class AppsGridPresenterImplTest {
     @Mock EventBus eventBusMock;
 
 
-    private AppsGridPresenterImpl uut;
+    private AppsListPresenterImpl uut;
 
     @Before public void setUp() {
         when(viewFactoryMock.create(Matchers.<ListStore<App>>any())).thenReturn(viewMock);
         when(viewMock.getGrid()).thenReturn(gridMock);
         when(gridMock.getSelectionModel()).thenReturn(selectionModelMock);
-        uut = new AppsGridPresenterImpl(viewFactoryMock,
+        uut = new AppsListPresenterImpl(viewFactoryMock,
                                         listStoreMock,
                                         eventBusMock);
         uut.appService = appServiceMock;
@@ -219,7 +220,7 @@ public class AppsGridPresenterImplTest {
      */
     @Test public void verifyAppServiceCalled_onAppFavoriteSelected(){
         // Book-keeping for constructor
-        verify(eventBusMock).addHandler(Matchers.<GwtEvent.Type<AppsGridPresenterImpl>>any(), eq(uut));
+        verify(eventBusMock).addHandler(Matchers.<GwtEvent.Type<AppsListPresenterImpl>>any(), eq(uut));
         AppFavoriteSelectedEvent eventMock = mock(AppFavoriteSelectedEvent.class);
         App appMock = mock(App.class);
         final String mockId = "mock id";
@@ -253,7 +254,7 @@ public class AppsGridPresenterImplTest {
 
     @Test public void runAppEventFired_onAppNameSelected() {
         // Book-keeping for constructor
-        verify(eventBusMock).addHandler(Matchers.<GwtEvent.Type<AppsGridPresenterImpl>>any(), eq(uut));
+        verify(eventBusMock).addHandler(Matchers.<GwtEvent.Type<AppsListPresenterImpl>>any(), eq(uut));
         AppNameSelectedEvent eventMock = mock(AppNameSelectedEvent.class);
         App appMock = mock(App.class);
         when(eventMock.getSelectedApp()).thenReturn(appMock);
@@ -273,7 +274,7 @@ public class AppsGridPresenterImplTest {
 
     @Test public void runAppEventFired_onRunAppSelected() {
         // Book-keeping for constructor
-        verify(eventBusMock).addHandler(Matchers.<GwtEvent.Type<AppsGridPresenterImpl>>any(), eq(uut));
+        verify(eventBusMock).addHandler(Matchers.<GwtEvent.Type<AppsListPresenterImpl>>any(), eq(uut));
         RunAppSelected eventMock = mock(RunAppSelected.class);
         App appMock = mock(App.class);
         when(eventMock.getApp()).thenReturn(appMock);
@@ -348,7 +349,7 @@ public class AppsGridPresenterImplTest {
 
     @Test public void verifyAppServiceCalled_onDeleteAppsSelected() {
         // Book-keeping for constructor
-        verify(eventBusMock).addHandler(Matchers.<GwtEvent.Type<AppsGridPresenterImpl>>any(), eq(uut));
+        verify(eventBusMock).addHandler(Matchers.<GwtEvent.Type<AppsListPresenterImpl>>any(), eq(uut));
         DeleteAppsSelected eventMock = mock(DeleteAppsSelected.class);
         App mock1 = mock(App.class);
         App mock2 = mock(App.class);

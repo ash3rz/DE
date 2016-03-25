@@ -22,28 +22,3 @@
     color: black;
     margin-top:30px;
 }
-
-@sprite .info {
-    gwt-image: 'info';
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-}
-
-.info:hover {
-    background-color: rgb(238,238,238);
-    outline: rgb(208,208,208) solid 2px;
-}
-
-@sprite .play {
-    gwt-image: 'play';
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-}
-
-.play:hover {
-    background-color: rgb(238,238,238);
-    outline: rgb(208,208,208) solid 2px;
-}
-

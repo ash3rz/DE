@@ -1,6 +1,6 @@
 package org.iplantc.de.theme.base.client.apps.cells;
 
-import org.iplantc.de.apps.client.views.grid.cells.AppIntegratorCell;
+import org.iplantc.de.apps.client.views.tilesList.cells.AppIntegratorCell;
 import org.iplantc.de.theme.base.client.apps.AppSearchHighlightAppearance;
 
 import com.google.gwt.core.client.GWT;

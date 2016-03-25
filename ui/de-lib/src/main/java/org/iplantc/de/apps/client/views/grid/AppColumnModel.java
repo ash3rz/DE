@@ -68,7 +68,7 @@ public class AppColumnModel extends ColumnModel<App> implements AppInfoSelectedE
         ColumnConfig<App, App> info = new ColumnConfig<>(new IdentityValueProvider<App>(""), 20);
         info.setHeader("");
 
-        ColumnConfig<App, App> name = new ColumnConfig<>(new IdentityValueProvider<App>("name"), //$NON-NLS-1$
+        ColumnConfig<App, App> name = new ColumnConfig<>(new IdentityValueProvider<App>("name"),//$NON-NLS-1$
                                                          180,
                                                          appearance.nameColumnLabel());
 

@@ -7,6 +7,7 @@ import com.sencha.gxt.data.shared.ListStore;
 
 /**
  * Created by jstroot on 3/5/15.
+ *
  * @author jstroot
  */
 public interface AppsGridViewFactory {

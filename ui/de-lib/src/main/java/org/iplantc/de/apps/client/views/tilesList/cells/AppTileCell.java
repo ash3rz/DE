@@ -1,4 +1,4 @@
-package org.iplantc.de.apps.client.views.grid.cells;
+package org.iplantc.de.apps.client.views.tilesList.cells;
 
 import org.iplantc.de.client.models.apps.App;
 

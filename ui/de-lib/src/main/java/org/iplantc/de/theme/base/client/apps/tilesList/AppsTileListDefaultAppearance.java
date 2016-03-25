@@ -1,4 +1,4 @@
-package org.iplantc.de.theme.base.client.apps.grid;
+package org.iplantc.de.theme.base.client.apps.tilesList;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -9,17 +9,17 @@ import com.sencha.gxt.theme.base.client.listview.ListViewCustomAppearance;
 /**
  * @author aramsey
  */
-public class AppsListViewCellDefaultAppearance<App> extends ListViewCustomAppearance<App> {
+public class AppsTileListDefaultAppearance<App> extends ListViewCustomAppearance<App> {
 
-    private static final AppsGridViewResources.AppsGridViewStyles style;
+    private static final AppsTileListResources.AppsGridViewStyles style;
 
     static {
         style =
-                GWT.<AppsGridViewResources>create(AppsGridViewResources.class).style();
+                GWT.<AppsTileListResources>create(AppsTileListResources.class).style();
         style.ensureInjected();
     }
 
-    public AppsListViewCellDefaultAppearance() {
+    public AppsTileListDefaultAppearance() {
         super("." + style.tileCell(), null, null);
     }
 

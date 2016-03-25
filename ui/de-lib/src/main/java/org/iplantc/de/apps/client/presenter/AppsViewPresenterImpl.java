@@ -2,6 +2,7 @@ package org.iplantc.de.apps.client.presenter;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
 import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
 import org.iplantc.de.apps.client.gin.factory.AppsViewFactory;
@@ -23,51 +24,53 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
 
     protected final AppsView view;
     private final AppCategoriesView.Presenter categoriesPresenter;
-    private final AppsGridView.Presenter appsGridPresenter;
+    private final AppsListView.Presenter appsListPresenter;
 
     @Inject
     protected AppsViewPresenterImpl(final AppsViewFactory viewFactory,
                                     final AppCategoriesView.Presenter categoriesPresenter,
+                                    final AppsListView.Presenter appsListPresenter,
                                     final AppsGridView.Presenter appsGridPresenter,
                                     final AppsToolbarView.Presenter toolbarPresenter) {
         this.categoriesPresenter = categoriesPresenter;
-        this.appsGridPresenter = appsGridPresenter;
+        this.appsListPresenter = appsListPresenter;
         this.view = viewFactory.create(categoriesPresenter,
+                                       appsListPresenter,
                                        appsGridPresenter,
                                        toolbarPresenter);
 
-        categoriesPresenter.getView().addAppCategorySelectedEventHandler(appsGridPresenter);
-        categoriesPresenter.getView().addAppCategorySelectedEventHandler(appsGridPresenter.getView());
+        categoriesPresenter.getView().addAppCategorySelectedEventHandler(appsListPresenter);
+        categoriesPresenter.getView().addAppCategorySelectedEventHandler(appsListPresenter.getView());
         categoriesPresenter.getView().addAppCategorySelectedEventHandler(toolbarPresenter.getView());
 
         // Wire up list store handlers
-        appsGridPresenter.addStoreAddHandler(categoriesPresenter);
-        appsGridPresenter.addStoreRemoveHandler(categoriesPresenter);
-        appsGridPresenter.addStoreClearHandler(categoriesPresenter);
-        appsGridPresenter.addAppFavoritedEventHandler(categoriesPresenter);
-        appsGridPresenter.getView().addAppSelectionChangedEventHandler(toolbarPresenter.getView());
-        appsGridPresenter.getView().addAppInfoSelectedEventHandler(categoriesPresenter);
+        appsListPresenter.addStoreAddHandler(categoriesPresenter);
+        appsListPresenter.addStoreRemoveHandler(categoriesPresenter);
+        appsListPresenter.addStoreClearHandler(categoriesPresenter);
+        appsListPresenter.addAppFavoritedEventHandler(categoriesPresenter);
+        appsListPresenter.getView().addAppSelectionChangedEventHandler(toolbarPresenter.getView());
+        appsListPresenter.getView().addAppInfoSelectedEventHandler(categoriesPresenter);
 
-        toolbarPresenter.getView().addDeleteAppsSelectedHandler(appsGridPresenter);
+        toolbarPresenter.getView().addDeleteAppsSelectedHandler(appsListPresenter);
         toolbarPresenter.getView().addCopyAppSelectedHandler(categoriesPresenter);
         toolbarPresenter.getView().addCopyWorkflowSelectedHandler(categoriesPresenter);
-        toolbarPresenter.getView().addRunAppSelectedHandler(appsGridPresenter);
-        toolbarPresenter.getView().addBeforeAppSearchEventHandler(appsGridPresenter.getView());
+        toolbarPresenter.getView().addRunAppSelectedHandler(appsListPresenter);
+        toolbarPresenter.getView().addBeforeAppSearchEventHandler(appsListPresenter.getView());
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(categoriesPresenter);
-        toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsGridPresenter);
-        toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsGridPresenter.getView());
+        toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsListPresenter);
+        toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsListPresenter.getView());
 
     }
 
     @Override
     public ListView<App, App> getAppsGrid() {
         // FIXME Too many levels of misdirection
-        return appsGridPresenter.getView().getGrid();
+        return appsListPresenter.getView().getGrid();
     }
 
     @Override
     public App getSelectedApp() {
-        return appsGridPresenter.getSelectedApp();
+        return appsListPresenter.getSelectedApp();
     }
 
     @Override

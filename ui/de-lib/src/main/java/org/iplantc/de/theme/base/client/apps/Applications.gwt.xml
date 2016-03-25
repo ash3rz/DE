@@ -6,13 +6,7 @@
     <replace-with class="org.iplantc.de.theme.base.client.apps.AppSearchHighlightDefaultAppearance">
         <when-type-is class="org.iplantc.de.theme.base.client.apps.AppSearchHighlightAppearance"/>
     </replace-with>
-
-    <!-- Grid -->
-    <replace-with class="org.iplantc.de.theme.base.client.apps.grid.AppsGridViewDefaultAppearance">
-        <when-type-is class="org.iplantc.de.apps.client.AppsGridView.AppsGridAppearance"/>
-    </replace-with>
-
-
+    
     <!-- Views -->
     <replace-with class="org.iplantc.de.theme.base.client.apps.AppsViewDefaultAppearance">
         <when-type-is class="org.iplantc.de.apps.client.AppsView.AppsViewAppearance"/>
@@ -22,29 +16,65 @@
     <replace-with class="org.iplantc.de.theme.base.client.apps.categories.AppCategoriesViewDefaultAppearance">
         <when-type-is class="org.iplantc.de.apps.client.AppCategoriesView.AppCategoriesAppearance"/>
     </replace-with>
-
+    
+    <!-- Tiles -->
+    <replace-with class="org.iplantc.de.theme.base.client.apps.tilesList.AppsListViewDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.AppsListView.AppsListAppearance"/>
+    </replace-with>
+    
     <!-- Cells -->
     <replace-with class="org.iplantc.de.theme.base.client.apps.cells.AppCommentCellDefaultAppearance">
-        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppCommentCell.AppCommentCellAppearance"/>
+        <when-type-is class="org.iplantc.de.apps.client.views.tilesList.cells.AppCommentCell.AppCommentCellAppearance"/>
     </replace-with>
 
     <replace-with class="org.iplantc.de.theme.base.client.apps.cells.AppRatingCellDefaultAppearance">
-        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppRatingCell.AppRatingCellAppearance"/>
+        <when-type-is class="org.iplantc.de.apps.client.views.tilesList.cells.AppRatingCell.AppRatingCellAppearance"/>
     </replace-with>
 
     <replace-with class="org.iplantc.de.theme.base.client.apps.cells.AppFavoriteCellDefaultAppearance">
-        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppFavoriteCell.AppFavoriteCellAppearance"/>
+        <when-type-is class="org.iplantc.de.apps.client.views.tilesList.cells.AppFavoriteCell.AppFavoriteCellAppearance"/>
     </replace-with>
 
     <replace-with class="org.iplantc.de.theme.base.client.apps.cells.AppHyperlinkCellDefaultAppearance">
-        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppHyperlinkCell.AppHyperlinkCellAppearance"/>
+        <when-type-is class="org.iplantc.de.apps.client.views.tilesList.cells.AppHyperlinkCell.AppHyperlinkCellAppearance"/>
     </replace-with>
 
     <replace-with class="org.iplantc.de.theme.base.client.apps.cells.AppInfoCellDefaultAppearance">
-        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppInfoCell.AppInfoCellAppearance"/>
+        <when-type-is class="org.iplantc.de.apps.client.views.tilesList.cells.AppInfoCell.AppInfoCellAppearance"/>
     </replace-with>
 
     <replace-with class="org.iplantc.de.theme.base.client.apps.cells.AppIntegratorCellDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.views.tilesList.cells.AppIntegratorCell.AppIntegratorCellAppearance"/>
+    </replace-with>
+
+
+    <!-- Grid -->
+    <replace-with class="org.iplantc.de.theme.base.client.apps.grid.AppsGridViewDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.AppsGridView.AppsGridAppearance"/>
+    </replace-with>
+
+    <!-- Cells -->
+    <replace-with class="org.iplantc.de.theme.base.client.apps.grid.cells.AppCommentCellDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppCommentCell.AppCommentCellAppearance"/>
+    </replace-with>
+
+    <replace-with class="org.iplantc.de.theme.base.client.apps.grid.cells.AppRatingCellDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppRatingCell.AppRatingCellAppearance"/>
+    </replace-with>
+
+    <replace-with class="org.iplantc.de.theme.base.client.apps.grid.cells.AppFavoriteCellDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppFavoriteCell.AppFavoriteCellAppearance"/>
+    </replace-with>
+
+    <replace-with class="org.iplantc.de.theme.base.client.apps.grid.cells.AppHyperlinkCellDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppHyperlinkCell.AppHyperlinkCellAppearance"/>
+    </replace-with>
+
+    <replace-with class="org.iplantc.de.theme.base.client.apps.grid.cells.AppInfoCellDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppInfoCell.AppInfoCellAppearance"/>
+    </replace-with>
+
+    <replace-with class="org.iplantc.de.theme.base.client.apps.grid.cells.AppIntegratorCellDefaultAppearance">
         <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppIntegratorCell.AppIntegratorCellAppearance"/>
     </replace-with>
 
