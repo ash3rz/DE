@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:container="urn:import:com.sencha.gxt.widget.core.client.container"
 	xmlns:tabs="urn:import:com.sencha.gxt.widget.core.client"
-	xmlns:appWidgets="urn:import:org.iplantc.de.apps.client.views.tilesList.cells">
+	xmlns:appWidgets="urn:import:org.iplantc.de.apps.client.views.list.cells">
 
 	<ui:with field="appearance"
 		type="org.iplantc.de.apps.client.AppDetailsView.AppDetailsAppearance" />

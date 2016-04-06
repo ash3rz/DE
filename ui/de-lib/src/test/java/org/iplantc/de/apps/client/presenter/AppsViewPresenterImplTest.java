@@ -1,7 +1,7 @@
 package org.iplantc.de.apps.client.presenter;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
-import org.iplantc.de.apps.client.AppsListView;
+import org.iplantc.de.apps.client.AppsTileView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.gin.factory.AppsViewFactory;
 
@@ -25,8 +25,8 @@ public class AppsViewPresenterImplTest {
     @Mock AppCategoriesView categoriesViewMock;
     @Mock AppCategoriesView.Presenter categoriesPresenterMock;
 
-    @Mock AppsListView gridViewMock;
-    @Mock AppsListView.Presenter gridPresenterMock;
+    @Mock AppsTileView gridViewMock;
+    @Mock AppsTileView.Presenter gridPresenterMock;
 
     @Mock AppsToolbarView toolbarViewMock;
     @Mock AppsToolbarView.Presenter toolbarPresenterMock;
@@ -35,7 +35,7 @@ public class AppsViewPresenterImplTest {
 
     @Before public void setUp() {
         when(categoriesPresenterMock.getView()).thenReturn(categoriesViewMock);
-        when(gridPresenterMock.getView()).thenReturn(gridViewMock);
+        when(gridPresenterMock.getListView()).thenReturn(gridViewMock);
         when(toolbarPresenterMock.getView()).thenReturn(toolbarViewMock);
         uut = new AppsViewPresenterImpl(viewFactoryMock,
                                         categoriesPresenterMock,
@@ -72,7 +72,7 @@ public class AppsViewPresenterImplTest {
         verify(toolbarViewMock).addAppSearchResultLoadEventHandler(gridViewMock);
 
         verify(categoriesPresenterMock, times(3)).getView();
-        verify(gridPresenterMock, times(5)).getView();
+        verify(gridPresenterMock, times(5)).getListView();
         verify(toolbarPresenterMock, times(10)).getView();
 
 

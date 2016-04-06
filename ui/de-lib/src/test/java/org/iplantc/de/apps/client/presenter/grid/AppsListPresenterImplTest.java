@@ -1,6 +1,6 @@
 package org.iplantc.de.apps.client.presenter.grid;
 
-import org.iplantc.de.apps.client.AppsListView;
+import org.iplantc.de.apps.client.AppsTileView;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.AppUpdatedEvent;
@@ -13,10 +13,10 @@ import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.DeleteAppsSelected;
 import org.iplantc.de.apps.client.events.selection.RunAppSelected;
-import org.iplantc.de.apps.client.gin.factory.AppsListViewFactory;
+import org.iplantc.de.apps.client.gin.factory.AppsTileViewFactory;
 import org.iplantc.de.apps.client.presenter.callbacks.DeleteRatingCallback;
 import org.iplantc.de.apps.client.presenter.callbacks.RateAppCallback;
-import org.iplantc.de.apps.client.presenter.tilesList.AppsListPresenterImpl;
+import org.iplantc.de.apps.client.presenter.list.AppsListPresenterImpl;
 import org.iplantc.de.client.events.EventBus;
 import org.iplantc.de.client.models.UserInfo;
 import org.iplantc.de.client.models.apps.App;
@@ -57,8 +57,8 @@ import java.util.List;
 @RunWith(GwtMockitoTestRunner.class)
 public class AppsListPresenterImplTest {
 
-    @Mock AppsListViewFactory viewFactoryMock;
-    @Mock AppsListView viewMock;
+    @Mock AppsTileViewFactory viewFactoryMock;
+    @Mock AppsTileView viewMock;
 
     @Mock ListStore<App> listStoreMock;
     @Mock StoreAddEvent.StoreAddHandler<App> storeAddHandlerMock;
@@ -68,7 +68,7 @@ public class AppsListPresenterImplTest {
     @Mock Grid<App> gridMock;
     @Mock GridSelectionModel<App> selectionModelMock;
     @Mock AppUserServiceFacade appServiceMock;
-    @Mock AppsListView.AppsListAppearance appearanceMock;
+    @Mock AppsTileView.AppsListAppearance appearanceMock;
     @Mock UserInfo userInfoMock;
     @Mock AppUserServiceFacade appUserServiceMock;
 

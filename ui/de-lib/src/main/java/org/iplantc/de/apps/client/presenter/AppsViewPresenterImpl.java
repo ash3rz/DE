@@ -1,7 +1,6 @@
 package org.iplantc.de.apps.client.presenter;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
-import org.iplantc.de.apps.client.AppsGridView;
 import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
@@ -28,24 +27,21 @@ public class AppsViewPresenterImpl implements AppsView.Presenter,
     protected final AppsView view;
     private final AppCategoriesView.Presenter categoriesPresenter;
     private final AppsListView.Presenter appsListPresenter;
-    private final AppsGridView.Presenter appsGridPresenter;
 
     @Inject
     protected AppsViewPresenterImpl(final AppsViewFactory viewFactory,
                                     final AppCategoriesView.Presenter categoriesPresenter,
                                     final AppsListView.Presenter appsListPresenter,
-                                    final AppsGridView.Presenter appsGridPresenter,
                                     final AppsToolbarView.Presenter toolbarPresenter) {
         this.categoriesPresenter = categoriesPresenter;
         this.appsListPresenter = appsListPresenter;
-        this.appsGridPresenter = appsGridPresenter;
         this.view = viewFactory.create(categoriesPresenter,
                                        appsListPresenter,
-                                       appsGridPresenter,
                                        toolbarPresenter);
 
         categoriesPresenter.getView().addAppCategorySelectedEventHandler(appsListPresenter);
-        categoriesPresenter.getView().addAppCategorySelectedEventHandler(appsListPresenter.getView());
+        categoriesPresenter.getView().addAppCategorySelectedEventHandler(appsListPresenter.getTilesView());
+        categoriesPresenter.getView().addAppCategorySelectedEventHandler(appsListPresenter.getGridView());
         categoriesPresenter.getView().addAppCategorySelectedEventHandler(toolbarPresenter.getView());
 
         // Wire up list store handlers
@@ -53,24 +49,28 @@ public class AppsViewPresenterImpl implements AppsView.Presenter,
         appsListPresenter.addStoreRemoveHandler(categoriesPresenter);
         appsListPresenter.addStoreClearHandler(categoriesPresenter);
         appsListPresenter.addAppFavoritedEventHandler(categoriesPresenter);
-        appsListPresenter.getView().addAppSelectionChangedEventHandler(toolbarPresenter.getView());
-        appsListPresenter.getView().addAppInfoSelectedEventHandler(categoriesPresenter);
+        appsListPresenter.getTilesView().addAppSelectionChangedEventHandler(toolbarPresenter.getView());
+        appsListPresenter.getTilesView().addAppInfoSelectedEventHandler(categoriesPresenter);
+        appsListPresenter.getGridView().addAppSelectionChangedEventHandler(toolbarPresenter.getView());
+        appsListPresenter.getGridView().addAppInfoSelectedEventHandler(categoriesPresenter);
 
         toolbarPresenter.getView().addDeleteAppsSelectedHandler(appsListPresenter);
         toolbarPresenter.getView().addCopyAppSelectedHandler(categoriesPresenter);
         toolbarPresenter.getView().addCopyWorkflowSelectedHandler(categoriesPresenter);
         toolbarPresenter.getView().addRunAppSelectedHandler(appsListPresenter);
-        toolbarPresenter.getView().addBeforeAppSearchEventHandler(appsListPresenter.getView());
+        toolbarPresenter.getView().addBeforeAppSearchEventHandler(appsListPresenter.getTilesView());
+        toolbarPresenter.getView().addBeforeAppSearchEventHandler(appsListPresenter.getGridView());
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(categoriesPresenter);
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsListPresenter);
-        toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsListPresenter.getView());
+        toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsListPresenter.getTilesView());
+        toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsListPresenter.getGridView());
         toolbarPresenter.getView().addSwapViewButtonClickedEventHandler(this);
     }
 
     @Override
     public ListView<App, App> getAppsGrid() {
         // FIXME Too many levels of misdirection
-        return appsListPresenter.getView().getGrid();
+        return appsListPresenter.getTilesView().getGrid();
     }
 
     @Override

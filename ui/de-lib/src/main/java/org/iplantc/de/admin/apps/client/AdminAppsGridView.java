@@ -1,7 +1,7 @@
 package org.iplantc.de.admin.apps.client;
 
 import org.iplantc.de.admin.apps.client.events.selection.RestoreAppSelected;
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.BeforeAppSearchEvent;
 import org.iplantc.de.apps.client.events.selection.AppCategorySelectionChangedEvent;
@@ -28,7 +28,7 @@ public interface AdminAppsGridView extends IsWidget,
                                            AppSearchResultLoadEvent.AppSearchResultLoadEventHandler,
                                            BeforeAppSearchEvent.BeforeAppSearchEventHandler {
 
-    interface Appearance extends AppsGridView.AppsGridAppearance {
+    interface Appearance extends AppsListView.AppsListAppearance {
 
     }
 
@@ -38,7 +38,7 @@ public interface AdminAppsGridView extends IsWidget,
                                 RestoreAppSelected.RestoreAppSelectedHandler,
                                 AppSearchResultLoadEvent.AppSearchResultLoadEventHandler {
 
-        interface Appearance extends AppsGridView.AppsGridAppearance {
+        interface Appearance extends AppsListView.AppsListAppearance {
 
             String confirmDeleteAppTitle();
 

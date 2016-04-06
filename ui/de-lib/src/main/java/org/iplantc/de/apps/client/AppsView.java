@@ -54,8 +54,8 @@ public interface AppsView extends IsWidget,
 
     void setActiveView(IsWidget view);
 
-    AppsListView getListView();
+    AppsListView.AppsTileView getListView();
 
-    AppsGridView getGridView();
+    AppsListView.AppsGridView getGridView();
 
 }

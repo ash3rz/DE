@@ -13,7 +13,7 @@ import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.DeleteAppsSelected;
 import org.iplantc.de.apps.client.events.selection.RunAppSelected;
-import org.iplantc.de.apps.client.presenter.tilesList.proxy.AppByCategoryLoadConfig;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppByCategoryLoadConfig;
 import org.iplantc.de.client.models.IsMaskable;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppCategory;
@@ -27,6 +27,7 @@ import com.sencha.gxt.data.shared.event.StoreUpdateEvent;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.ListView;
+import com.sencha.gxt.widget.core.client.grid.Grid;
 
 /**
  * This view is responsible for displaying lists of {@link App}s resulting for {@link AppCategory}
@@ -38,6 +39,7 @@ import com.sencha.gxt.widget.core.client.ListView;
  * Created by jstroot on 3/5/15.
  * @author jstroot
  */
+
 public interface AppsListView extends IsWidget,
                                       IsMaskable,
                                       AppSelectionChangedEvent.HasAppSelectionChangedEventHandlers,
@@ -51,56 +53,68 @@ public interface AppsListView extends IsWidget,
                                       AppCategorySelectionChangedEvent.AppCategorySelectionChangedEventHandler,
                                       AppFavoritedEvent.HasAppFavoritedEventHandlers,
                                       BeforeAppSearchEvent.BeforeAppSearchEventHandler {
-    interface AppsListAppearance {
 
-        String appLaunchWithoutToolError();
+        interface AppsListAppearance {
 
-        String appRemoveFailure();
+            String appLaunchWithoutToolError();
 
-        String beforeAppSearchLoadingMask();
+            String appRemoveFailure();
 
-        String favServiceFailure();
+            String beforeAppSearchLoadingMask();
 
-        String getAppsLoadingMask();
+            String favServiceFailure();
 
-        String integratedByColumnLabel();
+            String getAppsLoadingMask();
 
-        String nameColumnLabel();
+            String integratedByColumnLabel();
 
-        String ratingColumnLabel();
+            String nameColumnLabel();
 
-        String searchAppResultsHeader(String searchText, int total);
+            String ratingColumnLabel();
 
-        String agaveAuthRequiredTitle();
+            String searchAppResultsHeader(String searchText, int total);
 
-        String agaveAuthRequiredMsg();
-    }
+            String agaveAuthRequiredTitle();
 
-    /**
-     * This presenter is responsible for updating/maintaining the {@code ListStore} associated with
-     * the view. It fires store related events for other presenters. \
-     *
-     * To update the {@code ListStore}, it listens for {@link AppCategory}
-     * selection and search result load events.
-     */
-    interface Presenter extends AppCategorySelectionChangedEvent.AppCategorySelectionChangedEventHandler,
-                                AppSearchResultLoadEvent.AppSearchResultLoadEventHandler,
-                                StoreAddEvent.HasStoreAddHandlers<App>,
-                                StoreRemoveEvent.HasStoreRemoveHandler<App>,
-                                StoreUpdateEvent.HasStoreUpdateHandlers<App>,
-                                StoreClearEvent.HasStoreClearHandler<App>,
-                                AppFavoritedEvent.HasAppFavoritedEventHandlers,
-                                DeleteAppsSelected.DeleteAppsSelectedHandler,
-                                RunAppSelected.RunAppSelectedHandler {
+            String agaveAuthRequiredMsg();
+        }
 
-        App getSelectedApp();
+        /**
+         * This presenter is responsible for updating/maintaining the {@code ListStore} associated with
+         * the view. It fires store related events for other presenters. \
+         *
+         * To update the {@code ListStore}, it listens for {@link AppCategory} selection and search
+         * result load events.
+         */
+        interface Presenter extends AppCategorySelectionChangedEvent.AppCategorySelectionChangedEventHandler,
+                                    AppSearchResultLoadEvent.AppSearchResultLoadEventHandler,
+                                    StoreAddEvent.HasStoreAddHandlers<App>,
+                                    StoreRemoveEvent.HasStoreRemoveHandler<App>,
+                                    StoreUpdateEvent.HasStoreUpdateHandlers<App>,
+                                    StoreClearEvent.HasStoreClearHandler<App>,
+                                    AppFavoritedEvent.HasAppFavoritedEventHandlers,
+                                    DeleteAppsSelected.DeleteAppsSelectedHandler,
+                                    RunAppSelected.RunAppSelectedHandler {
 
-        AppsListView getView();
-    }
+            App getSelectedApp();
 
-    ListView<App, App> getGrid();
+            AppsTileView getTilesView();
+
+            AppsGridView getGridView();
+
+            void setActiveView(IsWidget view);
+        }
 
     void setSearchPattern(String searchPattern);
 
-    PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> getLoader();
+    interface AppsTileView extends AppsListView {
+
+        ListView<App, App> getGrid();
+
+        PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> getLoader();
+    }
+
+    interface AppsGridView extends AppsListView {
+        Grid<App> getGrid();
+    }
 }

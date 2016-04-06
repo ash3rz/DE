@@ -1,7 +1,6 @@
 package org.iplantc.de.apps.client.gin.factory;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
-import org.iplantc.de.apps.client.AppsGridView;
 import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
@@ -13,6 +12,5 @@ import org.iplantc.de.apps.client.AppsView;
 public interface AppsViewFactory {
     AppsView create(AppCategoriesView.Presenter categoriesPresenter,
                     AppsListView.Presenter appsListPresenter,
-                    AppsGridView.Presenter appsGridPresenter,
                     AppsToolbarView.Presenter toolbarPresenter);
 }

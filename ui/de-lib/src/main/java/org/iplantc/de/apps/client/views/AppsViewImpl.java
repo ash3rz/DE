@@ -2,7 +2,6 @@ package org.iplantc.de.apps.client.views;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
 import org.iplantc.de.apps.client.AppsListView;
-import org.iplantc.de.apps.client.AppsGridView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
 import org.iplantc.de.apps.shared.AppsModule.Ids;
@@ -29,23 +28,25 @@ public class AppsViewImpl extends Composite implements AppsView {
 
     @UiField(provided = true) final AppsToolbarView toolBar;
     @UiField(provided = true) final AppCategoriesView appCategoriesView;
-    @UiField(provided = true) final AppsListView appsListView;
-    @UiField(provided = true) final AppsGridView appsGridView;
+    @UiField(provided = true) final AppsListView.AppsTileView appsTileView;
+    @UiField(provided = true) final AppsListView.AppsGridView appsGridView;
     @UiField CardLayoutContainer centerPanel;
+    private final AppsListView.Presenter listPresenter;
 
     private static final MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     @Inject
     protected AppsViewImpl(@Assisted final AppCategoriesView.Presenter categoriesPresenter,
                            @Assisted final AppsListView.Presenter listPresenter,
-                           @Assisted final AppsGridView.Presenter gridPresenter,
                            @Assisted final AppsToolbarView.Presenter toolbarPresenter) {
         this.appCategoriesView = categoriesPresenter.getView();
-        this.appsListView = listPresenter.getView();
-        this.appsGridView = gridPresenter.getView();
+        this.appsTileView = listPresenter.getTilesView();
+        this.appsGridView = listPresenter.getGridView();
         this.toolBar = toolbarPresenter.getView();
+        this.listPresenter = listPresenter;
 
         initWidget(uiBinder.createAndBindUi(this));
+        setActiveView(appsTileView);
     }
 
     @Override
@@ -66,15 +67,16 @@ public class AppsViewImpl extends Composite implements AppsView {
     @Override
     public void setActiveView(IsWidget view) {
         centerPanel.setActiveWidget(view);
+        listPresenter.setActiveView(view);
     }
 
     @Override
-    public AppsListView getListView() {
-        return appsListView;
+    public AppsListView.AppsTileView getListView() {
+        return appsTileView;
     }
 
     @Override
-    public AppsGridView getGridView() {
+    public AppsListView.AppsGridView getGridView() {
         return appsGridView;
     }
 
@@ -82,7 +84,7 @@ public class AppsViewImpl extends Composite implements AppsView {
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
         toolBar.asWidget().ensureDebugId(baseID + Ids.MENU_BAR);
-        appsListView.asWidget().ensureDebugId(baseID);
+        appsTileView.asWidget().ensureDebugId(baseID);
         appCategoriesView.asWidget().ensureDebugId(baseID);
     }
 

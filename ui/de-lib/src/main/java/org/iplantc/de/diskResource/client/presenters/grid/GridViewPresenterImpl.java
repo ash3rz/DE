@@ -633,7 +633,7 @@ public class GridViewPresenterImpl implements
                                                                        "This object cannot be null at this point.");
                                             updateDiskResource(diskResource);
 
-                                            // presenter.getView().unmaskDetailsPanel();
+                                            // presenter.getTilesView().unmaskDetailsPanel();
                                             // presenter.unmaskVizMenuOptions();
                                         }
                                     });

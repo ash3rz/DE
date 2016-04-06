@@ -3,6 +3,7 @@
              xmlns:container="urn:import:com.sencha.gxt.widget.core.client.container"
              xmlns:gxt="urn:import:com.sencha.gxt.widget.core.client"
              xmlns:appsWidgets="urn:import:org.iplantc.de.apps.client"
+             xmlns:appsView="urn:import:org.iplantc.de.apps.client.AppsListView"
              xmlns:toolBar="urn:import:org.iplantc.de.apps.client">
 
     <!-- Border Layout Data -->
@@ -57,8 +58,8 @@
         <!-- This is the main panel -->
         <container:center layoutData="{centerData}">
             <container:CardLayoutContainer ui:field="centerPanel">
-                <appsWidgets:AppsListView ui:field="appsListView" />
-                <appsWidgets:AppsGridView ui:field="appsGridView"/>
+                <appsView:AppsTileView ui:field="appsTileView" />
+                <appsView:AppsGridView ui:field="appsGridView"/>
             </container:CardLayoutContainer>
         </container:center>
 

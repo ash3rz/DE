@@ -2,7 +2,6 @@ package org.iplantc.de.apps.client.gin;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
 import org.iplantc.de.apps.client.AppDetailsView;
-import org.iplantc.de.apps.client.AppsGridView;
 import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
@@ -10,23 +9,22 @@ import org.iplantc.de.apps.client.SubmitAppForPublicUseView;
 import org.iplantc.de.apps.client.gin.factory.AppCategoriesViewFactory;
 import org.iplantc.de.apps.client.gin.factory.AppDetailsViewFactory;
 import org.iplantc.de.apps.client.gin.factory.AppsGridViewFactory;
-import org.iplantc.de.apps.client.gin.factory.AppsListViewFactory;
+import org.iplantc.de.apps.client.gin.factory.AppsTileViewFactory;
 import org.iplantc.de.apps.client.gin.factory.AppsToolbarViewFactory;
 import org.iplantc.de.apps.client.gin.factory.AppsViewFactory;
 import org.iplantc.de.apps.client.presenter.AppsViewPresenterImpl;
 import org.iplantc.de.apps.client.presenter.categories.AppCategoriesPresenterImpl;
 import org.iplantc.de.apps.client.presenter.details.AppDetailsViewPresenterImpl;
-import org.iplantc.de.apps.client.presenter.grid.AppsGridPresenterImpl;
+import org.iplantc.de.apps.client.presenter.list.AppsListPresenterImpl;
 import org.iplantc.de.apps.client.presenter.submit.SubmitAppForPublicPresenter;
-import org.iplantc.de.apps.client.presenter.tilesList.AppsListPresenterImpl;
 import org.iplantc.de.apps.client.presenter.toolBar.AppsToolbarPresenterImpl;
 import org.iplantc.de.apps.client.views.AppsViewImpl;
 import org.iplantc.de.apps.client.views.categories.AppCategoriesViewImpl;
 import org.iplantc.de.apps.client.views.details.AppDetailsViewImpl;
 import org.iplantc.de.apps.client.views.details.dialogs.AppDetailsDialog;
-import org.iplantc.de.apps.client.views.grid.AppsGridViewImpl;
+import org.iplantc.de.apps.client.views.list.grid.AppsGridViewImpl;
 import org.iplantc.de.apps.client.views.submit.SubmitAppForPublicUseViewImpl;
-import org.iplantc.de.apps.client.views.tilesList.AppsListViewImpl;
+import org.iplantc.de.apps.client.views.list.tilesList.AppsTileViewImpl;
 import org.iplantc.de.apps.client.views.toolBar.AppsViewToolbarImpl;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppCategory;
@@ -68,17 +66,17 @@ public class AppsGinModule extends AbstractGinModule {
                     .build(AppCategoriesViewFactory.class));
         bind(AppCategoriesView.Presenter.class).to(AppCategoriesPresenterImpl.class);
 
-        // List View
-        install(new GinFactoryModuleBuilder()
-                    .implement(AppsListView.class, AppsListViewImpl.class)
-                    .build(AppsListViewFactory.class));
         bind(AppsListView.Presenter.class).to(AppsListPresenterImpl.class);
+
+        // Tiles View
+        install(new GinFactoryModuleBuilder()
+                    .implement(AppsListView.AppsTileView.class, AppsTileViewImpl.class)
+                    .build(AppsTileViewFactory.class));
 
         // Grid View
         install(new GinFactoryModuleBuilder()
-                        .implement(AppsGridView.class, AppsGridViewImpl.class)
+                        .implement(AppsListView.AppsGridView.class, AppsGridViewImpl.class)
                         .build(AppsGridViewFactory.class));
-        bind(AppsGridView.Presenter.class).to(AppsGridPresenterImpl.class);
 
         // Toolbar View
         install(new GinFactoryModuleBuilder()
