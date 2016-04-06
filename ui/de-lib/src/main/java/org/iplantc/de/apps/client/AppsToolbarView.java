@@ -2,6 +2,7 @@ package org.iplantc.de.apps.client;
 
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.BeforeAppSearchEvent;
+import org.iplantc.de.apps.client.events.SwapViewButtonClickedEvent;
 import org.iplantc.de.apps.client.events.selection.*;
 
 import com.google.gwt.event.shared.HasHandlers;
@@ -28,8 +29,9 @@ public interface AppsToolbarView extends IsWidget,
                                          DeleteAppsSelected.HasDeleteAppsSelectedHandlers,
                                          EditAppSelected.HasEditAppSelectedHandlers,
                                          EditWorkflowSelected.HasEditWorkflowSelectedHandlers,
-                                RequestToolSelected.HasRequestToolSelectedHandlers,
-                                ShareAppsSelected.HasShareAppSelectedHandlers {
+                                         RequestToolSelected.HasRequestToolSelectedHandlers,
+                                         ShareAppsSelected.HasShareAppSelectedHandlers,
+                                         SwapViewButtonClickedEvent.HasSwapViewButtonClickedEventHandlers {
 
     interface AppsToolbarAppearance {
 

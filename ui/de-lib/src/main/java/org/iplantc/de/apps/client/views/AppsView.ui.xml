@@ -58,7 +58,7 @@
         <container:center layoutData="{centerData}">
             <container:CardLayoutContainer ui:field="centerPanel">
                 <appsWidgets:AppsListView ui:field="appsListView" />
-                <!--<appsWidgets:AppsGridView ui:field="appsGridView"/>-->
+                <appsWidgets:AppsGridView ui:field="appsGridView"/>
             </container:CardLayoutContainer>
         </container:center>
 

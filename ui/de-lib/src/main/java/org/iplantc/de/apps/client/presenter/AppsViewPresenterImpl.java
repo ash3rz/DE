@@ -5,12 +5,14 @@ import org.iplantc.de.apps.client.AppsGridView;
 import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
+import org.iplantc.de.apps.client.events.SwapViewButtonClickedEvent;
 import org.iplantc.de.apps.client.gin.factory.AppsViewFactory;
 import org.iplantc.de.client.models.HasId;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppCategory;
 
 import com.google.gwt.user.client.ui.HasOneWidget;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Inject;
 
 import com.sencha.gxt.widget.core.client.ListView;
@@ -20,11 +22,13 @@ import com.sencha.gxt.widget.core.client.ListView;
  *
  * @author jstroot
  */
-public class AppsViewPresenterImpl implements AppsView.Presenter {
+public class AppsViewPresenterImpl implements AppsView.Presenter,
+                                              SwapViewButtonClickedEvent.SwapViewButtonClickedEventHandler {
 
     protected final AppsView view;
     private final AppCategoriesView.Presenter categoriesPresenter;
     private final AppsListView.Presenter appsListPresenter;
+    private final AppsGridView.Presenter appsGridPresenter;
 
     @Inject
     protected AppsViewPresenterImpl(final AppsViewFactory viewFactory,
@@ -34,6 +38,7 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
                                     final AppsToolbarView.Presenter toolbarPresenter) {
         this.categoriesPresenter = categoriesPresenter;
         this.appsListPresenter = appsListPresenter;
+        this.appsGridPresenter = appsGridPresenter;
         this.view = viewFactory.create(categoriesPresenter,
                                        appsListPresenter,
                                        appsGridPresenter,
@@ -59,7 +64,7 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(categoriesPresenter);
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsListPresenter);
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsListPresenter.getView());
-
+        toolbarPresenter.getView().addSwapViewButtonClickedEventHandler(this);
     }
 
     @Override
@@ -103,4 +108,14 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
         view.asWidget().ensureDebugId(baseId);
     }
 
+    @Override
+    public void onSwapViewButtonClicked(SwapViewButtonClickedEvent event) {
+        IsWidget activeView = view.getActiveView();
+        if (activeView == view.getListView()) {
+            activeView = view.getGridView();
+        } else {
+            activeView = view.getListView();
+        }
+        view.setActiveView(activeView);
+    }
 }

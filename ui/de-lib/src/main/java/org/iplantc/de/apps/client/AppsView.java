@@ -43,6 +43,7 @@ public interface AppsView extends IsWidget,
         Presenter hideWorkflowMenu();
 
         void setViewDebugId(String baseId);
+
     }
 
     void hideAppMenu();
@@ -52,5 +53,9 @@ public interface AppsView extends IsWidget,
     IsWidget getActiveView();
 
     void setActiveView(IsWidget view);
+
+    AppsListView getListView();
+
+    AppsGridView getGridView();
 
 }

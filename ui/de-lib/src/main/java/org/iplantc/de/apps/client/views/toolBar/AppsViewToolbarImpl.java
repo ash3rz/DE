@@ -5,6 +5,7 @@ import static org.iplantc.de.apps.client.events.AppSearchResultLoadEvent.TYPE;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent.AppSearchResultLoadEventHandler;
 import org.iplantc.de.apps.client.events.BeforeAppSearchEvent;
+import org.iplantc.de.apps.client.events.SwapViewButtonClickedEvent;
 import org.iplantc.de.apps.client.events.selection.AppCategorySelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.CopyAppSelected;
@@ -49,6 +50,7 @@ import com.sencha.gxt.widget.core.client.box.ConfirmMessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutData;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.menu.Item;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
@@ -122,6 +124,11 @@ public class AppsViewToolbarImpl extends Composite implements AppsToolbarView {
     }
 
     // <editor-fold desc="Handler Registrations">
+    @Override
+    public HandlerRegistration addSwapViewButtonClickedEventHandler(SwapViewButtonClickedEvent.SwapViewButtonClickedEventHandler handler) {
+        return addHandler(handler, SwapViewButtonClickedEvent.TYPE);
+    }
+
     @Override
     public HandlerRegistration addAppSearchResultLoadEventHandler(AppSearchResultLoadEventHandler handler) {
         return addHandler(handler, TYPE);
@@ -473,6 +480,11 @@ public class AppsViewToolbarImpl extends Composite implements AppsToolbarView {
     @UiHandler("shareCollab")
     void shareWithCollaborator(SelectionEvent<Item> event) {
         fireEvent(new ShareAppsSelected(currentSelection));
+    }
+
+    @UiHandler("swapViewBtn")
+    public void onSwapViewClick(SelectEvent e) {
+        fireEvent(new SwapViewButtonClickedEvent());
     }
 
 }

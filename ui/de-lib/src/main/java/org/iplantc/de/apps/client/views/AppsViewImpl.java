@@ -30,7 +30,7 @@ public class AppsViewImpl extends Composite implements AppsView {
     @UiField(provided = true) final AppsToolbarView toolBar;
     @UiField(provided = true) final AppCategoriesView appCategoriesView;
     @UiField(provided = true) final AppsListView appsListView;
-//    @UiField(provided = true) final AppsGridView appsGridView;
+    @UiField(provided = true) final AppsGridView appsGridView;
     @UiField CardLayoutContainer centerPanel;
 
     private static final MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
@@ -42,7 +42,7 @@ public class AppsViewImpl extends Composite implements AppsView {
                            @Assisted final AppsToolbarView.Presenter toolbarPresenter) {
         this.appCategoriesView = categoriesPresenter.getView();
         this.appsListView = listPresenter.getView();
-//        this.appsGridView = gridPresenter.getView();
+        this.appsGridView = gridPresenter.getView();
         this.toolBar = toolbarPresenter.getView();
 
         initWidget(uiBinder.createAndBindUi(this));
@@ -66,6 +66,16 @@ public class AppsViewImpl extends Composite implements AppsView {
     @Override
     public void setActiveView(IsWidget view) {
         centerPanel.setActiveWidget(view);
+    }
+
+    @Override
+    public AppsListView getListView() {
+        return appsListView;
+    }
+
+    @Override
+    public AppsGridView getGridView() {
+        return appsGridView;
     }
 
     @Override
