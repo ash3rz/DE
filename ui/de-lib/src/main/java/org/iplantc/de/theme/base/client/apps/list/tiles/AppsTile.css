@@ -18,6 +18,11 @@
     outline: rgb(208,208,208) solid 2px;
 }
 
+.tileCellSelect {
+    background-color: rgb(238,238,238);
+    outline: rgb(208,208,208) solid 2px;
+}
+
 .tileCell h2 {
     color: black;
     margin-top:30px;

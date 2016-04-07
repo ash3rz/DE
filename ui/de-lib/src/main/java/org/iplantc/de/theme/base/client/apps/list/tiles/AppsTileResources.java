@@ -21,6 +21,8 @@ public interface AppsTileResources extends ClientBundle {
 
         String tileCell();
 
+        String tileCellSelect();
+
         String infoMod();
 
         String commentMod();

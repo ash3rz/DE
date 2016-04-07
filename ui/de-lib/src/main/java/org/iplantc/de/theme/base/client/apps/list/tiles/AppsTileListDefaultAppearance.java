@@ -20,7 +20,7 @@ public class AppsTileListDefaultAppearance<App> extends ListViewCustomAppearance
     }
 
     public AppsTileListDefaultAppearance() {
-        super("." + style.tileCell(), null, null);
+        super("." + style.tileCell(), null, style.tileCellSelect());
     }
 
     @Override
