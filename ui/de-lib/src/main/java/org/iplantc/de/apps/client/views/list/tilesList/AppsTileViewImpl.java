@@ -57,17 +57,13 @@ import java.util.List;
 public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsTileView,
                                                               SelectionChangedEvent.SelectionChangedHandler<App>,
                                                               HasHandlers {
-    @Override
-    public ListView<App, App> getGrid() {
-        return null;
-    }
 
     interface AppsGridViewImplUiBinder extends UiBinder<Widget, AppsTileViewImpl> { }
 
     private static final AppsGridViewImplUiBinder ourUiBinder = GWT.create(AppsGridViewImplUiBinder.class);
 
     ListStore<App> listStore;
-    @UiField ListView<App, App> grid;
+    @UiField ListView<App, App> listView;
     @UiField(provided = true) PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> loader;
     @UiField PagingToolBar pagingToolBar;
     @UiField SimpleComboBox<String> sortBox;
@@ -109,8 +105,8 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
             }
         });
 
-        grid.getSelectionModel().addSelectionChangedHandler(this);
-        grid.setCell(this.appTileCell);
+        listView.getSelectionModel().addSelectionChangedHandler(this);
+        listView.setCell(this.appTileCell);
     }
 
     private void buildLoader() {
@@ -166,6 +162,10 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
         return addHandler(handler, AppRatingSelected.TYPE);
     }
 
+    public ListView<App, App> getListView() {
+        return null;
+    }
+
     @Override
     public void onAppCategorySelectionChanged(AppCategorySelectionChangedEvent event) {
         // FIXME Move to appearance
@@ -199,7 +199,7 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
-        grid.ensureDebugId(baseID + AppsModule.Ids.APP_GRID);
+        listView.ensureDebugId(baseID + AppsModule.Ids.APP_GRID);
     }
 
     @Override

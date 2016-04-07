@@ -70,7 +70,7 @@ public class AppsViewPresenterImpl implements AppsView.Presenter,
     @Override
     public ListView<App, App> getAppsGrid() {
         // FIXME Too many levels of misdirection
-        return appsListPresenter.getTilesView().getGrid();
+        return appsListPresenter.getTilesView().getListView();
     }
 
     @Override

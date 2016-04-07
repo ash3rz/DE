@@ -28,7 +28,7 @@
             </toolbar:ToolBar>
         </container:child>
         <container:child layoutData="{layoutData}">
-            <widget:ListView ui:field="grid"
+            <widget:ListView ui:field="listView"
                              borders="true"
                              height="100px"
                              width="100px"

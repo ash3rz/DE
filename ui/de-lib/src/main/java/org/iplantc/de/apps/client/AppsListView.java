@@ -109,7 +109,7 @@ public interface AppsListView extends IsWidget,
 
     interface AppsTileView extends AppsListView {
 
-        ListView<App, App> getGrid();
+        ListView<App, App> getListView();
 
         PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> getLoader();
     }
