@@ -6,6 +6,9 @@ import org.iplantc.de.theme.base.client.apps.AppsMessages;
 
 import com.google.gwt.core.client.GWT;
 
+import com.sencha.gxt.core.client.resources.ThemeStyles;
+import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
+
 /**
  * @author jstroot
  */
@@ -77,6 +80,17 @@ public class AppsListViewDefaultAppearance implements AppsListView.AppsListAppea
     @Override
     public String agaveAuthRequiredMsg() {
         return iplantDisplayStrings.agaveAuthRequiredMsg();
+    }
+
+    @Override
+    public int liveToolItemWidth() {
+        return 150;
+    }
+
+    @Override
+    public void setPagingToolBarStyle(ToolBar pagingToolbar) {
+        pagingToolbar.addStyleName(ThemeStyles.get().style().borderTop());
+        pagingToolbar.getElement().getStyle().setProperty("borderBottom", "none");
     }
 
 }

@@ -28,6 +28,7 @@ import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 
 /**
  * This view is responsible for displaying lists of {@link App}s resulting for {@link AppCategory}
@@ -77,6 +78,10 @@ public interface AppsListView extends IsWidget,
             String agaveAuthRequiredTitle();
 
             String agaveAuthRequiredMsg();
+
+            int liveToolItemWidth();
+
+            void setPagingToolBarStyle(ToolBar pagingToolbar);
         }
 
         /**
@@ -107,11 +112,11 @@ public interface AppsListView extends IsWidget,
 
     void setSearchPattern(String searchPattern);
 
+    PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> getLoader();
+
     interface AppsTileView extends AppsListView {
 
         ListView<App, App> getListView();
-
-        PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> getLoader();
     }
 
     interface AppsGridView extends AppsListView {

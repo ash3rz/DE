@@ -29,7 +29,6 @@ import org.iplantc.de.commons.client.ErrorHandler;
 import org.iplantc.de.commons.client.comments.view.dialogs.CommentsDialog;
 import org.iplantc.de.commons.client.info.ErrorAnnouncementConfig;
 import org.iplantc.de.commons.client.info.IplantAnnouncer;
-import org.iplantc.de.shared.exceptions.HttpRedirectException;
 
 import com.google.common.base.Preconditions;
 import com.google.gwt.event.shared.GwtEvent;
@@ -44,9 +43,6 @@ import com.sencha.gxt.data.shared.event.StoreAddEvent;
 import com.sencha.gxt.data.shared.event.StoreClearEvent;
 import com.sencha.gxt.data.shared.event.StoreRemoveEvent;
 import com.sencha.gxt.data.shared.event.StoreUpdateEvent;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
-
-import java.util.List;
 
 /**
  * @author jstroot
@@ -168,40 +164,49 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
             appsTileView.getLoader().load();
         }
         else {
+
+
             appsGridView.mask(appearance.getAppsLoadingMask());
 
             final AppCategory appCategory = event.getAppCategorySelection().iterator().next();
-            appService.getApps(appCategory, new AsyncCallback<List<App>>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                    if (caught instanceof HttpRedirectException) {
-                        MessageBox
-                                messageBox = new MessageBox(appearance.agaveAuthRequiredTitle(), appearance.agaveAuthRequiredMsg());
-                        messageBox.setIcon(MessageBox.ICONS.info());
-                        messageBox.show();
-                    } else {
-                        ErrorHandler.post(caught);
-                    }
-                    appsGridView.unmask();
-                }
 
-                @Override
-                public void onSuccess(final List<App> apps) {
-                    listStore.clear();
-                    listStore.addAll(apps);
-
-                    if (getDesiredSelectedApp() != null) {
-
-                        appsGridView.getGrid().getSelectionModel().select(getDesiredSelectedApp(), false);
-
-                    } else if (listStore.size() > 0) {
-                        // Select first app
-                        appsGridView.getGrid().getSelectionModel().select(listStore.get(0), false);
-                    }
-                    setDesiredSelectedApp(null);
-                    appsGridView.unmask();
-                }
-            });
+            appsGridView.getLoader().getLastLoadConfig().setAppCategory(appCategory);
+            appsGridView.getLoader().setOffset(0);
+            appsGridView.getLoader().load();
+//            appsGridView.mask(appearance.getAppsLoadingMask());
+//
+//            final AppCategory appCategory = event.getAppCategorySelection().iterator().next();
+//            appService.getApps(appCategory, new AsyncCallback<List<App>>() {
+//                @Override
+//                public void onFailure(Throwable caught) {
+//                    if (caught instanceof HttpRedirectException) {
+//                        MessageBox
+//                                messageBox = new MessageBox(appearance.agaveAuthRequiredTitle(), appearance.agaveAuthRequiredMsg());
+//                        messageBox.setIcon(MessageBox.ICONS.info());
+//                        messageBox.show();
+//                    } else {
+//                        ErrorHandler.post(caught);
+//                    }
+//                    appsGridView.unmask();
+//                }
+//
+//                @Override
+//                public void onSuccess(final List<App> apps) {
+//                    listStore.clear();
+//                    listStore.addAll(apps);
+//
+//                    if (getDesiredSelectedApp() != null) {
+//
+//                        appsGridView.getGrid().getSelectionModel().select(getDesiredSelectedApp(), false);
+//
+//                    } else if (listStore.size() > 0) {
+//                        // Select first app
+//                        appsGridView.getGrid().getSelectionModel().select(listStore.get(0), false);
+//                    }
+//                    setDesiredSelectedApp(null);
+//                    appsGridView.unmask();
+//                }
+//            });
         }
     }
 
