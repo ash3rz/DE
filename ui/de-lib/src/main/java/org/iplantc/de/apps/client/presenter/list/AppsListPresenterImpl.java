@@ -281,8 +281,8 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
 //        appCategory.setApps(appResourceList);
 //        appsTileView.getLoader().getLastLoadConfig().setAppCategory(appCategory);
 //        appsTileView.getLoader().load();
-        listStore.clear();
-        listStore.addAll(event.getResults());
+//        listStore.clear();
+//        listStore.addAll(event.getResults());
     }
 
     @Override

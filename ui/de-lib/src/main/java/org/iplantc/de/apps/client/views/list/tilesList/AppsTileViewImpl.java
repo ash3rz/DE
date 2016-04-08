@@ -163,7 +163,7 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
     }
 
     public ListView<App, App> getListView() {
-        return null;
+        return listView;
     }
 
     @Override
@@ -175,14 +175,18 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
             // Reset Search
             setSearchPattern("");
         }
-        pagingToolBar.show();
     }
 
     @Override
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
         int total = event.getResults() == null ? 0 : event.getResults().size();
         setHeadingText(appearance.searchAppResultsHeader(event.getSearchText(), total));
-        pagingToolBar.hide();
+        AppByCategoryLoadConfig appByCategoryLoadConfig = new AppByCategoryLoadConfig();
+        appByCategoryLoadConfig.setAppList(event.getResults());
+        loader.useLoadConfig(appByCategoryLoadConfig);
+        pagingToolBar.setPageSize(event.getResults().size());
+        loader.load();
+
         unmask();
     }
 

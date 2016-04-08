@@ -107,6 +107,23 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
         appByCategoryProxy.setMaskable(this);
     }
 
+    @UiFactory
+    LiveGridView<App> createLiveGridView() {
+        // CORE-5723 KLUDGE for Firefox bug with LiveGridView row height calculation.
+        // Always use a row height of 25 for now.
+
+        final LiveGridView<App> liveGridView = new LiveGridView<App>() {
+            @Override
+            protected void insertRows(int firstRow, int lastRow, boolean isUpdate) {
+                super.insertRows(firstRow, lastRow, isUpdate);
+
+                setRowHeight(25);
+            }
+        };
+        liveGridView.setCacheSize(200);
+        return liveGridView;
+    }
+
     //<editor-fold desc="Handler Registrations">
     @Override
     public HandlerRegistration addAppCommentSelectedEventHandlers(AppCommentSelectedEvent.AppCommentSelectedEventHandler handler) {
@@ -154,22 +171,6 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
         return grid;
     }
 
-    @UiFactory
-    LiveGridView<App> createLiveGridView() {
-        // CORE-5723 KLUDGE for Firefox bug with LiveGridView row height calculation.
-        // Always use a row height of 25 for now.
-
-        final LiveGridView<App> liveGridView = new LiveGridView<App>() {
-            @Override
-            protected void insertRows(int firstRow, int lastRow, boolean isUpdate) {
-                super.insertRows(firstRow, lastRow, isUpdate);
-
-                setRowHeight(25);
-            }
-        };
-//        liveGridView.setCacheSize(500);
-        return liveGridView;
-    }
 
     @Override
     public void onAppCategorySelectionChanged(AppCategorySelectionChangedEvent event) {
@@ -186,6 +187,11 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
         int total = event.getResults() == null ? 0 : event.getResults().size();
         setHeadingText(appearance.searchAppResultsHeader(event.getSearchText(), total));
+        AppByCategoryLoadConfig appByCategoryLoadConfig = new AppByCategoryLoadConfig();
+        appByCategoryLoadConfig.setAppList(event.getResults());
+        loader.useLoadConfig(appByCategoryLoadConfig);
+        loader.load();
+        
         unmask();
     }
 

@@ -38,11 +38,9 @@ public class AppByCategoryProxy extends RpcProxy<AppByCategoryLoadConfig, Paging
     public void load(final AppByCategoryLoadConfig loadConfig,
                      final AsyncCallback<PagingLoadResult<App>> callback) {
 
-//        if (null == loadConfig.getAppCategory().getId()) {
-//            List<AppResource> appResources = Lists.newArrayList();
-//            appResources.addAll(loadConfig.getAppCategory().getApps());
-//            callback.onSuccess(new PagingLoadResultBean<>(appResources, appResources.size(), loadConfig.getOffset()));
-//        } else {
+        if (null == loadConfig.getAppCategory() && null != loadConfig.getAppList()) {
+            callback.onSuccess(new PagingLoadResultBean<App>(loadConfig.getAppList(), loadConfig.getAppList().size(), 0 ));
+        } else {
             SortInfo sortInfo =
                     Iterables.getFirst(loadConfig.getSortInfo(), new SortInfoBean("name", SortDir.ASC));
             appService.getPagedApps(loadConfig.getAppCategory().getId(),
@@ -70,7 +68,7 @@ public class AppByCategoryProxy extends RpcProxy<AppByCategoryLoadConfig, Paging
                                     });
         }
 
-//    }
+    }
 
     public void setMaskable(IsMaskable maskable) {
         this.maskable = maskable;

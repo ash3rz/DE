@@ -117,5 +117,11 @@ public class AppsViewPresenterImpl implements AppsView.Presenter,
             activeView = view.getListView();
         }
         view.setActiveView(activeView);
+
+        AppCategory selectedAppCategory = categoriesPresenter.getSelectedAppCategory();
+        if (null != selectedAppCategory) {
+            categoriesPresenter.getView().getTree().getSelectionModel().deselectAll();
+            categoriesPresenter.go(selectedAppCategory);
+        }
     }
 }
