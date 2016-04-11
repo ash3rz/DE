@@ -203,7 +203,8 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
-        listView.ensureDebugId(baseID + AppsModule.Ids.APP_GRID);
+        listView.ensureDebugId(baseID + AppsModule.Ids.APP_TILES);
+        appTileCell.setDebugBaseId(baseID + AppsModule.Ids.APP_TILES);
     }
 
     @Override

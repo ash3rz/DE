@@ -82,4 +82,10 @@ public class AppTileCell extends CompositeCell<App> {
         appIntegratorCell.setSearchRegexPattern(pattern);
     }
 
+    public void setDebugBaseId(String baseID) {
+        appNameCell.setBaseDebugId(baseID);
+        appInfoCell.setBaseDebugId(baseID);
+    }
+
+
 }
