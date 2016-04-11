@@ -130,7 +130,11 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
 
     @Override
     public App getSelectedApp() {
-        return null;
+        if (activeView == appsTileView) {
+            return appsTileView.getListView().getSelectionModel().getSelectedItem();
+        } else {
+            return appsGridView.getGrid().getSelectionModel().getSelectedItem();
+        }
     }
 
     @Override
