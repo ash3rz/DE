@@ -373,6 +373,7 @@ public class AppCategoriesPresenterImpl implements AppCategoriesView.Presenter,
             return;
         }
         if (parent == null) {
+            treeStore.clear();
             treeStore.add(children);
         } else {
             treeStore.add(parent, children);
