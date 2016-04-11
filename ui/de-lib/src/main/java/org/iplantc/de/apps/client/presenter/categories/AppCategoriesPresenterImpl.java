@@ -176,7 +176,6 @@ public class AppCategoriesPresenterImpl implements AppCategoriesView.Presenter,
         if (appCategory == null) {
             return;
         }
-        updateAppCategoryAppCount(appCategory, event.getSource().getAll().size());
     }
 
     @Override
@@ -207,7 +206,6 @@ public class AppCategoriesPresenterImpl implements AppCategoriesView.Presenter,
             // Adjust favorite category count.
             final AppCategory favoriteCategory = findAppCategoryByName(FAVORITES);
             int favCountAdjustment = app.isFavorite() ? 1 : -1;
-            updateAppCategoryAppCount(favoriteCategory, favoriteCategory.getAppCount() + favCountAdjustment);
         }
     }
 
@@ -301,7 +299,6 @@ public class AppCategoriesPresenterImpl implements AppCategoriesView.Presenter,
         if (appCategory == null) {
             return;
         }
-        updateAppCategoryAppCount(appCategory, 0);
     }
 
     @Override
@@ -368,7 +365,6 @@ public class AppCategoriesPresenterImpl implements AppCategoriesView.Presenter,
         if (appCategory == null) {
             return;
         }
-        updateAppCategoryAppCount(appCategory, event.getSource().getAll().size());
     }
 
     void addAppCategories(AppCategory parent, List<AppCategory> children) {
@@ -418,16 +414,6 @@ public class AppCategoriesPresenterImpl implements AppCategoriesView.Presenter,
             JSONArray items = JSONParser.parseStrict(props.getPrivateWorkspaceItems()).isArray();
             USER_APPS_GROUP = jsonUtil.getRawValueAsString(items.get(0));
             FAVORITES = jsonUtil.getRawValueAsString(items.get(1));
-        }
-    }
-
-    void updateAppCategoryAppCount(AppCategory appGroup, int newCount) {
-        int difference = appGroup.getAppCount() - newCount;
-
-        while (appGroup != null) {
-            appGroup.setAppCount(appGroup.getAppCount() - difference);
-            treeStore.update(appGroup);
-            appGroup = treeStore.getParent(appGroup);
         }
     }
 
