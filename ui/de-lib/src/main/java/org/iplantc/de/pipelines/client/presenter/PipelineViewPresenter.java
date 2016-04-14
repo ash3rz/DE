@@ -1,8 +1,8 @@
 package org.iplantc.de.pipelines.client.presenter;
 
+import org.iplantc.de.apps.client.AppsView;
 import org.iplantc.de.apps.client.events.AppCategoryCountUpdateEvent;
 import org.iplantc.de.apps.client.events.AppSavedEvent;
-import org.iplantc.de.apps.client.AppsView;
 import org.iplantc.de.client.events.EventBus;
 import org.iplantc.de.client.gin.ServicesInjector;
 import org.iplantc.de.client.models.apps.App;
@@ -40,7 +40,9 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.dnd.core.client.DND.Operation;
 import com.sencha.gxt.dnd.core.client.DropTarget;
 import com.sencha.gxt.dnd.core.client.GridDragSource;
+import com.sencha.gxt.dnd.core.client.ListViewDragSource;
 import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.container.Container;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.form.error.DefaultEditorError;
@@ -128,20 +130,24 @@ public class PipelineViewPresenter implements Presenter, PipelineView.Presenter,
         appSelectView = new AppSelectionDialog();
         appSelectView.setPresenter(this);
 
-//        initAppsGridDragHandler(appsPresenter.getAppsGrid());
+        initAppsDragHandlers(appsPresenter.getAppsGrid(), appsPresenter.getAppsList());
         initPipelineBuilderDropHandler(view.getBuilderDropContainer());
 
         // TODO Possibly inject with annotation to replace with a different toolbar impl
         appsPresenter.hideAppMenu().hideWorkflowMenu().go(appSelectView, null, null);
     }
 
-    private void initAppsGridDragHandler(Grid<App> grid) {
+    private void initAppsDragHandlers(Grid<App> grid, ListView<App, App> appsList) {
         AppsGridDragHandler handler = new AppsGridDragHandler();
         handler.setPresenter(this);
 
-        GridDragSource<App> source = new GridDragSource<>(grid);
-        source.addDragStartHandler(handler);
-        source.addDragCancelHandler(handler);
+        GridDragSource<App> gridDragSource = new GridDragSource<>(grid);
+        gridDragSource.addDragStartHandler(handler);
+        gridDragSource.addDragCancelHandler(handler);
+
+        ListViewDragSource<App> tileDragSource = new ListViewDragSource<App>(appsList);
+        tileDragSource.addDragStartHandler(handler);
+        tileDragSource.addDragCancelHandler(handler);
     }
 
     private void initPipelineBuilderDropHandler(Container builderPanel) {

@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Inject;
 
 import com.sencha.gxt.widget.core.client.ListView;
+import com.sencha.gxt.widget.core.client.grid.Grid;
 
 /**
  * The presenter for the AppsView.
@@ -68,9 +69,9 @@ public class AppsViewPresenterImpl implements AppsView.Presenter,
     }
 
     @Override
-    public ListView<App, App> getAppsGrid() {
+    public Grid<App> getAppsGrid() {
         // FIXME Too many levels of misdirection
-        return appsListPresenter.getTilesView().getListView();
+        return appsListPresenter.getGridView().getGrid();
     }
 
     @Override
@@ -106,6 +107,11 @@ public class AppsViewPresenterImpl implements AppsView.Presenter,
     @Override
     public void setViewDebugId(String baseId) {
         view.asWidget().ensureDebugId(baseId);
+    }
+
+    @Override
+    public ListView<App, App> getAppsList() {
+        return appsListPresenter.getTilesView().getListView();
     }
 
     @Override
