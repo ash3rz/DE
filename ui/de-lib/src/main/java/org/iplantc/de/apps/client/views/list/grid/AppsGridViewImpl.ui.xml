@@ -32,7 +32,6 @@
                        store="{listStore}"
                        cm="{cm}"
                        view="{gridView}"
-                       loadMask="true"
                         loader="{loader}"/>
         </container:child>
         <container:child layoutData="{centerBottomBarLayoutData}">

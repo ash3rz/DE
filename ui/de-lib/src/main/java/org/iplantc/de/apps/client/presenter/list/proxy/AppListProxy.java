@@ -57,6 +57,8 @@ public class AppListProxy extends RpcProxy<AppLoadConfig, PagingLoadResult<App>>
                                                new SortInfoBean("name", SortDir.ASC));
         String sortField = getSortField(sortInfo);
 
+        maskable.mask(appearance.getAppsLoadingMask());
+
         if (loadConfig instanceof AppListLoadConfig) {
             AppListLoadConfig appListLoadConfig = (AppListLoadConfig)loadConfig;
             List<App> apps = appListLoadConfig.getAppList();
