@@ -1,10 +1,12 @@
 package org.iplantc.de.apps.client.presenter.list.proxy;
 
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.client.models.IsMaskable;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppCategory;
 import org.iplantc.de.client.services.AppServiceFacade;
 import org.iplantc.de.commons.client.ErrorHandler;
+import org.iplantc.de.shared.exceptions.HttpRedirectException;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -17,6 +19,7 @@ import com.sencha.gxt.data.shared.SortInfo;
 import com.sencha.gxt.data.shared.SortInfoBean;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoadResultBean;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,12 +31,14 @@ import java.util.List;
 public class AppListProxy extends RpcProxy<AppLoadConfig, PagingLoadResult<App>> {
 
     private final AppServiceFacade appService;
+    private AppsListView.AppsListAppearance appearance;
 
     private IsMaskable maskable;
 
     @Inject
-    public AppListProxy(AppServiceFacade appService) {
+    public AppListProxy(AppServiceFacade appService, AppsListView.AppsListAppearance appearance) {
         this.appService = appService;
+        this.appearance = appearance;
     }
 
     public void setMaskable(IsMaskable maskable) {
@@ -78,7 +83,15 @@ public class AppListProxy extends RpcProxy<AppLoadConfig, PagingLoadResult<App>>
                                     new AsyncCallback<AppCategory>() {
                                         @Override
                                         public void onFailure(Throwable caught) {
-                                            ErrorHandler.post(caught);
+                                            if (caught instanceof HttpRedirectException) {
+                                                MessageBox messageBox =
+                                                        new MessageBox(appearance.agaveAuthRequiredTitle(),
+                                                                       appearance.agaveAuthRequiredMsg());
+                                                messageBox.setIcon(MessageBox.ICONS.info());
+                                                messageBox.show();
+                                            } else {
+                                                ErrorHandler.post(caught);
+                                            }
                                             maskable.unmask();
                                         }
 

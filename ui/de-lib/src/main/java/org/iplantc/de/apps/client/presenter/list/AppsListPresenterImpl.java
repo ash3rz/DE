@@ -159,60 +159,19 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
             return;
         }
         Preconditions.checkArgument(event.getAppCategorySelection().size() == 1);
+        final AppCategory appCategory = event.getAppCategorySelection().iterator().next();
+
+        AppCategoryLoadConfig categoryLoadConfig = new AppCategoryLoadConfig();
+        categoryLoadConfig.setAppCategory(appCategory);
+
         if (activeView == appsTileView) {
             appsTileView.mask(appearance.getAppsLoadingMask());
-
-            final AppCategory appCategory = event.getAppCategorySelection().iterator().next();
-
-            AppCategoryLoadConfig categoryLoadConfig = new AppCategoryLoadConfig();
-            categoryLoadConfig.setAppCategory(appCategory);
             categoryLoadConfig.setSortInfo(appsTileView.getSortInfo());
             appsTileView.getLoader().load(categoryLoadConfig);
         }
         else {
-
-
             appsGridView.mask(appearance.getAppsLoadingMask());
-
-            final AppCategory appCategory = event.getAppCategorySelection().iterator().next();
-
-            AppCategoryLoadConfig categoryLoadConfig = new AppCategoryLoadConfig();
-            categoryLoadConfig.setAppCategory(appCategory);
             appsGridView.getLoader().load(categoryLoadConfig);
-//            appsGridView.mask(appearance.getAppsLoadingMask());
-//
-//            final AppCategory appCategory = event.getAppCategorySelection().iterator().next();
-//            appService.getApps(appCategory, new AsyncCallback<List<App>>() {
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    if (caught instanceof HttpRedirectException) {
-//                        MessageBox
-//                                messageBox = new MessageBox(appearance.agaveAuthRequiredTitle(), appearance.agaveAuthRequiredMsg());
-//                        messageBox.setIcon(MessageBox.ICONS.info());
-//                        messageBox.show();
-//                    } else {
-//                        ErrorHandler.post(caught);
-//                    }
-//                    appsGridView.unmask();
-//                }
-//
-//                @Override
-//                public void onSuccess(final List<App> apps) {
-//                    listStore.clear();
-//                    listStore.addAll(apps);
-//
-//                    if (getDesiredSelectedApp() != null) {
-//
-//                        appsGridView.getGrid().getSelectionModel().select(getDesiredSelectedApp(), false);
-//
-//                    } else if (listStore.size() > 0) {
-//                        // Select first app
-//                        appsGridView.getGrid().getSelectionModel().select(listStore.get(0), false);
-//                    }
-//                    setDesiredSelectedApp(null);
-//                    appsGridView.unmask();
-//                }
-//            });
         }
     }
 
@@ -280,15 +239,6 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
         } else {
             appsGridView.setSearchPattern(event.getSearchPattern());
         }
-
-//        AppCategory appCategory = factory.appGroup().as();
-//        List<AppResource> appResourceList = Lists.newArrayList();
-//        appResourceList.addAll(event.getResults());
-//        appCategory.setApps(appResourceList);
-//        appsTileView.getLoader().getLastLoadConfig().setAppCategory(appCategory);
-//        appsTileView.getLoader().load();
-//        listStore.clear();
-//        listStore.addAll(event.getResults());
     }
 
     @Override
