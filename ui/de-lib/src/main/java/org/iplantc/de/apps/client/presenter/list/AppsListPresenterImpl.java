@@ -171,6 +171,7 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
         }
         else {
             appsGridView.mask(appearance.getAppsLoadingMask());
+            categoryLoadConfig.setLimit(appsGridView.getLoader().getLimit());
             appsGridView.getLoader().load(categoryLoadConfig);
         }
     }
