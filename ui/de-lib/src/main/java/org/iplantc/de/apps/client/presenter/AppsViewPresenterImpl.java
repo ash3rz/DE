@@ -128,6 +128,12 @@ public class AppsViewPresenterImpl implements AppsView.Presenter,
         if (null != selectedAppCategory) {
             categoriesPresenter.getView().getTree().getSelectionModel().deselectAll();
             categoriesPresenter.go(selectedAppCategory);
+        } else {
+            /**
+             * Refresh the view because each view will manipulate the
+             * shared listStore differently (which page #, versus # visible items)
+             */
+            appsListPresenter.refreshActiveView();
         }
     }
 }

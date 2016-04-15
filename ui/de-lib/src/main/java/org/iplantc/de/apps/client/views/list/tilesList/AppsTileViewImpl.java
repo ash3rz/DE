@@ -12,7 +12,6 @@ import org.iplantc.de.apps.client.events.selection.AppNameSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
-import org.iplantc.de.apps.client.presenter.list.proxy.AppListLoadConfig;
 import org.iplantc.de.apps.client.presenter.list.proxy.AppListProxy;
 import org.iplantc.de.apps.client.presenter.list.proxy.AppLoadConfig;
 import org.iplantc.de.apps.client.views.list.cells.AppTileCell;
@@ -181,10 +180,8 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
         int total = event.getResults() == null ? 0 : event.getResults().size();
         setHeadingText(appearance.searchAppResultsHeader(event.getSearchText(), total));
-        AppListLoadConfig appListLoadConfig = new AppListLoadConfig();
-        appListLoadConfig.setAppList(event.getResults());
         pagingToolBar.setPageSize(event.getResults().size());
-        loader.load(appListLoadConfig);
+        pagingToolBar.refresh();
 
     }
 
@@ -222,6 +219,12 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
         }
         sortInfoList.add(sortInfo);
         return sortInfoList;
+    }
+
+    @Override
+    public void refresh() {
+        listView.refresh();
+        pagingToolBar.refresh();
     }
 
     @Override

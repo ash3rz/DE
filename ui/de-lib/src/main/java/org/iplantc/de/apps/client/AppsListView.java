@@ -58,7 +58,8 @@ public interface AppsListView extends IsWidget,
                                       AppFavoritedEvent.HasAppFavoritedEventHandlers,
                                       BeforeAppSearchEvent.BeforeAppSearchEventHandler {
 
-        interface AppsListAppearance {
+
+    interface AppsListAppearance {
 
             String appLaunchWithoutToolError();
 
@@ -113,7 +114,11 @@ public interface AppsListView extends IsWidget,
             AppsGridView getGridView();
 
             void setActiveView(IsWidget view);
+
+            void refreshActiveView();
         }
+
+    void refresh();
 
     void setSearchPattern(String searchPattern);
 

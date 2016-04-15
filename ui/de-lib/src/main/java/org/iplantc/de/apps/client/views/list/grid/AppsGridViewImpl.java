@@ -12,9 +12,8 @@ import org.iplantc.de.apps.client.events.selection.AppNameSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
-import org.iplantc.de.apps.client.presenter.list.proxy.AppListLoadConfig;
-import org.iplantc.de.apps.client.presenter.list.proxy.AppLoadConfig;
 import org.iplantc.de.apps.client.presenter.list.proxy.AppListProxy;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppLoadConfig;
 import org.iplantc.de.apps.shared.AppsModule;
 import org.iplantc.de.client.models.apps.App;
 
@@ -188,9 +187,7 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
         int total = event.getResults() == null ? 0 : event.getResults().size();
         setHeadingText(appearance.searchAppResultsHeader(event.getSearchText(), total));
-        AppListLoadConfig appListLoadConfig = new AppListLoadConfig();
-        appListLoadConfig.setAppList(event.getResults());
-        loader.load(appListLoadConfig);
+
 
     }
 
@@ -202,6 +199,11 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
     @Override
     public void onSelectionChanged(SelectionChangedEvent<App> event) {
         fireEvent(new AppSelectionChangedEvent(event.getSelection()));
+    }
+
+    @Override
+    public void refresh() {
+        gridView.refresh();
     }
 
     @Override

@@ -18,6 +18,7 @@ import org.iplantc.de.apps.client.gin.factory.AppsTileViewFactory;
 import org.iplantc.de.apps.client.presenter.callbacks.DeleteRatingCallback;
 import org.iplantc.de.apps.client.presenter.callbacks.RateAppCallback;
 import org.iplantc.de.apps.client.presenter.list.proxy.AppCategoryLoadConfig;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppListLoadConfig;
 import org.iplantc.de.client.events.EventBus;
 import org.iplantc.de.client.models.UserInfo;
 import org.iplantc.de.client.models.apps.App;
@@ -154,6 +155,16 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
     }
 
     @Override
+    public void refreshActiveView() {
+        if (activeView == appsTileView) {
+            appsTileView.refresh();
+        } else {
+            appsGridView.refresh();
+        }
+
+    }
+
+    @Override
     public void onAppCategorySelectionChanged(AppCategorySelectionChangedEvent event) {
         if (event.getAppCategorySelection().isEmpty()) {
             return;
@@ -235,10 +246,16 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
 
     @Override
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
+        AppListLoadConfig appListLoadConfig = new AppListLoadConfig();
+        appListLoadConfig.setAppList(event.getResults());
         if (activeView == appsTileView) {
             appsTileView.setSearchPattern(event.getSearchPattern());
+            appsGridView.getLoader().load(appListLoadConfig);
+            appsTileView.getLoader().load(appListLoadConfig);
         } else {
             appsGridView.setSearchPattern(event.getSearchPattern());
+            appsTileView.getLoader().load(appListLoadConfig);
+            appsGridView.getLoader().load(appListLoadConfig);
         }
     }
 
