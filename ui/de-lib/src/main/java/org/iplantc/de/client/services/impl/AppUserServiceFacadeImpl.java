@@ -321,6 +321,30 @@ public class AppUserServiceFacadeImpl implements AppUserServiceFacade {
     }
 
     @Override
+    public void pagedSearchApp(String search, int limit,
+                               String sortField,
+                               int offset,
+                               String sortDir,
+                               AsyncCallback<AppListLoadResult> callback) {
+
+        String address = APPS + "?search=" + URL.encodeQueryString(search) + "&limit=" + limit + "&sort-field="
+                         + sortField + "&sort-dir=" + sortDir + "&offset=" + offset;
+
+        ServiceCallWrapper wrapper = new ServiceCallWrapper(GET, address);
+        deServiceFacade.getServiceData(wrapper,  new AsyncCallbackConverter<String, AppListLoadResult>(callback) {
+            @Override
+            protected AppListLoadResult convertFrom(String object) {
+                List<App> apps = AutoBeanCodex.decode(svcFactory, AppList.class, object).as().getApps();
+                AutoBean<AppListLoadResult> loadResultAutoBean = svcFactory.loadResult();
+
+                final AppListLoadResult loadResult = loadResultAutoBean.as();
+                loadResult.setData(apps);
+                return loadResult;
+            }
+        });
+    }
+
+    @Override
     public void publishWorkflow(String workflowId, String body, AsyncCallback<String> callback) {
         String address = PIPELINES + "/" + workflowId;
         ServiceCallWrapper wrapper = new ServiceCallWrapper(Type.PUT, address, body);

@@ -8,10 +8,14 @@ import org.iplantc.de.client.services.AppServiceFacade;
 import org.iplantc.de.commons.client.ErrorHandler;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.sencha.gxt.data.client.loader.RpcProxy;
+import com.sencha.gxt.data.shared.SortDir;
+import com.sencha.gxt.data.shared.SortInfo;
+import com.sencha.gxt.data.shared.SortInfoBean;
 import com.sencha.gxt.data.shared.loader.FilterConfig;
 import com.sencha.gxt.data.shared.loader.FilterPagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
@@ -62,8 +66,14 @@ public class AppSearchRpcProxy extends RpcProxy<FilterPagingLoadConfig, PagingLo
             hasHandlers.fireEvent(new BeforeAppSearchEvent());
         }
 
+        // Get sort info
+        SortInfo sortInfo = Iterables.getFirst(loadConfig.getSortInfo(),
+                                               new SortInfoBean("name", SortDir.ASC));
+        String sortField = getSortField(sortInfo);
+
+
         // Call the searchApp service with this proxy's query.
-        appService.searchApp(lastQueryText, new AsyncCallback<AppListLoadResult>() {
+        appService.pagedSearchApp(lastQueryText, loadConfig.getLimit(), sortField, loadConfig.getOffset(), sortInfo.getSortDir().toString(), new AsyncCallback<AppListLoadResult>() {
             @Override
             public void onSuccess(final AppListLoadResult loadResult) {
                 List<App> apps = loadResult.getData();
@@ -93,6 +103,25 @@ public class AppSearchRpcProxy extends RpcProxy<FilterPagingLoadConfig, PagingLo
                 callback.onFailure(caught);
             }
         });
+    }
+
+    public String getSortField(SortInfo sortInfo) {
+        String sortField = sortInfo.getSortField();
+        return getServiceFilterName(sortField);
+    }
+
+    public String getServiceFilterName(String input) {
+        String filter = input.toLowerCase();
+        if (filter.matches("[Nn]ame")) {
+            return AppServiceFacade.NAME_SORT_FIELD;
+        }
+        if (filter.matches("[Ii](ntegrator|ntegrated).*")) {
+            return AppServiceFacade.INTEGRATOR_SORT_FIELD;
+        }
+        if (filter.matches("(.*[Rr]ating)")) {
+            return AppServiceFacade.RATING_SORT_FIELD;
+        }
+        return null;
     }
 
     private final class AppComparator implements Comparator<App> {

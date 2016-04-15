@@ -74,4 +74,7 @@ public interface AppServiceFacade {
      */
     void searchApp(String search, AsyncCallback<AppListLoadResult> callback);
 
+    void pagedSearchApp(String search, int limit, String sortField, int offset,
+                        String sortDir, AsyncCallback<AppListLoadResult> callback);
+
 }

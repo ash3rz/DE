@@ -5,6 +5,7 @@ import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppDoc;
 import org.iplantc.de.client.models.apps.AppFeedback;
 import org.iplantc.de.client.models.apps.integration.AppTemplate;
+import org.iplantc.de.client.models.apps.proxy.AppListLoadResult;
 import org.iplantc.de.client.models.apps.sharing.AppSharingRequestList;
 import org.iplantc.de.client.models.apps.sharing.AppUnSharingRequestList;
 
@@ -37,6 +38,13 @@ public interface AppUserServiceFacade extends AppServiceFacade {
      * @param callback called when the RPC call is complete.
      */
     void getDataObjectsForApp(String appId, AsyncCallback<String> callback);
+
+    void pagedSearchApp(String search,
+                        int limit,
+                        String sortField,
+                        int offset,
+                        String sortDir,
+                        AsyncCallback<AppListLoadResult> callback);
 
     /**
      * Publishes a workflow / pipeline to user's workspace
