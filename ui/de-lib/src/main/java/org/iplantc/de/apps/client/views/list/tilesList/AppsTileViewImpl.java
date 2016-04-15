@@ -69,7 +69,7 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
     @UiField(provided = true) PagingLoader<AppLoadConfig, PagingLoadResult<App>> loader;
     @UiField PagingToolBar pagingToolBar;
     @UiField SimpleComboBox<String> sortBox;
-    private final AppsListView.AppsListAppearance appearance;
+    @UiField(provided = true) AppsListView.AppsListAppearance appearance;
     private AppsTileListDefaultAppearance<App> cellAppearance;
     private AppTileCell appTileCell;
     private AppListProxy appListProxy;
@@ -173,6 +173,8 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
             // Reset Search
             setSearchPattern("");
         }
+
+        pagingToolBar.setPageSize(appearance.toolbarPageSize());
     }
 
     @Override

@@ -84,6 +84,8 @@ public interface AppsListView extends IsWidget,
 
             int liveToolItemWidth();
 
+            int toolbarPageSize();
+
             void setPagingToolBarStyle(ToolBar pagingToolbar);
         }
 

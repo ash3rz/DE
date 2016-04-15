@@ -15,6 +15,7 @@
     <ui:with field="labelProvider"
              type="com.sencha.gxt.data.shared.StringLabelProvider"/>
     <ui:with type="com.sencha.gxt.data.shared.loader.PagingLoader" field="loader" />
+    <ui:with field="appearance" type="org.iplantc.de.apps.client.AppsListView.AppsListAppearance"/>
     <container:VerticalLayoutContainer>
         <container:child>
             <toolbar:ToolBar>
@@ -35,7 +36,7 @@
                              loader="{loader}"/>
         </container:child>
         <container:child layoutData="{toolBarLayoutData}">
-            <toolbar:PagingToolBar pageSize="50" ui:field="pagingToolBar" borders="false"/>
+            <toolbar:PagingToolBar pageSize="{appearance.toolbarPageSize}" ui:field="pagingToolBar" borders="false"/>
         </container:child>
     </container:VerticalLayoutContainer>
 </ui:UiBinder>

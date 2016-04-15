@@ -88,6 +88,11 @@ public class AppsListViewDefaultAppearance implements AppsListView.AppsListAppea
     }
 
     @Override
+    public int toolbarPageSize() {
+        return 50;
+    }
+
+    @Override
     public void setPagingToolBarStyle(ToolBar pagingToolbar) {
         pagingToolbar.addStyleName(ThemeStyles.get().style().borderTop());
         pagingToolbar.getElement().getStyle().setProperty("borderBottom", "none");
