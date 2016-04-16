@@ -22,10 +22,8 @@ import org.iplantc.de.apps.client.presenter.list.proxy.AppListLoadConfig;
 import org.iplantc.de.client.events.EventBus;
 import org.iplantc.de.client.models.UserInfo;
 import org.iplantc.de.client.models.apps.App;
-import org.iplantc.de.client.models.apps.AppAutoBeanFactory;
 import org.iplantc.de.client.models.apps.AppCategory;
 import org.iplantc.de.client.services.AppMetadataServiceFacade;
-import org.iplantc.de.client.services.AppServiceFacade;
 import org.iplantc.de.client.services.AppUserServiceFacade;
 import org.iplantc.de.commons.client.ErrorHandler;
 import org.iplantc.de.commons.client.comments.view.dialogs.CommentsDialog;
@@ -58,7 +56,6 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
 
     final ListStore<App> listStore;
     @Inject IplantAnnouncer announcer;
-    @Inject AppServiceFacade appService;
     @Inject AppUserServiceFacade appUserService;
     @Inject AppsListView.AppsListAppearance appearance;
     @Inject AsyncProvider<CommentsDialog> commentsDialogProvider;
@@ -68,14 +65,13 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
     private final AppsListView.AppsTileView appsTileView;
     private final AppsListView.AppsGridView appsGridView;
     private App desiredSelectedApp;
-    @Inject AppAutoBeanFactory factory;
-    private IsWidget activeView;
+    IsWidget activeView;
 
     @Inject
-    AppsListPresenterImpl(final AppsTileViewFactory listViewFactory,
-                          final AppsGridViewFactory gridViewFactory,
-                          final ListStore<App> listStore,
-                          final EventBus eventBus) {
+    public AppsListPresenterImpl(final AppsTileViewFactory listViewFactory,
+                                 final AppsGridViewFactory gridViewFactory,
+                                 final ListStore<App> listStore,
+                                 final EventBus eventBus) {
         this.listStore = listStore;
         this.eventBus = eventBus;
         this.appsTileView = listViewFactory.create(listStore);

@@ -1,9 +1,20 @@
 package org.iplantc.de.apps.client.presenter.categories;
 
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+
 import org.iplantc.de.apps.client.AppCategoriesView;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
-import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.AppSavedEvent;
+import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.AppUpdatedEvent;
 import org.iplantc.de.apps.client.events.selection.AppFavoriteSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppInfoSelectedEvent;
@@ -37,7 +48,6 @@ import com.sencha.gxt.data.shared.event.StoreRemoveEvent;
 import com.sencha.gxt.widget.core.client.tree.Tree;
 import com.sencha.gxt.widget.core.client.tree.TreeSelectionModel;
 
-import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +56,6 @@ import org.mockito.Captor;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -140,84 +149,6 @@ public class AppCategoriesPresenterImplTest {
 
         verify(selectionModelMock).getSelectedItem();
         verifyNoMoreInteractions(selectionModelMock);
-    }
-
-    @Test public void currentAppCategoryCountsUpdated_onStoreAdd() {
-        final AppCategoriesPresenterImpl spy = spy(new AppCategoriesPresenterImpl(treeStoreMock,
-                                                                                  propsMock,
-                                                                                  jsonUtilMock,
-                                                                                  eventBusMock,
-                                                                                  viewFactoryMock));
-        spy.appService = appUserServiceMock;
-        spy.appearance = appearanceMock;
-
-        AppCategory appCategoryMock = mock(AppCategory.class);
-        when(selectionModelMock.getSelectedItem()).thenReturn(appCategoryMock);
-
-        // Setup event mock
-        final ArrayList<App> apps = Lists.newArrayList(mock(App.class), mock(App.class));
-        when(mockAddEvent.getSource()).thenReturn(mockStore);
-        when(mockStore.getAll()).thenReturn(apps);
-
-
-        /*** CALL METHOD UNDER TEST ***/
-        spy.onAdd(mockAddEvent);
-        verify(mockAddEvent).getSource();
-        verify(selectionModelMock).getSelectedItem();
-        verify(mockStore).getAll();
-        verify(spy).updateAppCategoryAppCount(eq(appCategoryMock), eq(apps.size()));
-
-        verifyNoMoreInteractions(mockStore,
-                                 selectionModelMock);
-    }
-
-    @Test public void currentAppCategoryCountsUpdated_onStoreRemove() {
-        final AppCategoriesPresenterImpl spy = spy(new AppCategoriesPresenterImpl(treeStoreMock,
-                                                                                  propsMock,
-                                                                                  jsonUtilMock,
-                                                                                  eventBusMock,
-                                                                                  viewFactoryMock));
-        spy.appService = appUserServiceMock;
-
-        AppCategory appCategoryMock = mock(AppCategory.class);
-        when(selectionModelMock.getSelectedItem()).thenReturn(appCategoryMock);
-
-        // Setup event mock
-        final ArrayList<App> apps = Lists.newArrayList(mock(App.class), mock(App.class));
-        when(mockRemoveEvent.getSource()).thenReturn(mockStore);
-        when(mockStore.getAll()).thenReturn(apps);
-
-
-        /*** CALL METHOD UNDER TEST ***/
-        spy.onRemove(mockRemoveEvent);
-        verify(mockRemoveEvent).getSource();
-        verify(selectionModelMock).getSelectedItem();
-        verify(mockStore).getAll();
-        verify(spy).updateAppCategoryAppCount(eq(appCategoryMock), eq(apps.size()));
-    }
-
-    @Test public void currentAppCategoryCountsZeroed_onStoreClear() {
-        final AppCategoriesPresenterImpl spy = spy(new AppCategoriesPresenterImpl(treeStoreMock,
-                                                                                  propsMock,
-                                                                                  jsonUtilMock,
-                                                                                  eventBusMock,
-                                                                                  viewFactoryMock));
-        spy.appService = appUserServiceMock;
-
-        // For book-keeping, for construction of non-spy and spy uut's
-        verify(eventBusMock, times(6)).addHandler(Matchers.<GwtEvent.Type<AppCategoriesPresenterImpl>>any(), Matchers.<AppCategoriesPresenterImpl>any());
-
-        AppCategory appCategoryMock = mock(AppCategory.class);
-        when(selectionModelMock.getSelectedItem()).thenReturn(appCategoryMock);
-
-        /*** CALL METHOD UNDER TEST ***/
-        spy.onClear(mockClearEvent);
-        verify(selectionModelMock).getSelectedItem();
-        verify(spy).updateAppCategoryAppCount(eq(appCategoryMock), eq(0));
-
-        verifyNoMoreInteractions(eventBusMock);
-        verifyZeroInteractions(appUserServiceMock,
-                               appServiceMock);
     }
 
     @Test public void verifyServiceCalled_onAppFavoriteSelected() {
@@ -317,106 +248,6 @@ public class AppCategoriesPresenterImplTest {
 
         verifyNoMoreInteractions(eventBusMock);
         verifyZeroInteractions(appUserServiceMock);
-    }
-
-    /**
-     * Verify that when the current category *IS NOT* the favorites category,
-     * that the favorites category count is updated
-     */
-    @Test public void favoritesCategoryCountUpdated_onAppFavorited() {
-
-        final AppCategoriesPresenterImpl spy = spy(new AppCategoriesPresenterImpl(treeStoreMock,
-                                                                                  propsMock,
-                                                                                  jsonUtilMock,
-                                                                                  eventBusMock,
-                                                                                  viewFactoryMock));
-        // Setup fav category
-        uut.FAVORITES = "Favorites";
-        AppCategory favoritesCat = mock(AppCategory.class);
-        when(favoritesCat.getName()).thenReturn(uut.FAVORITES);
-        int startingFavCount = 4;
-        when(favoritesCat.getAppCount()).thenReturn(startingFavCount);
-
-        // Set current category as NOT the favorites category
-        AppCategory appCategoryMock = mock(AppCategory.class);
-        final String currentCategoryName = "OTHER CATEGORY";
-        when(appCategoryMock.getName()).thenReturn(currentCategoryName);
-        when(selectionModelMock.getSelectedItem()).thenReturn(appCategoryMock);
-
-        // Set treeStore items
-        when(treeStoreMock.getAll()).thenReturn(Lists.newArrayList(favoritesCat, appCategoryMock));
-
-
-        AppFavoritedEvent mockEvent = mock(AppFavoritedEvent.class);
-        final App mockApp = mock(App.class);
-        when(mockEvent.getApp()).thenReturn(mockApp);
-        when(mockApp.isFavorite()).thenReturn(true);
-
-        /*** CALL METHOD UNDER TEST ***/
-        spy.onAppFavorited(mockEvent);
-
-        verify(spy).findAppCategoryByName(eq(uut.FAVORITES));
-
-        // Verify count is incremented when app is favorite
-        verify(spy).updateAppCategoryAppCount(eq(favoritesCat), eq(startingFavCount + 1));
-
-        // Set app to NOT favorite, and repeat test
-        when(mockApp.isFavorite()).thenReturn(false);
-
-        /*** CALL METHOD UNDER TEST ***/
-        spy.onAppFavorited(mockEvent);
-
-        // Verify count is incremented when app is favorite
-        verify(spy).updateAppCategoryAppCount(eq(favoritesCat), eq(startingFavCount - 1));
-    }
-
-    /**
-     * Verify that when the current category null i.e when searching, that the favorites category count
-     * is updated
-     */
-    @Test
-    public void favoritesCategoryCountUpdated_onAppFavorited_onSearch() {
-
-        final AppCategoriesPresenterImpl spy = spy(new AppCategoriesPresenterImpl(treeStoreMock,
-                                                                                  propsMock,
-                                                                                  jsonUtilMock,
-                                                                                  eventBusMock,
-                                                                                  viewFactoryMock));
-        // Setup fav category
-        uut.FAVORITES = "Favorites";
-        AppCategory favoritesCat = mock(AppCategory.class);
-        when(favoritesCat.getName()).thenReturn(uut.FAVORITES);
-        int startingFavCount = 4;
-        when(favoritesCat.getAppCount()).thenReturn(startingFavCount);
-
-        // Set current category as null
-        AppCategory appCategoryMock = null;
-        when(selectionModelMock.getSelectedItem()).thenReturn(appCategoryMock);
-
-        // Set treeStore items
-        when(treeStoreMock.getAll()).thenReturn(Lists.newArrayList(favoritesCat));
-
-        AppFavoritedEvent mockEvent = mock(AppFavoritedEvent.class);
-        final App mockApp = mock(App.class);
-        when(mockEvent.getApp()).thenReturn(mockApp);
-        when(mockApp.isFavorite()).thenReturn(true);
-
-        /*** CALL METHOD UNDER TEST ***/
-        spy.onAppFavorited(mockEvent);
-
-        verify(spy).findAppCategoryByName(eq(uut.FAVORITES));
-
-        // Verify count is incremented when app is favorite
-        verify(spy).updateAppCategoryAppCount(eq(favoritesCat), eq(startingFavCount + 1));
-
-        // Set app to NOT favorite, and repeat test
-        when(mockApp.isFavorite()).thenReturn(false);
-
-        /*** CALL METHOD UNDER TEST ***/
-        spy.onAppFavorited(mockEvent);
-
-        // Verify count is incremented when app is favorite
-        verify(spy).updateAppCategoryAppCount(eq(favoritesCat), eq(startingFavCount - 1));
     }
 
     /**

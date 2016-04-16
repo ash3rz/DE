@@ -25,7 +25,7 @@ import com.sencha.gxt.widget.core.client.grid.Grid;
 public class AppsViewPresenterImpl implements AppsView.Presenter,
                                               SwapViewButtonClickedEvent.SwapViewButtonClickedEventHandler {
 
-    protected final AppsView view;
+    protected AppsView view;
     private final AppCategoriesView.Presenter categoriesPresenter;
     private final AppsListView.Presenter appsListPresenter;
 

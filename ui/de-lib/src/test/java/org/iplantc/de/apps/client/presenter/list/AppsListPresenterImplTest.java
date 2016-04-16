@@ -1,6 +1,15 @@
-package org.iplantc.de.apps.client.presenter.grid;
+package org.iplantc.de.apps.client.presenter.list;
 
-import org.iplantc.de.apps.client.AppsTileView;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.AppUpdatedEvent;
@@ -13,10 +22,11 @@ import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.DeleteAppsSelected;
 import org.iplantc.de.apps.client.events.selection.RunAppSelected;
+import org.iplantc.de.apps.client.gin.factory.AppsGridViewFactory;
 import org.iplantc.de.apps.client.gin.factory.AppsTileViewFactory;
 import org.iplantc.de.apps.client.presenter.callbacks.DeleteRatingCallback;
 import org.iplantc.de.apps.client.presenter.callbacks.RateAppCallback;
-import org.iplantc.de.apps.client.presenter.list.AppsListPresenterImpl;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppLoadConfig;
 import org.iplantc.de.client.events.EventBus;
 import org.iplantc.de.client.models.UserInfo;
 import org.iplantc.de.client.models.apps.App;
@@ -37,10 +47,12 @@ import com.sencha.gxt.data.shared.event.StoreAddEvent;
 import com.sencha.gxt.data.shared.event.StoreClearEvent;
 import com.sencha.gxt.data.shared.event.StoreRemoveEvent;
 import com.sencha.gxt.data.shared.event.StoreUpdateEvent;
+import com.sencha.gxt.data.shared.loader.PagingLoadResult;
+import com.sencha.gxt.data.shared.loader.PagingLoader;
+import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.GridSelectionModel;
 
-import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +61,7 @@ import org.mockito.Captor;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -57,8 +70,10 @@ import java.util.List;
 @RunWith(GwtMockitoTestRunner.class)
 public class AppsListPresenterImplTest {
 
-    @Mock AppsTileViewFactory viewFactoryMock;
-    @Mock AppsTileView viewMock;
+    @Mock AppsGridViewFactory gridFactoryMock;
+    @Mock AppsTileViewFactory tileFactoryMock;
+    @Mock AppsListView.AppsGridView gridViewMock;
+    @Mock AppsListView.AppsTileView tileViewMock;
 
     @Mock ListStore<App> listStoreMock;
     @Mock StoreAddEvent.StoreAddHandler<App> storeAddHandlerMock;
@@ -66,11 +81,16 @@ public class AppsListPresenterImplTest {
     @Mock StoreUpdateEvent.StoreUpdateHandler<App> storeUpdateHandlerMock;
     @Mock StoreClearEvent.StoreClearHandler<App> storeClearHandlerMock;
     @Mock Grid<App> gridMock;
+    @Mock ListView<App, App> tileMock;
     @Mock GridSelectionModel<App> selectionModelMock;
     @Mock AppUserServiceFacade appServiceMock;
-    @Mock AppsTileView.AppsListAppearance appearanceMock;
+    @Mock AppsListView.AppsListAppearance appearanceMock;
     @Mock UserInfo userInfoMock;
     @Mock AppUserServiceFacade appUserServiceMock;
+    @Mock List<AppCategory> appCategoriesMock;
+    @Mock Iterator<AppCategory> appCategoryIterator;
+    @Mock PagingLoader<AppLoadConfig, PagingLoadResult<App>> gridLoaderMock;
+    @Mock PagingLoader<AppLoadConfig, PagingLoadResult<App>> tilesLoaderMock;
 
     @Mock AsyncProvider<CommentsDialog> commentsProviderMock;
     @Captor ArgumentCaptor<AsyncCallback<CommentsDialog>> commentsDlgCaptor;
@@ -84,24 +104,26 @@ public class AppsListPresenterImplTest {
     private AppsListPresenterImpl uut;
 
     @Before public void setUp() {
-        when(viewFactoryMock.create(Matchers.<ListStore<App>>any())).thenReturn(viewMock);
-        when(viewMock.getGrid()).thenReturn(gridMock);
+        when(gridFactoryMock.create(Matchers.<ListStore<App>>any())).thenReturn(gridViewMock);
+        when(tileFactoryMock.create(Matchers.<ListStore<App>>any())).thenReturn(tileViewMock);
+        when(gridViewMock.getGrid()).thenReturn(gridMock);
         when(gridMock.getSelectionModel()).thenReturn(selectionModelMock);
-        uut = new AppsListPresenterImpl(viewFactoryMock,
+        when(appCategoryIterator.next()).thenReturn(mock(AppCategory.class));
+        when(appCategoriesMock.iterator()).thenReturn(appCategoryIterator);
+        when(tileViewMock.getLoader()).thenReturn(tilesLoaderMock);
+        when(gridViewMock.getLoader()).thenReturn(gridLoaderMock);
+        uut = new AppsListPresenterImpl(tileFactoryMock,
+                                        gridFactoryMock,
                                         listStoreMock,
                                         eventBusMock);
-        uut.appService = appServiceMock;
         uut.appUserService = appUserServiceMock;
         uut.appearance = appearanceMock;
         uut.commentsDialogProvider = commentsProviderMock;
         uut.userInfo = userInfoMock;
-    }
 
-    @Test public void testConstructorEventHandlerWiring() {
         verifyConstructor();
 
-        verifyNoMoreInteractions(viewFactoryMock,
-                                 viewMock);
+        verifyNoMoreInteractions(gridFactoryMock, gridViewMock);
     }
 
     /**
@@ -112,7 +134,7 @@ public class AppsListPresenterImplTest {
 
         /*** CALL METHOD UNDER TEST ***/
         uut.addAppFavoritedEventHandler(eventHandlerMock);
-        verify(viewMock).addAppFavoritedEventHandler(eq(eventHandlerMock));
+        verify(tileViewMock).addAppFavoritedEventHandler(eq(eventHandlerMock));
 
         /*** CALL METHOD UNDER TEST ***/
         uut.addStoreAddHandler(storeAddHandlerMock);
@@ -136,7 +158,7 @@ public class AppsListPresenterImplTest {
         /*** CALL METHOD UNDER TEST ***/
         uut.getSelectedApp();
 
-        verify(viewMock).getGrid();
+        verify(gridViewMock).getGrid();
         verify(gridMock).getSelectionModel();
         verify(selectionModelMock).getSelectedItem();
 
@@ -144,34 +166,55 @@ public class AppsListPresenterImplTest {
                                  selectionModelMock);
     }
 
-    @Test public void verifyAppServiceCalled_onAppCategorySelected() {
+    @Test
+    public void verifyAppServiceCalled_onAppCategorySelected_isEmpty() {
 
         AppCategorySelectionChangedEvent eventMock = mock(AppCategorySelectionChangedEvent.class);
         final AppCategory appCategoryMock = mock(AppCategory.class);
         when(appCategoryMock.getId()).thenReturn("mock category id");
-        List<AppCategory> selection = Lists.newArrayList(appCategoryMock);
-        when(eventMock.getAppCategorySelection()).thenReturn(selection);
-
-        when(appearanceMock.getAppsLoadingMask()).thenReturn("loading mask");
+        when(eventMock.getAppCategorySelection()).thenReturn(appCategoriesMock);
+        when(appCategoriesMock.isEmpty()).thenReturn(true);
 
         /*** CALL METHOD UNDER TEST ***/
         uut.onAppCategorySelectionChanged(eventMock);
 
-        verify(viewMock).mask(anyString());
-        verify(appearanceMock).getAppsLoadingMask();
-        verify(appServiceMock).getApps(eq(appCategoryMock), appListCallbackCaptor.capture());
+        verifyNoMoreInteractions(tileMock, gridMock, appServiceMock);
+    }
 
-        List<App> resultList = Lists.newArrayList(mock(App.class));
+    @Test
+    public void verifyAppServiceCalled_onAppCategorySelected_tilesViewActive() {
+
+        AppCategorySelectionChangedEvent eventMock = mock(AppCategorySelectionChangedEvent.class);
+        final AppCategory appCategoryMock = mock(AppCategory.class);
+        when(appCategoryMock.getId()).thenReturn("mock category id");
+        when(appCategoriesMock.size()).thenReturn(1);
+        when(eventMock.getAppCategorySelection()).thenReturn(appCategoriesMock);
+        uut.activeView = tileViewMock;
 
         /*** CALL METHOD UNDER TEST ***/
-        appListCallbackCaptor.getValue().onSuccess(resultList);
+        uut.onAppCategorySelectionChanged(eventMock);
 
-        verify(listStoreMock).clear();
-        verify(listStoreMock).addAll(eq(resultList));
-        verify(viewMock).unmask();
+        verify(tileViewMock).mask(eq(appearanceMock.getAppsLoadingMask()));
+        verify(tilesLoaderMock).load(Matchers.<AppLoadConfig>any());
+        verifyZeroInteractions(appServiceMock, gridViewMock);
+    }
 
-        verifyNoMoreInteractions(appServiceMock,
-                                 appearanceMock);
+    @Test
+    public void verifyAppServiceCalled_onAppCategorySelected_gridViewActive() {
+
+        AppCategorySelectionChangedEvent eventMock = mock(AppCategorySelectionChangedEvent.class);
+        final AppCategory appCategoryMock = mock(AppCategory.class);
+        when(appCategoryMock.getId()).thenReturn("mock category id");
+        when(appCategoriesMock.size()).thenReturn(1);
+        when(eventMock.getAppCategorySelection()).thenReturn(appCategoriesMock);
+        uut.activeView = gridViewMock;
+
+        /*** CALL METHOD UNDER TEST ***/
+        uut.onAppCategorySelectionChanged(eventMock);
+
+        verify(gridViewMock).mask(eq(appearanceMock.getAppsLoadingMask()));
+        verify(gridLoaderMock).load(Matchers.<AppLoadConfig>any());
+        verifyZeroInteractions(appServiceMock, tileViewMock);
     }
 
     @Test public void doNothingIfSelectionIsEmpty_onAppCategorySelected() {
@@ -229,7 +272,7 @@ public class AppsListPresenterImplTest {
         when(eventMock.getApp()).thenReturn(appMock);
 
         Widget widgetMock = mock(Widget.class);
-        when(viewMock.asWidget()).thenReturn(widgetMock);
+        when(gridViewMock.asWidget()).thenReturn(widgetMock);
         when(userInfoMock.getWorkspaceId()).thenReturn("workspace id");
 
         /*** CALL METHOD UNDER TEST ***/
@@ -323,28 +366,40 @@ public class AppsListPresenterImplTest {
                                  appMock);
     }
 
-    @Test public void verifyStoreClearedAndResultsAdded_onAppSearchResultLoad() {
-        // Record keeping
-        verifyConstructor();
+    @Test public void verifyStoreClearedAndResultsAdded_onAppSearchResultLoad_tilesViewActive() {
         AppSearchResultLoadEvent eventMock = mock(AppSearchResultLoadEvent.class);
         List<App> results = Lists.newArrayList(mock(App.class), mock(App.class));
         String searchPatternMock = "mock search pattern";
         when(eventMock.getResults()).thenReturn(results);
         when(eventMock.getSearchPattern()).thenReturn(searchPatternMock);
+        uut.activeView = tileViewMock;
 
         /*** CALL METHOD UNDER TEST ***/
         uut.onAppSearchResultLoad(eventMock);
 
-        verify(viewMock).setSearchPattern(eq(searchPatternMock));
+        verify(tileViewMock).setSearchPattern(eq(searchPatternMock));
+        verify(tilesLoaderMock).load(Matchers.<AppLoadConfig>any());
+        verify(gridLoaderMock).load(Matchers.<AppLoadConfig>any());
 
-        verify(listStoreMock).clear();
-        verify(listStoreMock).addAll(eq(results));
+        verifyNoMoreInteractions(gridLoaderMock, tilesLoaderMock);
+    }
 
-        verifyNoMoreInteractions(listStoreMock,
-                                 viewMock);
+    @Test public void verifyStoreClearedAndResultsAdded_onAppSearchResultLoad_gridViewActive() {
+        AppSearchResultLoadEvent eventMock = mock(AppSearchResultLoadEvent.class);
+        List<App> results = Lists.newArrayList(mock(App.class), mock(App.class));
+        String searchPatternMock = "mock search pattern";
+        when(eventMock.getResults()).thenReturn(results);
+        when(eventMock.getSearchPattern()).thenReturn(searchPatternMock);
+        uut.activeView = gridViewMock;
 
-        verifyZeroInteractions(appServiceMock,
-                               appUserServiceMock);
+        /*** CALL METHOD UNDER TEST ***/
+        uut.onAppSearchResultLoad(eventMock);
+
+        verify(gridViewMock).setSearchPattern(eq(searchPatternMock));
+        verify(tilesLoaderMock).load(Matchers.<AppLoadConfig>any());
+        verify(gridLoaderMock).load(Matchers.<AppLoadConfig>any());
+
+        verifyNoMoreInteractions(gridLoaderMock, tilesLoaderMock);
     }
 
     @Test public void verifyAppServiceCalled_onDeleteAppsSelected() {
@@ -380,14 +435,21 @@ public class AppsListPresenterImplTest {
     }
 
     private void verifyConstructor() {
-        verify(viewFactoryMock).create(eq(uut.listStore));
+        verify(gridFactoryMock).create(eq(listStoreMock));
+        verify(tileFactoryMock).create(eq(listStoreMock));
 
         // Verify view wiring
-        verify(viewMock).addAppNameSelectedEventHandler(eq(uut));
-        verify(viewMock).addAppRatingDeselectedHandler(eq(uut));
-        verify(viewMock).addAppRatingSelectedHandler(eq(uut));
-        verify(viewMock).addAppCommentSelectedEventHandlers(eq(uut));
-        verify(viewMock).addAppFavoriteSelectedEventHandlers(eq(uut));
+        verify(tileViewMock).addAppNameSelectedEventHandler(eq(uut));
+        verify(tileViewMock).addAppRatingDeselectedHandler(eq(uut));
+        verify(tileViewMock).addAppRatingSelectedHandler(eq(uut));
+        verify(tileViewMock).addAppCommentSelectedEventHandlers(eq(uut));
+        verify(tileViewMock).addAppFavoriteSelectedEventHandlers(eq(uut));
+
+        verify(gridViewMock).addAppNameSelectedEventHandler(eq(uut));
+        verify(gridViewMock).addAppRatingDeselectedHandler(eq(uut));
+        verify(gridViewMock).addAppRatingSelectedHandler(eq(uut));
+        verify(gridViewMock).addAppCommentSelectedEventHandlers(eq(uut));
+        verify(gridViewMock).addAppFavoriteSelectedEventHandlers(eq(uut));
     }
 
 
