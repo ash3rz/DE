@@ -73,8 +73,11 @@ public class AppSearchRpcProxy extends RpcProxy<FilterPagingLoadConfig, PagingLo
 
 
         // Call the searchApp service with this proxy's query.
-        appService.pagedSearchApp(lastQueryText, loadConfig.getLimit(), sortField, loadConfig.getOffset(), sortInfo.getSortDir().toString(), new AsyncCallback<AppListLoadResult>() {
-            @Override
+//        appService.pagedSearchApp(lastQueryText, loadConfig.getLimit(), sortField, loadConfig.getOffset(), sortInfo.getSortDir().toString(), new AsyncCallback<AppListLoadResult>() {
+        appService.searchApp(lastQueryText,
+                                  new AsyncCallback<AppListLoadResult>() {
+
+                                      @Override
             public void onSuccess(final AppListLoadResult loadResult) {
                 List<App> apps = loadResult.getData();
                 // FIXME Sorting should not be done here.
