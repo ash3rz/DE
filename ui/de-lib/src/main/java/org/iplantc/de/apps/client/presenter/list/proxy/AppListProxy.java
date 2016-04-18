@@ -32,8 +32,10 @@ public class AppListProxy extends RpcProxy<AppLoadConfig, PagingLoadResult<App>>
 
     private final AppServiceFacade appService;
     private AppsListView.AppsListAppearance appearance;
+    SortInfo sortInfo;
+    String sortField;
 
-    private IsMaskable maskable;
+    IsMaskable maskable;
 
     @Inject
     public AppListProxy(AppServiceFacade appService, AppsListView.AppsListAppearance appearance) {
@@ -53,9 +55,8 @@ public class AppListProxy extends RpcProxy<AppLoadConfig, PagingLoadResult<App>>
             return;
         }
 
-        SortInfo sortInfo = Iterables.getFirst(loadConfig.getSortInfo(),
-                                               new SortInfoBean("name", SortDir.ASC));
-        String sortField = getSortField(sortInfo);
+        sortInfo = getSortInfo(loadConfig);
+        sortField = getSortField(sortInfo);
 
         maskable.mask(appearance.getAppsLoadingMask());
 
@@ -110,6 +111,11 @@ public class AppListProxy extends RpcProxy<AppLoadConfig, PagingLoadResult<App>>
                                     });
         }
 
+    }
+
+    private SortInfoBean getSortInfo(AppLoadConfig loadConfig) {
+        return Iterables.getFirst(loadConfig.getSortInfo(),
+                                  new SortInfoBean("name", SortDir.ASC));
     }
 
     public String getSortField(SortInfo sortInfo) {
