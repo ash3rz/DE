@@ -56,7 +56,10 @@
 
         <!-- This is the main panel -->
         <container:center layoutData="{centerData}">
-            <appsWidgets:AppsListView ui:field="appsListView" />
+            <container:CardLayoutContainer ui:field="centerPanel">
+                <appsWidgets:AppsListView ui:field="appsListView" />
+                <!--<appsWidgets:AppsGridView ui:field="appsGridView"/>-->
+            </container:CardLayoutContainer>
         </container:center>
 
         <!-- This is the details panel -->
