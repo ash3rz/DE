@@ -98,4 +98,9 @@ public class AppsListViewDefaultAppearance implements AppsListView.AppsListAppea
         pagingToolbar.getElement().getStyle().setProperty("borderBottom", "none");
     }
 
+    @Override
+    public int selectionStatusWidth() {
+        return 100;
+    }
+
 }

@@ -11,7 +11,6 @@ import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppCategory;
 
 import com.google.gwt.user.client.ui.HasOneWidget;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Inject;
 
 import com.sencha.gxt.widget.core.client.ListView;
@@ -116,13 +115,9 @@ public class AppsViewPresenterImpl implements AppsView.Presenter,
 
     @Override
     public void onSwapViewButtonClicked(SwapViewButtonClickedEvent event) {
-        IsWidget activeView = view.getActiveView();
-        if (activeView == view.getListView()) {
-            activeView = view.getGridView();
-        } else {
-            activeView = view.getListView();
-        }
-        view.setActiveView(activeView);
+        AppsListView inactiveView = getInactiveView(view.getActiveView());
+
+        view.setActiveView(inactiveView);
 
         AppCategory selectedAppCategory = categoriesPresenter.getSelectedAppCategory();
         if (null != selectedAppCategory) {
@@ -133,7 +128,15 @@ public class AppsViewPresenterImpl implements AppsView.Presenter,
              * Refresh the view because each view will manipulate the
              * shared listStore differently (which page #, versus # visible items)
              */
-            appsListPresenter.refreshActiveView();
+            inactiveView.refresh();
+        }
+    }
+
+    private AppsListView getInactiveView(AppsListView activeView) {
+        if (activeView == view.getListView()) {
+            return view.getGridView();
+        } else {
+            return view.getListView();
         }
     }
 }

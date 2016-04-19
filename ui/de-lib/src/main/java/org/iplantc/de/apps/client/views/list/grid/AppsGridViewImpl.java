@@ -29,10 +29,12 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.data.shared.SortInfo;
 import com.sencha.gxt.data.shared.loader.LoadResultListStoreBinding;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.Status;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.LiveGridView;
@@ -41,6 +43,8 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.tips.QuickTip;
 import com.sencha.gxt.widget.core.client.toolbar.FillToolItem;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
+
+import java.util.List;
 
 /**
  * Created by jstroot on 3/5/15.
@@ -64,6 +68,7 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
     private final AppsListAppearance appearance;
     private String searchRegexPattern;
     private AppListProxy appListProxy;
+    private final Status selectionStatus;
 
     @Inject
     AppsGridViewImpl(final AppsListAppearance appearance,
@@ -72,15 +77,12 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
         this.appearance = appearance;
         this.listStore = listStore;
         this.appListProxy = appListProxy;
+        this.selectionStatus = new Status();
 
         buildLoader();
 
         setWidget(ourUiBinder.createAndBindUi(this));
-        LiveToolItem liveToolItem = new LiveToolItem(grid);
-        liveToolItem.setWidth(appearance.liveToolItemWidth());
-        pagingToolbar.add(liveToolItem);
-        pagingToolbar.add(new FillToolItem());
-        appearance.setPagingToolBarStyle(pagingToolbar);
+        setUpPagingToolbar();
 
         this.acm = (AppColumnModel) cm;
         grid.getSelectionModel().addSelectionChangedHandler(this);
@@ -96,6 +98,21 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
                 loader.useLoadConfig(loadConfig);
             }
         });
+    }
+
+    private void setUpPagingToolbar() {
+        selectionStatus.setWidth(appearance.selectionStatusWidth());
+        LiveToolItem liveToolItem = new LiveToolItem(grid);
+        liveToolItem.setWidth(appearance.liveToolItemWidth());
+        pagingToolbar.add(liveToolItem);
+        pagingToolbar.add(new FillToolItem());
+        pagingToolbar.add(selectionStatus);
+        appearance.setPagingToolBarStyle(pagingToolbar);
+        updateSelectionCount(0);
+    }
+
+    private void updateSelectionCount(int count) {
+        selectionStatus.setText(count + " item(s)");
     }
 
     private void buildLoader() {
@@ -198,6 +215,7 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
 
     @Override
     public void onSelectionChanged(SelectionChangedEvent<App> event) {
+        updateSelectionCount(event.getSelection().size());
         fireEvent(new AppSelectionChangedEvent(event.getSelection()));
     }
 
@@ -215,6 +233,11 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
     @Override
     public PagingLoader<AppLoadConfig, PagingLoadResult<App>> getLoader() {
         return loader;
+    }
+
+    @Override
+    public List<? extends SortInfo> getSortInfo() {
+        return grid.getLoader().getSortInfo();
     }
 
     @Override

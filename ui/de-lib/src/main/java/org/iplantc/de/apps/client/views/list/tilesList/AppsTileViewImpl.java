@@ -23,12 +23,12 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -38,6 +38,7 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.SortDir;
 import com.sencha.gxt.data.shared.SortInfo;
 import com.sencha.gxt.data.shared.SortInfoBean;
+import com.sencha.gxt.data.shared.StringLabelProvider;
 import com.sencha.gxt.data.shared.loader.LoadResultListStoreBinding;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
@@ -91,17 +92,6 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
 
         pagingToolBar.bind(loader);
 
-        sortBox.add(Arrays.asList(appearance.nameColumnLabel(), appearance.integratedByColumnLabel(), appearance.ratingColumnLabel()));
-        sortBox.setValue(appearance.nameColumnLabel());
-        sortBox.addSelectionHandler(new SelectionHandler<String>() {
-            @Override
-            public void onSelection(SelectionEvent<String> event) {
-                mask();
-                loader.getLastLoadConfig().setSortInfo(getSortInfo());
-                loader.load(loader.getLastLoadConfig());
-            }
-        });
-
         listView.getSelectionModel().addSelectionChangedHandler(this);
         listView.setCell(this.appTileCell);
     }
@@ -113,6 +103,23 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
         loader.setRemoteSort(false);
         loader.addLoadHandler(new LoadResultListStoreBinding<AppLoadConfig, App, PagingLoadResult<App>>(listStore));
         appListProxy.setMaskable(this);
+    }
+    
+    @UiFactory
+    SimpleComboBox<String> createSortBox() {
+        SimpleComboBox<String> comboBox = new SimpleComboBox<>(new StringLabelProvider<>());
+        comboBox.add(Arrays.asList(appearance.nameColumnLabel(),
+                                   appearance.integratedByColumnLabel(),
+                                   appearance.ratingColumnLabel()));
+        comboBox.setValue(appearance.nameColumnLabel());
+        return comboBox;
+    }
+
+    @UiHandler("sortBox")
+    void onSortBoxSelection(SelectionEvent<String> event) {
+        mask();
+        loader.getLastLoadConfig().setSortInfo(getSortInfo());
+        loader.load(loader.getLastLoadConfig());
     }
 
     @UiFactory ListView<App, App> createListView() {
@@ -208,7 +215,7 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
     }
 
     @Override
-    public List<SortInfo> getSortInfo() {
+    public List<? extends SortInfo> getSortInfo() {
         List<SortInfo> sortInfoList = Lists.newArrayList();
         String sortField = sortBox.getCurrentValue();
         SortInfo sortInfo;

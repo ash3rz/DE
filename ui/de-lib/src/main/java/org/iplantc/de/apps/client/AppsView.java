@@ -52,9 +52,9 @@ public interface AppsView extends IsWidget,
 
     void hideWorkflowMenu();
 
-    IsWidget getActiveView();
+    AppsListView getActiveView();
 
-    void setActiveView(IsWidget view);
+    void setActiveView(AppsListView view);
 
     AppsListView.AppsTileView getListView();
 

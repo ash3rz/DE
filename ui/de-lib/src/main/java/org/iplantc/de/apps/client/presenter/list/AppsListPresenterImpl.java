@@ -35,7 +35,6 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Inject;
 
 import com.sencha.gxt.data.shared.ListStore;
@@ -64,8 +63,7 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
     private final EventBus eventBus;
     private final AppsListView.AppsTileView appsTileView;
     private final AppsListView.AppsGridView appsGridView;
-    private App desiredSelectedApp;
-    IsWidget activeView;
+    private AppsListView activeView;
 
     @Inject
     public AppsListPresenterImpl(final AppsTileViewFactory listViewFactory,
@@ -122,10 +120,6 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
         throw new UnsupportedOperationException("Firing events on this presenter is not allowed.");
     }
 
-    public App getDesiredSelectedApp() {
-        return desiredSelectedApp;
-    }
-
     @Override
     public App getSelectedApp() {
         if (activeView == appsTileView) {
@@ -146,18 +140,8 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
     }
 
     @Override
-    public void setActiveView(IsWidget view) {
+    public void setActiveView(AppsListView view) {
         activeView = view;
-    }
-
-    @Override
-    public void refreshActiveView() {
-        if (activeView == appsTileView) {
-            appsTileView.refresh();
-        } else {
-            appsGridView.refresh();
-        }
-
     }
 
     @Override
@@ -171,16 +155,13 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
         AppCategoryLoadConfig categoryLoadConfig = new AppCategoryLoadConfig();
         categoryLoadConfig.setAppCategory(appCategory);
 
-        if (activeView == appsTileView) {
-            appsTileView.mask(appearance.getAppsLoadingMask());
-            categoryLoadConfig.setSortInfo(appsTileView.getSortInfo());
-            appsTileView.getLoader().load(categoryLoadConfig);
-        }
-        else {
-            appsGridView.mask(appearance.getAppsLoadingMask());
+        activeView.mask(appearance.getAppsLoadingMask());
+        categoryLoadConfig.setSortInfo(activeView.getSortInfo());
+        if (activeView == appsGridView) {
             categoryLoadConfig.setLimit(appsGridView.getLoader().getLimit());
-            appsGridView.getLoader().load(categoryLoadConfig);
         }
+
+        activeView.getLoader().load(categoryLoadConfig);
     }
 
     @Override
@@ -244,12 +225,11 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
         AppListLoadConfig appListLoadConfig = new AppListLoadConfig();
         appListLoadConfig.setAppList(event.getResults());
+        activeView.setSearchPattern(event.getSearchPattern());
         if (activeView == appsTileView) {
-            appsTileView.setSearchPattern(event.getSearchPattern());
             appsGridView.getLoader().load(appListLoadConfig);
             appsTileView.getLoader().load(appListLoadConfig);
         } else {
-            appsGridView.setSearchPattern(event.getSearchPattern());
             appsTileView.getLoader().load(appListLoadConfig);
             appsGridView.getLoader().load(appListLoadConfig);
         }
@@ -281,10 +261,6 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
     @Override
     public void onRunAppSelected(RunAppSelected event) {
         doRunApp(event.getApp());
-    }
-
-    public void setDesiredSelectedApp(final App desiredSelectedApp) {
-        this.desiredSelectedApp = desiredSelectedApp;
     }
 
     void doRunApp(final App app) {

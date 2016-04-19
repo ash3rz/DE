@@ -30,6 +30,40 @@ import java.util.List;
  */
 public class AppListProxy extends RpcProxy<AppLoadConfig, PagingLoadResult<App>> {
 
+    class AppCategoryAsyncCallback implements AsyncCallback<AppCategory> {
+        private final AsyncCallback<PagingLoadResult<App>> callback;
+        private final AppCategoryLoadConfig categoryLoadConfig;
+
+        public AppCategoryAsyncCallback(AsyncCallback<PagingLoadResult<App>> callback,
+                                        AppCategoryLoadConfig categoryLoadConfig) {
+            this.callback = callback;
+            this.categoryLoadConfig = categoryLoadConfig;
+        }
+
+        @Override
+        public void onFailure(Throwable caught) {
+            if (caught instanceof HttpRedirectException) {
+                MessageBox messageBox = new MessageBox(appearance.agaveAuthRequiredTitle(),
+                                                       appearance.agaveAuthRequiredMsg());
+                messageBox.setIcon(MessageBox.ICONS.info());
+                messageBox.show();
+            } else {
+                ErrorHandler.post(caught);
+            }
+            maskable.unmask();
+        }
+
+        @Override
+        public void onSuccess(AppCategory result) {
+            List<App> appResources = Lists.newArrayList();
+            appResources.addAll(result.getApps());
+            callback.onSuccess(new PagingLoadResultBean<App>(appResources,
+                                                             result.getAppCount(),
+                                                             categoryLoadConfig.getOffset()));
+            maskable.unmask();
+        }
+    }
+
     private final AppServiceFacade appService;
     private AppsListView.AppsListAppearance appearance;
     SortInfo sortInfo;
@@ -83,32 +117,7 @@ public class AppListProxy extends RpcProxy<AppLoadConfig, PagingLoadResult<App>>
                                     sortField,
                                     categoryLoadConfig.getOffset(),
                                     sortInfo.getSortDir().toString(),
-                                    new AsyncCallback<AppCategory>() {
-                                        @Override
-                                        public void onFailure(Throwable caught) {
-                                            if (caught instanceof HttpRedirectException) {
-                                                MessageBox messageBox =
-                                                        new MessageBox(appearance.agaveAuthRequiredTitle(),
-                                                                       appearance.agaveAuthRequiredMsg());
-                                                messageBox.setIcon(MessageBox.ICONS.info());
-                                                messageBox.show();
-                                            } else {
-                                                ErrorHandler.post(caught);
-                                            }
-                                            maskable.unmask();
-                                        }
-
-                                        @Override
-                                        public void onSuccess(AppCategory result) {
-                                            List<App> appResources = Lists.newArrayList();
-                                            appResources.addAll(result.getApps());
-                                            callback.onSuccess(new PagingLoadResultBean<App>(appResources,
-                                                                                             result.getAppCount(),
-                                                                                             categoryLoadConfig
-                                                                                                     .getOffset()));
-                                            maskable.unmask();
-                                        }
-                                    });
+                                    new AppCategoryAsyncCallback(callback, categoryLoadConfig));
         }
 
     }

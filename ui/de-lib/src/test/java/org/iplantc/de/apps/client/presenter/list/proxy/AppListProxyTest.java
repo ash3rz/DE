@@ -2,7 +2,7 @@ package org.iplantc.de.apps.client.presenter.list.proxy;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.eq;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -105,15 +105,5 @@ public class AppListProxyTest {
         verify(pagingCallbackMock).onSuccess(pagingResultCaptureMock.capture());
 
         verify(maskableMock).unmask();
-    }
-
-    @Test
-    public void testGetSortField() {
-
-    }
-
-    @Test
-    public void testGetServiceFilterName() {
-
     }
 }

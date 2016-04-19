@@ -12,8 +12,6 @@
     <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="toolBarLayoutData">
         <ui:attributes width="1" height="-1" />
     </ui:with>
-    <ui:with field="labelProvider"
-             type="com.sencha.gxt.data.shared.StringLabelProvider"/>
     <ui:with type="com.sencha.gxt.data.shared.loader.PagingLoader" field="loader" />
     <ui:with field="appearance" type="org.iplantc.de.apps.client.AppsListView.AppsListAppearance"/>
     <container:VerticalLayoutContainer>
@@ -23,8 +21,7 @@
                     <toolbar:LabelToolItem label="Sort By: "/>
                 </toolbar:child>
                 <toolbar:child>
-                    <form:SimpleComboBox ui:field="sortBox" width="100" editable="false" triggerAction="ALL"
-                                         labelProvider="{labelProvider}"/>
+                    <form:SimpleComboBox ui:field="sortBox" width="100" editable="false" triggerAction="ALL"/>
                 </toolbar:child>
             </toolbar:ToolBar>
         </container:child>

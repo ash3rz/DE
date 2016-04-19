@@ -88,7 +88,9 @@ public interface AppsListView extends IsWidget,
             int toolbarPageSize();
 
             void setPagingToolBarStyle(ToolBar pagingToolbar);
-        }
+
+            int selectionStatusWidth();
+    }
 
         /**
          * This presenter is responsible for updating/maintaining the {@code ListStore} associated with
@@ -113,9 +115,7 @@ public interface AppsListView extends IsWidget,
 
             AppsGridView getGridView();
 
-            void setActiveView(IsWidget view);
-
-            void refreshActiveView();
+            void setActiveView(AppsListView view);
         }
 
     void refresh();
@@ -124,11 +124,11 @@ public interface AppsListView extends IsWidget,
 
     PagingLoader<AppLoadConfig, PagingLoadResult<App>> getLoader();
 
+    List<? extends SortInfo> getSortInfo();
+
     interface AppsTileView extends AppsListView {
 
         ListView<App, App> getListView();
-
-        List<SortInfo> getSortInfo();
     }
 
     interface AppsGridView extends AppsListView {
