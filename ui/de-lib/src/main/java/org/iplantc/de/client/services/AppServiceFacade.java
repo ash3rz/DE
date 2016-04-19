@@ -11,8 +11,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanFactory;
 
-import com.sencha.gxt.data.shared.SortDir;
-
 import java.util.List;
 
 /**
@@ -26,6 +24,8 @@ public interface AppServiceFacade {
         AutoBean<AppListLoadResult> loadResult();
 
         AutoBean<HasId> hasId();
+
+        AutoBean<AppCategory> appCategory();
     }
 
     /**
@@ -45,7 +45,7 @@ public interface AppServiceFacade {
      * @param callback called when the RPC call is complete.
      */
     void getPagedApps(String appCategoryId, int limit, String sortField, int offset,
-            SortDir sortDir, AsyncCallback<String> callback);
+            String sortDir, AsyncCallback<AppCategory> callback);
 
     /**
      * Retrieves a hierarchy of public App Groups.

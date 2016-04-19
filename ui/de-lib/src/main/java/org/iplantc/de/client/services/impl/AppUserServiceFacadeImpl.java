@@ -43,8 +43,6 @@ import com.google.web.bindery.autobean.shared.AutoBeanUtils;
 import com.google.web.bindery.autobean.shared.Splittable;
 import com.google.web.bindery.autobean.shared.impl.StringQuoter;
 
-import com.sencha.gxt.data.shared.SortDir;
-
 import java.util.List;
 
 /**
@@ -122,12 +120,18 @@ public class AppUserServiceFacadeImpl implements AppUserServiceFacade {
                              int limit,
                              String sortField,
                              int offset,
-                             SortDir sortDir,
-                             AsyncCallback<String> asyncCallback) {
+                             String sortDir,
+                             AsyncCallback<AppCategory> asyncCallback) {
         String address = CATEGORIES + "/" + appCategoryId + "?limit=" + limit + "&sort-field="
-                + sortField + "&sort-dir=" + sortDir.toString() + "&offset=" + offset;
+                + sortField + "&sort-dir=" + sortDir + "&offset=" + offset;
         ServiceCallWrapper wrapper = new ServiceCallWrapper(address);
-        deServiceFacade.getServiceData(wrapper, asyncCallback);
+        deServiceFacade.getServiceData(wrapper, new AsyncCallbackConverter<String, AppCategory>(asyncCallback) {
+            @Override
+            protected AppCategory convertFrom(String object) {
+                AppCategory apps = AutoBeanCodex.decode(svcFactory, AppCategory.class, object).as();
+                return apps;
+            }
+        });
     }
 
     @Override
