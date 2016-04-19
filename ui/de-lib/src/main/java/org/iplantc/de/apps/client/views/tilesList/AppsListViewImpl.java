@@ -12,11 +12,6 @@ import org.iplantc.de.apps.client.events.selection.AppNameSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
-import org.iplantc.de.apps.client.views.tilesList.cells.AppCommentCell;
-import org.iplantc.de.apps.client.views.tilesList.cells.AppHyperlinkCell;
-import org.iplantc.de.apps.client.views.tilesList.cells.AppInfoCell;
-import org.iplantc.de.apps.client.views.tilesList.cells.AppIntegratorCell;
-import org.iplantc.de.apps.client.views.tilesList.cells.AppRatingCell;
 import org.iplantc.de.apps.client.views.tilesList.cells.AppTileCell;
 import org.iplantc.de.apps.shared.AppsModule;
 import org.iplantc.de.client.models.apps.App;
@@ -24,7 +19,6 @@ import org.iplantc.de.theme.base.client.apps.tilesList.AppsTileListDefaultAppear
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
@@ -82,26 +76,6 @@ public class AppsListViewImpl extends ContentPanel implements AppsListView,
         setWidget(ourUiBinder.createAndBindUi(this));
 
         grid.getSelectionModel().addSelectionChangedHandler(this);
-        List<HasCell<App, ?>> cellList = Lists.newArrayList();
-        AppHyperlinkCell appNameCell = new AppHyperlinkCell();
-        AppInfoCell appInfoCell = new AppInfoCell();
-        AppCommentCell appCommentCell = new AppCommentCell();
-//        AppFavoriteCell appFavoriteCell = new AppFavoriteCell();
-        AppRatingCell appRatingCell = new AppRatingCell();
-        AppIntegratorCell appIntegratorCell = new AppIntegratorCell();
-        appNameCell.setHasHandlers(this);
-        appInfoCell.setHasHandlers(this);
-        appCommentCell.setHasHandlers(this);
-//        appFavoriteCell.setHasHandlers(this);
-        appRatingCell.setHasHandlers(this);
-        cellList.add(appNameCell);
-        cellList.add(appInfoCell);
-        cellList.add(appCommentCell);
-//        cellList.add(appFavoriteCell);
-        cellList.add(appRatingCell);
-        cellList.add(appIntegratorCell);
-        AppTileCell appTileCell = new AppTileCell(cellList);
-        grid.setCell(appTileCell);
     }
 
     @UiFactory ListView<App, App> createListView() {
