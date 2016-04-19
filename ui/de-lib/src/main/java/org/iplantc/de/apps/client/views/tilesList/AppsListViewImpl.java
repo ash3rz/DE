@@ -12,6 +12,8 @@ import org.iplantc.de.apps.client.events.selection.AppNameSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
+import org.iplantc.de.apps.client.presenter.tilesList.proxy.AppByCategoryLoadConfig;
+import org.iplantc.de.apps.client.presenter.tilesList.proxy.AppByCategoryProxy;
 import org.iplantc.de.apps.client.views.tilesList.cells.AppTileCell;
 import org.iplantc.de.apps.shared.AppsModule;
 import org.iplantc.de.client.models.apps.App;
@@ -20,6 +22,8 @@ import org.iplantc.de.theme.base.client.apps.tilesList.AppsTileListDefaultAppear
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -31,9 +35,17 @@ import com.google.inject.assistedinject.Assisted;
 
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.data.shared.SortDir;
+import com.sencha.gxt.data.shared.SortInfo;
+import com.sencha.gxt.data.shared.SortInfoBean;
+import com.sencha.gxt.data.shared.loader.LoadResultListStoreBinding;
+import com.sencha.gxt.data.shared.loader.PagingLoadResult;
+import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.ListView;
+import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
+import com.sencha.gxt.widget.core.client.toolbar.PagingToolBar;
 
 import java.util.List;
 
@@ -50,36 +62,68 @@ public class AppsListViewImpl extends ContentPanel implements AppsListView,
         return null;
     }
 
-    @Override
-    public void setSearchPattern(String searchPattern) {
-
-    }
-
     interface AppsGridViewImplUiBinder extends UiBinder<Widget, AppsListViewImpl> { }
 
     private static final AppsGridViewImplUiBinder ourUiBinder = GWT.create(AppsGridViewImplUiBinder.class);
 
     ListStore<App> listStore;
     @UiField ListView<App, App> grid;
-
+    @UiField(provided = true) PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> loader;
+    @UiField PagingToolBar pagingToolBar;
+    @UiField SimpleComboBox<String> sortBox;
     private final AppsListAppearance appearance;
     private AppsTileListDefaultAppearance<App> cellAppearance;
+    private AppTileCell appTileCell;
+    private AppByCategoryProxy appByCategoryProxy;
 
     @Inject
     AppsListViewImpl(final AppsListAppearance appearance,
                      @Assisted final ListStore<App> listStore,
-                     AppsTileListDefaultAppearance<App> cellAppearance) {
+                     AppsTileListDefaultAppearance<App> cellAppearance,
+                     AppTileCell appTileCell, AppByCategoryProxy appByCategoryProxy) {
         this.appearance = appearance;
         this.listStore = listStore;
         this.cellAppearance = cellAppearance;
+        this.appTileCell = appTileCell;
+        this.appByCategoryProxy = appByCategoryProxy;
+        appTileCell.setHasHandlers(this);
+
+        buildLoader();
 
         setWidget(ourUiBinder.createAndBindUi(this));
 
+        pagingToolBar.bind(loader);
+
+        sortBox.add("Name");
+        sortBox.add("Integrator Name");
+        sortBox.add("Average Rating");
+        sortBox.setValue("Name");
+        sortBox.addSelectionHandler(new SelectionHandler<String>() {
+            @Override
+            public void onSelection(SelectionEvent<String> event) {
+                List<SortInfo> sortInfos = Lists.newArrayList();
+                SortInfo sortInfo = new SortInfoBean(event.getSelectedItem().toLowerCase().replace(" ", "_"), SortDir.ASC);
+                sortInfos.add(sortInfo);
+                loader.getLastLoadConfig().setSortInfo(sortInfos);
+                loader.load(loader.getLastLoadConfig());
+            }
+        });
+
         grid.getSelectionModel().addSelectionChangedHandler(this);
+        grid.setCell(this.appTileCell);
+    }
+
+    private void buildLoader() {
+        loader = new PagingLoader<>(appByCategoryProxy);
+        loader.useLoadConfig(new AppByCategoryLoadConfig());
+        loader.setReuseLoadConfig(true);
+        loader.setRemoteSort(true);
+        loader.addLoadHandler(new LoadResultListStoreBinding<AppByCategoryLoadConfig, App, PagingLoadResult<App>>(listStore));
+        appByCategoryProxy.setMaskable(this);
     }
 
     @UiFactory ListView<App, App> createListView() {
-        return new ListView<App, App>(listStore, new IdentityValueProvider<App>(), cellAppearance);
+        return new ListView<>(listStore, new IdentityValueProvider<App>(), cellAppearance);
     }
 
     @Override
@@ -131,12 +175,14 @@ public class AppsListViewImpl extends ContentPanel implements AppsListView,
             // Reset Search
             setSearchPattern("");
         }
+        pagingToolBar.show();
     }
 
     @Override
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
         int total = event.getResults() == null ? 0 : event.getResults().size();
         setHeadingText(appearance.searchAppResultsHeader(event.getSearchText(), total));
+        pagingToolBar.hide();
         unmask();
     }
 
@@ -155,4 +201,15 @@ public class AppsListViewImpl extends ContentPanel implements AppsListView,
         super.onEnsureDebugId(baseID);
         grid.ensureDebugId(baseID + AppsModule.Ids.APP_GRID);
     }
+
+    @Override
+    public PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> getLoader() {
+        return loader;
+    }
+
+    @Override
+    public void setSearchPattern(String searchPattern) {
+        appTileCell.setSearchRegexPattern(searchPattern);
+    }
+
 }

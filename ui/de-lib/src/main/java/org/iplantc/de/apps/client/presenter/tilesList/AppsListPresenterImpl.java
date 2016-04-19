@@ -16,9 +16,11 @@ import org.iplantc.de.apps.client.events.selection.RunAppSelected;
 import org.iplantc.de.apps.client.gin.factory.AppsListViewFactory;
 import org.iplantc.de.apps.client.presenter.callbacks.DeleteRatingCallback;
 import org.iplantc.de.apps.client.presenter.callbacks.RateAppCallback;
+import org.iplantc.de.apps.client.presenter.tilesList.proxy.AppByCategoryProxy;
 import org.iplantc.de.client.events.EventBus;
 import org.iplantc.de.client.models.UserInfo;
 import org.iplantc.de.client.models.apps.App;
+import org.iplantc.de.client.models.apps.AppAutoBeanFactory;
 import org.iplantc.de.client.models.apps.AppCategory;
 import org.iplantc.de.client.services.AppMetadataServiceFacade;
 import org.iplantc.de.client.services.AppServiceFacade;
@@ -27,7 +29,6 @@ import org.iplantc.de.commons.client.ErrorHandler;
 import org.iplantc.de.commons.client.comments.view.dialogs.CommentsDialog;
 import org.iplantc.de.commons.client.info.ErrorAnnouncementConfig;
 import org.iplantc.de.commons.client.info.IplantAnnouncer;
-import org.iplantc.de.shared.exceptions.HttpRedirectException;
 
 import com.google.common.base.Preconditions;
 import com.google.gwt.event.shared.GwtEvent;
@@ -41,9 +42,6 @@ import com.sencha.gxt.data.shared.event.StoreAddEvent;
 import com.sencha.gxt.data.shared.event.StoreClearEvent;
 import com.sencha.gxt.data.shared.event.StoreRemoveEvent;
 import com.sencha.gxt.data.shared.event.StoreUpdateEvent;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
-
-import java.util.List;
 
 /**
  * @author jstroot
@@ -66,9 +64,11 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
     private final EventBus eventBus;
     private final AppsListView view;
     private App desiredSelectedApp;
+    @Inject AppAutoBeanFactory factory;
 
     @Inject
     AppsListPresenterImpl(final AppsListViewFactory viewFactory,
+                          AppByCategoryProxy appByCategoryProxy,
                           final ListStore<App> listStore,
                           final EventBus eventBus) {
         this.listStore = listStore;
@@ -79,8 +79,6 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
         this.view.addAppFavoriteSelectedEventHandlers(this);
         this.view.addAppRatingDeselectedHandler(this);
         this.view.addAppRatingSelectedHandler(this);
-
-
 
         eventBus.addHandler(AppUpdatedEvent.TYPE, this);
     }
@@ -138,36 +136,42 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
         view.mask(appearance.getAppsLoadingMask());
 
         final AppCategory appCategory = event.getAppCategorySelection().iterator().next();
-        appService.getApps(appCategory, new AsyncCallback<List<App>>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof HttpRedirectException) {
-                    MessageBox messageBox = new MessageBox(appearance.agaveAuthRequiredTitle(), appearance.agaveAuthRequiredMsg());
-                    messageBox.setIcon(MessageBox.ICONS.info());
-                    messageBox.show();
-                } else {
-                    ErrorHandler.post(caught);
-                }
-                view.unmask();
-            }
 
-            @Override
-            public void onSuccess(final List<App> apps) {
-                listStore.clear();
-                listStore.addAll(apps);
+        view.getLoader().getLastLoadConfig().setAppCategory(appCategory);
+        view.getLoader().setOffset(0);
+        view.getLoader().load();
 
-                if (getDesiredSelectedApp() != null) {
 
-                    view.getGrid().getSelectionModel().select(getDesiredSelectedApp(), false);
-
-                } else if (listStore.size() > 0) {
-                    // Select first app
-//                    view.getGrid().getSelectionModel().select(listStore.get(0), false);
-                }
-                setDesiredSelectedApp(null);
-                view.unmask();
-            }
-        });
+//        appService.getApps(appCategory, new AsyncCallback<List<App>>() {
+//            @Override
+//            public void onFailure(Throwable caught) {
+//                if (caught instanceof HttpRedirectException) {
+//                    MessageBox messageBox = new MessageBox(appearance.agaveAuthRequiredTitle(), appearance.agaveAuthRequiredMsg());
+//                    messageBox.setIcon(MessageBox.ICONS.info());
+//                    messageBox.show();
+//                } else {
+//                    ErrorHandler.post(caught);
+//                }
+//                view.unmask();
+//            }
+//
+//            @Override
+//            public void onSuccess(final List<App> apps) {
+//                listStore.clear();
+//                listStore.addAll(apps);
+//
+//                if (getDesiredSelectedApp() != null) {
+//
+//                    view.getGrid().getSelectionModel().select(getDesiredSelectedApp(), false);
+//
+//                } else if (listStore.size() > 0) {
+//                    // Select first app
+////                    view.getGrid().getSelectionModel().select(listStore.get(0), false);
+//                }
+//                setDesiredSelectedApp(null);
+//                view.unmask();
+//            }
+//        });
     }
 
     @Override
@@ -230,6 +234,12 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
     @Override
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
         view.setSearchPattern(event.getSearchPattern());
+//        AppCategory appCategory = factory.appGroup().as();
+//        List<AppResource> appResourceList = Lists.newArrayList();
+//        appResourceList.addAll(event.getResults());
+//        appCategory.setApps(appResourceList);
+//        view.getLoader().getLastLoadConfig().setAppCategory(appCategory);
+//        view.getLoader().load();
         listStore.clear();
         listStore.addAll(event.getResults());
     }

@@ -14,6 +14,8 @@ public interface AppCategory extends HasId, HasName {
 
     List<AppCategory> getCategories();
 
+    List<App> getApps();
+
     @PropertyName("is_public")
     boolean isPublic();
 

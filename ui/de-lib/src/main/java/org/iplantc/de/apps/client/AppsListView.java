@@ -13,6 +13,7 @@ import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.DeleteAppsSelected;
 import org.iplantc.de.apps.client.events.selection.RunAppSelected;
+import org.iplantc.de.apps.client.presenter.tilesList.proxy.AppByCategoryLoadConfig;
 import org.iplantc.de.client.models.IsMaskable;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppCategory;
@@ -23,6 +24,8 @@ import com.sencha.gxt.data.shared.event.StoreAddEvent;
 import com.sencha.gxt.data.shared.event.StoreClearEvent;
 import com.sencha.gxt.data.shared.event.StoreRemoveEvent;
 import com.sencha.gxt.data.shared.event.StoreUpdateEvent;
+import com.sencha.gxt.data.shared.loader.PagingLoadResult;
+import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.ListView;
 
 /**
@@ -98,4 +101,6 @@ public interface AppsListView extends IsWidget,
     ListView<App, App> getGrid();
 
     void setSearchPattern(String searchPattern);
+
+    PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> getLoader();
 }

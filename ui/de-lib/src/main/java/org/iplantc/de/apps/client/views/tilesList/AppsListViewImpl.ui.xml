@@ -1,18 +1,41 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
+             xmlns:toolbar="urn:import:com.sencha.gxt.widget.core.client.toolbar"
              xmlns:widget='urn:import:com.sencha.gxt.widget.core.client'
+             xmlns:form='urn:import:com.sencha.gxt.widget.core.client.form'
 >
 
     <ui:with field="layoutData"
              type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
         <ui:attributes width="1" height="1"/>
     </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="toolBarLayoutData">
+        <ui:attributes width="1" height="-1" />
+    </ui:with>
+    <ui:with field="labelProvider"
+             type="com.sencha.gxt.data.shared.StringLabelProvider"/>
+    <ui:with type="com.sencha.gxt.data.shared.loader.PagingLoader" field="loader" />
     <container:VerticalLayoutContainer>
+        <container:child>
+            <toolbar:ToolBar>
+                <toolbar:child>
+                    <toolbar:LabelToolItem label="Sort By: "/>
+                </toolbar:child>
+                <toolbar:child>
+                    <form:SimpleComboBox ui:field="sortBox" width="100" editable="false" triggerAction="ALL"
+                                         labelProvider="{labelProvider}"/>
+                </toolbar:child>
+            </toolbar:ToolBar>
+        </container:child>
         <container:child layoutData="{layoutData}">
             <widget:ListView ui:field="grid"
                              borders="true"
                              height="100px"
-                             width="100px"/>
+                             width="100px"
+                             loader="{loader}"/>
+        </container:child>
+        <container:child layoutData="{toolBarLayoutData}">
+            <toolbar:PagingToolBar pageSize="50" ui:field="pagingToolBar" borders="false"/>
         </container:child>
     </container:VerticalLayoutContainer>
 </ui:UiBinder>
