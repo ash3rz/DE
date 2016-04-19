@@ -12,8 +12,9 @@ import org.iplantc.de.apps.client.events.selection.AppNameSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
-import org.iplantc.de.apps.client.presenter.list.proxy.AppByCategoryLoadConfig;
-import org.iplantc.de.apps.client.presenter.list.proxy.AppByCategoryProxy;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppListLoadConfig;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppListProxy;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppLoadConfig;
 import org.iplantc.de.apps.client.views.list.cells.AppTileCell;
 import org.iplantc.de.apps.shared.AppsModule;
 import org.iplantc.de.client.models.apps.App;
@@ -47,6 +48,7 @@ import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.toolbar.PagingToolBar;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -64,24 +66,24 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
 
     ListStore<App> listStore;
     @UiField ListView<App, App> listView;
-    @UiField(provided = true) PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> loader;
+    @UiField(provided = true) PagingLoader<AppLoadConfig, PagingLoadResult<App>> loader;
     @UiField PagingToolBar pagingToolBar;
     @UiField SimpleComboBox<String> sortBox;
     private final AppsListView.AppsListAppearance appearance;
     private AppsTileListDefaultAppearance<App> cellAppearance;
     private AppTileCell appTileCell;
-    private AppByCategoryProxy appByCategoryProxy;
+    private AppListProxy appListProxy;
 
     @Inject
     AppsTileViewImpl(final AppsListView.AppsListAppearance appearance,
                      @Assisted final ListStore<App> listStore,
                      AppsTileListDefaultAppearance<App> cellAppearance,
-                     AppTileCell appTileCell, AppByCategoryProxy appByCategoryProxy) {
+                     AppTileCell appTileCell, AppListProxy appListProxy) {
         this.appearance = appearance;
         this.listStore = listStore;
         this.cellAppearance = cellAppearance;
         this.appTileCell = appTileCell;
-        this.appByCategoryProxy = appByCategoryProxy;
+        this.appListProxy = appListProxy;
         appTileCell.setHasHandlers(this);
 
         buildLoader();
@@ -90,17 +92,13 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
 
         pagingToolBar.bind(loader);
 
-        sortBox.add("Name");
-        sortBox.add("Integrator Name");
-        sortBox.add("Average Rating");
-        sortBox.setValue("Name");
+        sortBox.add(Arrays.asList(appearance.nameColumnLabel(), appearance.integratedByColumnLabel(), appearance.ratingColumnLabel()));
+        sortBox.setValue(appearance.nameColumnLabel());
         sortBox.addSelectionHandler(new SelectionHandler<String>() {
             @Override
             public void onSelection(SelectionEvent<String> event) {
-                List<SortInfo> sortInfos = Lists.newArrayList();
-                SortInfo sortInfo = new SortInfoBean(event.getSelectedItem().toLowerCase().replace(" ", "_"), SortDir.ASC);
-                sortInfos.add(sortInfo);
-                loader.getLastLoadConfig().setSortInfo(sortInfos);
+                mask();
+                loader.getLastLoadConfig().setSortInfo(getSortInfo());
                 loader.load(loader.getLastLoadConfig());
             }
         });
@@ -110,12 +108,12 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
     }
 
     private void buildLoader() {
-        loader = new PagingLoader<>(appByCategoryProxy);
-        loader.useLoadConfig(new AppByCategoryLoadConfig());
+        loader = new PagingLoader<>(appListProxy);
+        loader.useLoadConfig(new AppLoadConfig());
         loader.setReuseLoadConfig(true);
-        loader.setRemoteSort(true);
-        loader.addLoadHandler(new LoadResultListStoreBinding<AppByCategoryLoadConfig, App, PagingLoadResult<App>>(listStore));
-        appByCategoryProxy.setMaskable(this);
+        loader.setRemoteSort(false);
+        loader.addLoadHandler(new LoadResultListStoreBinding<AppLoadConfig, App, PagingLoadResult<App>>(listStore));
+        appListProxy.setMaskable(this);
     }
 
     @UiFactory ListView<App, App> createListView() {
@@ -181,13 +179,11 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
         int total = event.getResults() == null ? 0 : event.getResults().size();
         setHeadingText(appearance.searchAppResultsHeader(event.getSearchText(), total));
-        AppByCategoryLoadConfig appByCategoryLoadConfig = new AppByCategoryLoadConfig();
-        appByCategoryLoadConfig.setAppList(event.getResults());
-        loader.useLoadConfig(appByCategoryLoadConfig);
+        AppListLoadConfig appListLoadConfig = new AppListLoadConfig();
+        appListLoadConfig.setAppList(event.getResults());
         pagingToolBar.setPageSize(event.getResults().size());
-        loader.load();
+        loader.load(appListLoadConfig);
 
-        unmask();
     }
 
     @Override
@@ -208,8 +204,22 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
     }
 
     @Override
-    public PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> getLoader() {
+    public PagingLoader<AppLoadConfig, PagingLoadResult<App>> getLoader() {
         return loader;
+    }
+
+    @Override
+    public List<SortInfo> getSortInfo() {
+        List<SortInfo> sortInfoList = Lists.newArrayList();
+        String sortField = sortBox.getCurrentValue();
+        SortInfo sortInfo;
+        if (sortField.equals(appearance.ratingColumnLabel())) {
+            sortInfo = new SortInfoBean(sortField, SortDir.DESC);
+        } else {
+            sortInfo = new SortInfoBean(sortField, SortDir.ASC);
+        }
+        sortInfoList.add(sortInfo);
+        return sortInfoList;
     }
 
     @Override

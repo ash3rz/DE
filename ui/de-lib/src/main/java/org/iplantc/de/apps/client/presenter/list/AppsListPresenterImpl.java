@@ -17,6 +17,7 @@ import org.iplantc.de.apps.client.gin.factory.AppsGridViewFactory;
 import org.iplantc.de.apps.client.gin.factory.AppsTileViewFactory;
 import org.iplantc.de.apps.client.presenter.callbacks.DeleteRatingCallback;
 import org.iplantc.de.apps.client.presenter.callbacks.RateAppCallback;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppCategoryLoadConfig;
 import org.iplantc.de.client.events.EventBus;
 import org.iplantc.de.client.models.UserInfo;
 import org.iplantc.de.client.models.apps.App;
@@ -163,9 +164,10 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
 
             final AppCategory appCategory = event.getAppCategorySelection().iterator().next();
 
-            appsTileView.getLoader().getLastLoadConfig().setAppCategory(appCategory);
-            appsTileView.getLoader().setOffset(0);
-            appsTileView.getLoader().load();
+            AppCategoryLoadConfig categoryLoadConfig = new AppCategoryLoadConfig();
+            categoryLoadConfig.setAppCategory(appCategory);
+            categoryLoadConfig.setSortInfo(appsTileView.getSortInfo());
+            appsTileView.getLoader().load(categoryLoadConfig);
         }
         else {
 
@@ -174,9 +176,9 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
 
             final AppCategory appCategory = event.getAppCategorySelection().iterator().next();
 
-            appsGridView.getLoader().getLastLoadConfig().setAppCategory(appCategory);
-            appsGridView.getLoader().setOffset(0);
-            appsGridView.getLoader().load();
+            AppCategoryLoadConfig categoryLoadConfig = new AppCategoryLoadConfig();
+            categoryLoadConfig.setAppCategory(appCategory);
+            appsGridView.getLoader().load(categoryLoadConfig);
 //            appsGridView.mask(appearance.getAppsLoadingMask());
 //
 //            final AppCategory appCategory = event.getAppCategorySelection().iterator().next();

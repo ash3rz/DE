@@ -18,6 +18,10 @@ import java.util.List;
  */
 public interface AppServiceFacade {
 
+    String NAME_SORT_FIELD = "name";
+    String INTEGRATOR_SORT_FIELD = "integrator_name";
+    String RATING_SORT_FIELD = "average_rating";
+
     interface AppServiceAutoBeanFactory extends AutoBeanFactory {
         AutoBean<AppList> appList();
 

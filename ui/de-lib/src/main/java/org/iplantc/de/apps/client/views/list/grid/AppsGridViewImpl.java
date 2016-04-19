@@ -12,8 +12,9 @@ import org.iplantc.de.apps.client.events.selection.AppNameSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
-import org.iplantc.de.apps.client.presenter.list.proxy.AppByCategoryLoadConfig;
-import org.iplantc.de.apps.client.presenter.list.proxy.AppByCategoryProxy;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppListLoadConfig;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppLoadConfig;
+import org.iplantc.de.apps.client.presenter.list.proxy.AppListProxy;
 import org.iplantc.de.apps.shared.AppsModule;
 import org.iplantc.de.client.models.apps.App;
 
@@ -58,20 +59,20 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
     @UiField Grid<App> grid;
     @UiField LiveGridView gridView;
     @UiField ToolBar pagingToolbar;
-    @UiField (provided = true) PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> loader;
+    @UiField (provided = true) PagingLoader<AppLoadConfig, PagingLoadResult<App>> loader;
     private final AppColumnModel acm; // Convenience class
 
     private final AppsListAppearance appearance;
     private String searchRegexPattern;
-    private AppByCategoryProxy appByCategoryProxy;
+    private AppListProxy appListProxy;
 
     @Inject
     AppsGridViewImpl(final AppsListAppearance appearance,
                      @Assisted final ListStore<App> listStore,
-                     AppByCategoryProxy appByCategoryProxy) {
+                     AppListProxy appListProxy) {
         this.appearance = appearance;
         this.listStore = listStore;
-        this.appByCategoryProxy = appByCategoryProxy;
+        this.appListProxy = appListProxy;
 
         buildLoader();
 
@@ -91,7 +92,7 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
-                final AppByCategoryLoadConfig loadConfig = new AppByCategoryLoadConfig();
+                final AppLoadConfig loadConfig = new AppLoadConfig();
                 loadConfig.setLimit(gridView.getCacheSize());
                 loader.useLoadConfig(loadConfig);
             }
@@ -99,12 +100,12 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
     }
 
     private void buildLoader() {
-        loader = new PagingLoader<>(appByCategoryProxy);
-        loader.useLoadConfig(new AppByCategoryLoadConfig());
+        loader = new PagingLoader<>(appListProxy);
+        loader.useLoadConfig(new AppLoadConfig());
         loader.setReuseLoadConfig(true);
         loader.setRemoteSort(true);
-        loader.addLoadHandler(new LoadResultListStoreBinding<AppByCategoryLoadConfig, App, PagingLoadResult<App>>(listStore));
-        appByCategoryProxy.setMaskable(this);
+        loader.addLoadHandler(new LoadResultListStoreBinding<AppLoadConfig, App, PagingLoadResult<App>>(listStore));
+        appListProxy.setMaskable(this);
     }
 
     @UiFactory
@@ -187,12 +188,10 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
         int total = event.getResults() == null ? 0 : event.getResults().size();
         setHeadingText(appearance.searchAppResultsHeader(event.getSearchText(), total));
-        AppByCategoryLoadConfig appByCategoryLoadConfig = new AppByCategoryLoadConfig();
-        appByCategoryLoadConfig.setAppList(event.getResults());
-        loader.useLoadConfig(appByCategoryLoadConfig);
-        loader.load();
-        
-        unmask();
+        AppListLoadConfig appListLoadConfig = new AppListLoadConfig();
+        appListLoadConfig.setAppList(event.getResults());
+        loader.load(appListLoadConfig);
+
     }
 
     @Override
@@ -212,7 +211,7 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView.AppsG
     }
 
     @Override
-    public PagingLoader<AppByCategoryLoadConfig, PagingLoadResult<App>> getLoader() {
+    public PagingLoader<AppLoadConfig, PagingLoadResult<App>> getLoader() {
         return loader;
     }
 
