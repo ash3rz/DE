@@ -88,3 +88,15 @@
     right: 3px;
     top: 5px;
 }
+
+@sprite .workFlow {
+    gwt-image: 'listItems';
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+@sprite .privateApp {
+    gwt-image: 'link';
+    position: absolute;
+}

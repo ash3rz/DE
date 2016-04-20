@@ -17,6 +17,12 @@ public interface AppsTileResources extends ClientBundle {
     @Source("org/iplantc/de/resources/client/mini_logo.png")
     ImageResource miniLogo();
 
+    @Source("org/iplantc/de/resources/client/list-items.gif")
+    ImageResource listItems();
+
+    @Source("org/iplantc/de/theme/base/client/diskResource/link.png")
+    ImageResource link();
+
     public interface AppsTileStyle extends CssResource {
 
         String tileCell();
@@ -34,6 +40,11 @@ public interface AppsTileResources extends ClientBundle {
         String integratorMod();
 
         String ratingMod();
+
+        String workFlow();
+
+        String privateApp();
+
     }
 }
 
