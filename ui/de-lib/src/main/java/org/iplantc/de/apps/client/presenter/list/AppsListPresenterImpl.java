@@ -159,6 +159,8 @@ public class AppsListPresenterImpl implements AppsListView.Presenter,
         categoryLoadConfig.setSortInfo(activeView.getSortInfo());
         if (activeView == appsGridView) {
             categoryLoadConfig.setLimit(appsGridView.getLoader().getLimit());
+        } else {
+            categoryLoadConfig.setLimit(appearance.toolbarPageSize());
         }
 
         activeView.getLoader().load(categoryLoadConfig);

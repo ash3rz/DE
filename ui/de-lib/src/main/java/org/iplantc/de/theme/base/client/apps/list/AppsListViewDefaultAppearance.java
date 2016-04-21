@@ -89,7 +89,7 @@ public class AppsListViewDefaultAppearance implements AppsListView.AppsListAppea
 
     @Override
     public int toolbarPageSize() {
-        return 50;
+        return 60;
     }
 
     @Override

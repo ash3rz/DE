@@ -98,7 +98,9 @@ public class AppsTileViewImpl extends ContentPanel implements AppsListView.AppsT
 
     private void buildLoader() {
         loader = new PagingLoader<>(appListProxy);
-        loader.useLoadConfig(new AppLoadConfig());
+        AppLoadConfig loadConfig = new AppLoadConfig();
+        loadConfig.setLimit(appearance.toolbarPageSize());
+        loader.useLoadConfig(loadConfig);
         loader.setReuseLoadConfig(true);
         loader.setRemoteSort(false);
         loader.addLoadHandler(new LoadResultListStoreBinding<AppLoadConfig, App, PagingLoadResult<App>>(listStore));
