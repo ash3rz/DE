@@ -16,6 +16,7 @@ import org.iplantc.de.client.DEClientConstants;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.ontologies.Ontology;
 import org.iplantc.de.client.models.ontologies.OntologyHierarchy;
+import org.iplantc.de.client.util.OntologyUtil;
 import org.iplantc.de.commons.client.views.dialogs.EdamUploadDialog;
 
 import com.google.gwt.core.client.GWT;
@@ -51,7 +52,6 @@ import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.tree.Tree;
 
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -61,14 +61,6 @@ public class OntologiesViewImpl extends Composite implements OntologiesView {
 
     interface OntologiesViewImplUiBinder extends UiBinder<Widget, OntologiesViewImpl> {
 
-    }
-
-    private class OntologyHierarchyNameComparator implements Comparator<OntologyHierarchy> {
-
-        @Override
-        public int compare(OntologyHierarchy o1, OntologyHierarchy o2) {
-            return o1.getLabel().compareToIgnoreCase(o2.getLabel());
-        }
     }
 
     private static OntologiesViewImplUiBinder uiBinder = GWT.create(OntologiesViewImplUiBinder.class);
@@ -95,6 +87,7 @@ public class OntologiesViewImpl extends Composite implements OntologiesView {
     private App targetApp;
     private OntologyHierarchyToAppDND hierarchyToAppDND;
     private AppToOntologyHierarchyDND appToHierarchyDND;
+    private OntologyUtil ontologyUtil = OntologyUtil.getInstance();
 
     @Inject
     public OntologiesViewImpl(OntologiesViewAppearance appearance,
@@ -341,7 +334,7 @@ public class OntologiesViewImpl extends Composite implements OntologiesView {
             }
         });
 
-        treeStore.addSortInfo(new Store.StoreSortInfo<>(new OntologyHierarchyNameComparator(), SortDir.ASC));
+        treeStore.addSortInfo(new Store.StoreSortInfo<>(ontologyUtil.getOntologyNameComparator(), SortDir.ASC));
 
         return ontologyTree;
     }
