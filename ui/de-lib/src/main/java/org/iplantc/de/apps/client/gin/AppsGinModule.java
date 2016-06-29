@@ -27,7 +27,9 @@ import org.iplantc.de.apps.client.views.details.dialogs.AppDetailsDialog;
 import org.iplantc.de.apps.client.views.grid.AppsGridViewImpl;
 import org.iplantc.de.apps.client.views.hierarchies.OntologyHierarchiesViewImpl;
 import org.iplantc.de.apps.client.views.submit.SubmitAppForPublicUseViewImpl;
+import org.iplantc.de.apps.client.views.toolBar.AppSearchField;
 import org.iplantc.de.apps.client.views.toolBar.AppsViewToolbarImpl;
+import org.iplantc.de.apps.client.views.toolBar.cells.AppSearchCell;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppCategory;
 import org.iplantc.de.client.models.ontologies.OntologyHierarchy;
@@ -91,6 +93,8 @@ public class AppsGinModule extends AbstractGinModule {
                     .implement(AppsToolbarView.class, AppsViewToolbarImpl.class)
                     .build(AppsToolbarViewFactory.class));
         bind(AppsToolbarView.Presenter.class).to(AppsToolbarPresenterImpl.class);
+        bind(AppSearchCell.class);
+        bind(AppSearchField.class);
 
         // Details
         install(new GinFactoryModuleBuilder()

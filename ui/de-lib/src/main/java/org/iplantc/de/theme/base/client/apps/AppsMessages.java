@@ -137,4 +137,12 @@ public interface AppsMessages extends Messages {
     String ontologyAttrMatchingFailure();
 
     String privateToolTip();
+
+    String allAppsOption();
+
+    String setSearchEmptyText(String selectedItem);
+
+    String hierarchyAppsOption(String hierarchy);
+
+    String dropDownColumnLabel();
 }

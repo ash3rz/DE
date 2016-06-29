@@ -5,6 +5,7 @@ import static org.iplantc.de.apps.client.events.AppSearchResultLoadEvent.TYPE;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent.AppSearchResultLoadEventHandler;
 import org.iplantc.de.apps.client.events.BeforeAppSearchEvent;
+import org.iplantc.de.apps.client.events.HierarchiesLoadedEvent;
 import org.iplantc.de.apps.client.events.selection.AppCategorySelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.CopyAppSelected;
@@ -32,7 +33,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -73,7 +73,7 @@ public class AppsViewToolbarImpl extends Composite implements AppsToolbarView {
     TextButton shareMenuButton;
     @UiField
     MenuItem appRun;
-    @UiField
+    @UiField(provided = true)
     AppSearchField appSearch;
     @UiField
     TextButton app_menu;
@@ -114,11 +114,15 @@ public class AppsViewToolbarImpl extends Composite implements AppsToolbarView {
 
     @Inject
     AppsViewToolbarImpl(final AppsToolbarAppearance appearance,
+                        final AppSearchField appSearch,
                         @Assisted
                         final PagingLoader<FilterPagingLoadConfig, PagingLoadResult<App>> loader) {
         this.appearance = appearance;
+        this.appSearch = appSearch;
         this.loader = loader;
         initWidget(uiBinder.createAndBindUi(this));
+
+        appSearch.setHasHandlers(this);
     }
 
     // <editor-fold desc="Handler Registrations">
@@ -393,11 +397,6 @@ public class AppsViewToolbarImpl extends Composite implements AppsToolbarView {
         return true;
     }
 
-    @UiFactory
-    AppSearchField createAppSearchField() {
-        return new AppSearchField(loader);
-    }
-
     // <editor-fold desc="UI Handlers">
     @UiHandler({ "appRun", "wfRun" })
     void appRunClicked(SelectionEvent<Item> event) {
@@ -480,5 +479,10 @@ public class AppsViewToolbarImpl extends Composite implements AppsToolbarView {
     @UiHandler("shareCollab")
     void shareWithCollaborator(SelectionEvent<Item> event) {
         fireEvent(new ShareAppsSelected(currentSelection));
+    }
+
+    @Override
+    public void onHierarchiesLoaded(HierarchiesLoadedEvent event) {
+        appSearch.onHierarchiesLoaded(event);
     }
 }

@@ -24,6 +24,7 @@ import org.iplantc.de.apps.client.views.categories.AppCategoriesViewImpl;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppCategory;
 import org.iplantc.de.client.services.AppServiceFacade;
+import org.iplantc.de.client.services.AppUserServiceFacade;
 import org.iplantc.de.client.services.impl.AppUserServiceFacadeImpl;
 
 import com.google.gwt.inject.client.AbstractGinModule;
@@ -47,6 +48,7 @@ public class AdminAppsGinModule extends AbstractGinModule {
 
         bind(AppAdminServiceFacade.class).to(AppAdminServiceFacadeImpl.class);
         bind(AppServiceFacade.class).to(AppUserServiceFacadeImpl.class);
+        bind(AppUserServiceFacade.class).to(AppUserServiceFacadeImpl.class);
 
 
         // Main view

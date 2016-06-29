@@ -6,6 +6,7 @@ import org.iplantc.de.apps.client.OntologyHierarchiesView;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.AppUpdatedEvent;
+import org.iplantc.de.apps.client.events.HierarchiesLoadedEvent;
 import org.iplantc.de.apps.client.events.selection.AppFavoriteSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppInfoSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
@@ -152,6 +153,7 @@ public class OntologyHierarchiesPresenterImpl implements OntologyHierarchiesView
                         announcer.schedule(new ErrorAnnouncementConfig(appearance.ontologyAttrMatchingFailure()));
                         LOG.log(Level.SEVERE, "ERROR UI's ontology configs do not exist or do not match published ontology!");
                     } else {
+                        fireEvent(new HierarchiesLoadedEvent(result));
                         createViewTabs(result);
                     }
                 }
@@ -356,6 +358,11 @@ public class OntologyHierarchiesPresenterImpl implements OntologyHierarchiesView
     public HandlerRegistration addOntologyHierarchySelectionChangedEventHandler(
             OntologyHierarchySelectionChangedEvent.OntologyHierarchySelectionChangedEventHandler handler) {
         return ensureHandlers().addHandler(OntologyHierarchySelectionChangedEvent.TYPE, handler);
+    }
+
+    @Override
+    public HandlerRegistration addHierarchiesLoadedEventHandler(HierarchiesLoadedEvent.HierarchiesLoadedEventHandler handler) {
+        return ensureHandlers().addHandler(HierarchiesLoadedEvent.TYPE, handler);
     }
 
     HandlerManager createHandlerManager() {

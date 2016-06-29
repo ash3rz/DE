@@ -22,7 +22,6 @@ import com.google.common.base.Preconditions;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
@@ -55,7 +54,7 @@ public class AdminAppsToolbarViewImpl extends Composite implements AdminAppsTool
     }
 
     @UiField TextButton addCategory;
-    @UiField AppSearchField appSearch;
+    @UiField(provided = true) AppSearchField appSearch;
     @UiField TextButton categorizeApp;
     @UiField TextButton deleteApp;
     @UiField TextButton deleteCat;
@@ -72,9 +71,11 @@ public class AdminAppsToolbarViewImpl extends Composite implements AdminAppsTool
 
     @Inject
     AdminAppsToolbarViewImpl(final ToolbarAppearance appearance,
+                             final AppSearchField appSearch,
                              @Assisted final PagingLoader<FilterPagingLoadConfig, PagingLoadResult<App>> loader) {
         this.appearance = appearance;
         this.loader = loader;
+        this.appSearch = appSearch;
         initWidget(uiBinder.createAndBindUi(this));
     }
 
@@ -272,11 +273,6 @@ public class AdminAppsToolbarViewImpl extends Composite implements AdminAppsTool
     @UiHandler("restoreApp")
     void restoreAppClicked(SelectEvent event) {
         fireEvent(new RestoreAppSelected(appSelection));
-    }
-
-    @UiFactory
-    AppSearchField createAppSearchField() {
-        return new AppSearchField(loader);
     }
 
     @Override

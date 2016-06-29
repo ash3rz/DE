@@ -1,6 +1,7 @@
 package org.iplantc.de.apps.client;
 
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
+import org.iplantc.de.apps.client.events.HierarchiesLoadedEvent;
 import org.iplantc.de.apps.client.events.selection.AppInfoSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.OntologyHierarchySelectionChangedEvent;
 import org.iplantc.de.client.models.IsMaskable;
@@ -27,7 +28,8 @@ public interface OntologyHierarchiesView extends IsWidget,
 
     interface Presenter extends AppInfoSelectedEvent.AppInfoSelectedEventHandler,
                                 AppSearchResultLoadEvent.AppSearchResultLoadEventHandler,
-                                OntologyHierarchySelectionChangedEvent.HasOntologyHierarchySelectionChangedEventHandlers {
+                                OntologyHierarchySelectionChangedEvent.HasOntologyHierarchySelectionChangedEventHandlers,
+                                HierarchiesLoadedEvent.HasHierarchiesLoadedEventHandlers {
 
         void go(DETabPanel tabPanel);
 

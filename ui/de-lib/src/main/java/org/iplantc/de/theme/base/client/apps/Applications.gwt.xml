@@ -71,6 +71,10 @@
         <when-type-is class="org.iplantc.de.apps.client.AppsToolbarView.AppsToolbarAppearance"/>
     </replace-with>
 
+    <replace-with class="org.iplantc.de.theme.base.client.apps.toolbar.AppSearchCellDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.views.toolBar.cells.AppSearchCell.AppSearchCellAppearance"/>
+    </replace-with>
+
     <!-- Details -->
     <replace-with class="org.iplantc.de.theme.base.client.apps.details.AppDetailsDefaultAppearance">
         <when-type-is class="org.iplantc.de.apps.client.AppDetailsView.AppDetailsAppearance"/>
