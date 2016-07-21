@@ -1,5 +1,5 @@
-@sprite .tileCell {
-    gwt-image: 'miniLogo';
+.tileCell {
+    /*gwt-image: 'miniLogo';*/
     /*border: double #185DA2;*/
     width: 170px;
     height: 100px;

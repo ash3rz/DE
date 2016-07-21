@@ -1,5 +1,6 @@
 package org.iplantc.de.theme.base.client.apps.list.tiles;
 
+import org.iplantc.de.apps.client.views.list.cells.AppCardCell;
 import org.iplantc.de.apps.client.views.list.cells.AppCommentCell;
 import org.iplantc.de.apps.client.views.list.cells.AppFavoriteCell;
 import org.iplantc.de.apps.client.views.list.cells.AppHyperlinkCell;
@@ -8,6 +9,7 @@ import org.iplantc.de.apps.client.views.list.cells.AppIntegratorCell;
 import org.iplantc.de.apps.client.views.list.cells.AppRatingCell;
 import org.iplantc.de.apps.client.views.list.cells.AppTileCell;
 import org.iplantc.de.client.models.apps.App;
+import org.iplantc.de.commons.client.util.MD5Util;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.HasCell;
@@ -25,8 +27,11 @@ public class AppTileCellDefaultAppearance implements AppTileCell.AppTileCellAppe
      * The HTML templates used to render the cell.
      */
     interface Templates extends SafeHtmlTemplates {
-        @Template("<div class='{0}'/>")
+        @Template("<div class='{0}'>")
         SafeHtml mod(String className);
+
+        @SafeHtmlTemplates.Template("<img src='{0}'/>")
+        SafeHtml img(String gravatar);
     }
 
     private final AppsTileResources resources;
@@ -85,6 +90,12 @@ public class AppTileCellDefaultAppearance implements AppTileCell.AppTileCellAppe
             sb.appendHtmlConstant("</div>");
         } else if (hasCell instanceof AppRatingCell) {
             sb.append(templates.mod(style.ratingMod()));
+            hasCell.getCell().render(context, hasCell.getValue(value), sb);
+            sb.appendHtmlConstant("</div>");
+        } else if (hasCell instanceof AppCardCell) {
+            String code = MD5Util.md5Hex(value.getId());
+            String hash = "https://www.gravatar.com/avatar/" + code + "?d=identicon&s=60";
+            sb.append(templates.img(hash));
             hasCell.getCell().render(context, hasCell.getValue(value), sb);
             sb.appendHtmlConstant("</div>");
         }

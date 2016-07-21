@@ -27,6 +27,7 @@ public class AppTileCell extends CompositeCell<App> {
     private static AppCommentCell appCommentCell;
     private static AppRatingCell appRatingCell;
     private static AppIntegratorCell appIntegratorCell;
+    private static AppCardCell appCardCell;
     private AppTileCellAppearance appearance = GWT.create(AppTileCellAppearance.class);
 
     public AppTileCell() {
@@ -50,12 +51,14 @@ public class AppTileCell extends CompositeCell<App> {
         appCommentCell = new AppCommentCell();
         appRatingCell = new AppRatingCell();
         appIntegratorCell = new AppIntegratorCell();
+        appCardCell = new AppCardCell();
 
         cellList.add(appNameCell);
         cellList.add(appInfoCell);
         cellList.add(appCommentCell);
         cellList.add(appRatingCell);
         cellList.add(appIntegratorCell);
+        cellList.add(appCardCell);
 
         return cellList;
     }
