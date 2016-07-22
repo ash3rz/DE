@@ -24,19 +24,11 @@ import com.sencha.gxt.data.shared.event.StoreAddEvent;
 import com.sencha.gxt.data.shared.event.StoreClearEvent;
 import com.sencha.gxt.data.shared.event.StoreRemoveEvent;
 import com.sencha.gxt.data.shared.event.StoreUpdateEvent;
-import com.sencha.gxt.widget.core.client.grid.Grid;
 
 /**
- * This view is responsible for displaying lists of {@link App}s resulting for {@link AppCategory}
- * selection or App searches.
- *
- * It is also responsible for relaying user-related events from the listed Apps, primarily selection
- * events.
- *
- * Created by jstroot on 3/5/15.
- * @author jstroot
+ * @author aramsey
  */
-public interface AppsGridView extends IsWidget,
+public interface AppsListView extends IsWidget,
                                       IsMaskable,
                                       AppSelectionChangedEvent.HasAppSelectionChangedEventHandlers,
                                       AppInfoSelectedEvent.HasAppInfoSelectedEventHandlers,
@@ -49,8 +41,8 @@ public interface AppsGridView extends IsWidget,
                                       AppCategorySelectionChangedEvent.AppCategorySelectionChangedEventHandler,
                                       AppFavoritedEvent.HasAppFavoritedEventHandlers,
                                       BeforeAppSearchEvent.BeforeAppSearchEventHandler,
-                                      OntologyHierarchySelectionChangedEvent.OntologyHierarchySelectionChangedEventHandler{
-    interface AppsGridAppearance {
+                                      OntologyHierarchySelectionChangedEvent.OntologyHierarchySelectionChangedEventHandler {
+    interface AppsListAppearance {
 
         String appLaunchWithoutToolError();
 
@@ -76,11 +68,11 @@ public interface AppsGridView extends IsWidget,
     }
 
     /**
-     * This presenter is responsible for updating/maintaining the {@code ListStore} associated with
-     * the view. It fires store related events for other presenters. \
+     * This presenter is responsible for updating/maintaining the {@code ListStore} associated with the
+     * view. It fires store related events for other presenters. \
      *
-     * To update the {@code ListStore}, it listens for {@link AppCategory}
-     * selection and search result load events.
+     * To update the {@code ListStore}, it listens for {@link AppCategory} selection and search result
+     * load events.
      */
     interface Presenter extends AppCategorySelectionChangedEvent.AppCategorySelectionChangedEventHandler,
                                 AppSearchResultLoadEvent.AppSearchResultLoadEventHandler,
@@ -94,10 +86,14 @@ public interface AppsGridView extends IsWidget,
                                 OntologyHierarchySelectionChangedEvent.OntologyHierarchySelectionChangedEventHandler {
         App getSelectedApp();
 
-        AppsGridView getView();
+        AppsListView getView();
     }
 
-    Grid<App> getGrid();
+    App getSelectedItem();
+
+    void select(App app, boolean keepExisting);
+
+    void deselectAll();
 
     void setSearchPattern(String searchPattern);
 

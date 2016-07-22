@@ -1,6 +1,5 @@
 package org.iplantc.de.apps.client.views.grid;
 
-import org.iplantc.de.apps.client.AppsGridView;
 import org.iplantc.de.apps.client.events.selection.AppCommentSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppCommentSelectedEvent.AppCommentSelectedEventHandler;
 import org.iplantc.de.apps.client.events.selection.AppFavoriteSelectedEvent;
@@ -9,11 +8,12 @@ import org.iplantc.de.apps.client.events.selection.AppNameSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppRatingDeselected;
 import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.models.AppProperties;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.views.grid.cells.AppCommentCell;
 import org.iplantc.de.apps.client.views.grid.cells.AppFavoriteCell;
-import org.iplantc.de.apps.client.views.grid.cells.AppNameCell;
 import org.iplantc.de.apps.client.views.grid.cells.AppInfoCell;
 import org.iplantc.de.apps.client.views.grid.cells.AppIntegratorCell;
+import org.iplantc.de.apps.client.views.grid.cells.AppNameCell;
 import org.iplantc.de.apps.client.views.grid.cells.AppRatingCell;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.client.models.apps.AppNameComparator;
@@ -41,7 +41,7 @@ public class AppColumnModel extends ColumnModel<App> implements AppInfoSelectedE
                                                                 AppRatingSelected.HasAppRatingSelectedEventHandlers,
                                                                 AppRatingDeselected.HasAppRatingDeselectedHandlers {
 
-    public AppColumnModel(final AppsGridView.AppsGridAppearance appearance) {
+    public AppColumnModel(final AppsListView.AppsListAppearance appearance) {
         super(createColumnConfigList(appearance));
 
         // Set handler managers on appropriate cells so they can fire events.
@@ -61,7 +61,7 @@ public class AppColumnModel extends ColumnModel<App> implements AppInfoSelectedE
         }
     }
 
-    public static List<ColumnConfig<App, ?>> createColumnConfigList(final AppsGridView.AppsGridAppearance appearance) {
+    public static List<ColumnConfig<App, ?>> createColumnConfigList(final AppsListView.AppsListAppearance appearance) {
         AppProperties props = GWT.create(AppProperties.class);
         List<ColumnConfig<App, ?>> list = new ArrayList<>();
 

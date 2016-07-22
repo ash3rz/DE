@@ -1,14 +1,16 @@
 package org.iplantc.de.apps.client.views.grid.cells;
 
+import static com.google.gwt.dom.client.BrowserEvents.CLICK;
+
 import org.iplantc.de.apps.client.events.selection.AppFavoriteSelectedEvent;
 import org.iplantc.de.apps.shared.AppsModule;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.theme.base.client.apps.AppsMessages;
 
-import static com.google.gwt.dom.client.BrowserEvents.CLICK;
-
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -20,7 +22,22 @@ import com.google.gwt.user.client.Event;
 /**
  * @author jstroot
  */
-public class AppFavoriteCell extends AbstractCell<App> {
+public class AppFavoriteCell extends AbstractCell<App> implements HasCell<App, App> {
+
+    @Override
+    public Cell<App> getCell() {
+        return this;
+    }
+
+    @Override
+    public FieldUpdater<App, App> getFieldUpdater() {
+        return null;
+    }
+
+    @Override
+    public App getValue(App object) {
+        return object;
+    }
 
     public interface AppFavoriteCellAppearance {
         String addAppToFav();

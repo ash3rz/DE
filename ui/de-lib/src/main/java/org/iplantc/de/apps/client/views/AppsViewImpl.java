@@ -1,7 +1,7 @@
 package org.iplantc.de.apps.client.views;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
 import org.iplantc.de.apps.client.OntologyHierarchiesView;
@@ -34,14 +34,14 @@ public class AppsViewImpl extends Composite implements AppsView {
     AppCategoriesView.Presenter categoriesPresenter;
     OntologyHierarchiesView.Presenter hierarchiesPresenter;
 
-    @UiField(provided = true) final AppsGridView appsGridView;
+    @UiField(provided = true) final AppsListView appsGridView;
 
     private static final MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     @Inject
     protected AppsViewImpl(@Assisted final AppCategoriesView.Presenter categoriesPresenter,
                            @Assisted final OntologyHierarchiesView.Presenter hierarchiesPresenter,
-                           @Assisted final AppsGridView.Presenter gridPresenter,
+                           @Assisted final AppsListView.Presenter gridPresenter,
                            @Assisted final AppsToolbarView.Presenter toolbarPresenter) {
         this.categoriesPresenter = categoriesPresenter;
         this.hierarchiesPresenter = hierarchiesPresenter;

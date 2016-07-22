@@ -4,25 +4,26 @@ import org.iplantc.de.admin.apps.client.AdminAppsGridView;
 import org.iplantc.de.resources.client.messages.IplantDisplayStrings;
 import org.iplantc.de.theme.base.client.admin.BelphegorDisplayStrings;
 import org.iplantc.de.theme.base.client.admin.BelphegorErrorStrings;
-import org.iplantc.de.theme.base.client.apps.grid.AppsGridViewDefaultAppearance;
+import org.iplantc.de.theme.base.client.apps.grid.AppsListViewDefaultAppearance;
 
 import com.google.gwt.core.client.GWT;
 
 /**
  * @author jstroot
  */
-public class AdminAppsGridPresenterDefaultAppearance extends AppsGridViewDefaultAppearance implements AdminAppsGridView.Presenter.Appearance {
+public class AdminAppsListPresenterDefaultAppearance extends AppsListViewDefaultAppearance
+        implements AdminAppsGridView.Presenter.Appearance {
     private final BelphegorDisplayStrings displayStrings;
     private final BelphegorErrorStrings errorStrings;
     private final IplantDisplayStrings iplantDisplayStrings;
 
-    public AdminAppsGridPresenterDefaultAppearance() {
+    public AdminAppsListPresenterDefaultAppearance() {
         this(GWT.<BelphegorDisplayStrings> create(BelphegorDisplayStrings.class),
              GWT.<BelphegorErrorStrings> create(BelphegorErrorStrings.class),
              GWT.<IplantDisplayStrings> create(IplantDisplayStrings.class));
     }
 
-    AdminAppsGridPresenterDefaultAppearance(final BelphegorDisplayStrings displayStrings,
+    AdminAppsListPresenterDefaultAppearance(final BelphegorDisplayStrings displayStrings,
                                             final BelphegorErrorStrings errorStrings,
                                             final IplantDisplayStrings iplantDisplayStrings) {
         this.displayStrings = displayStrings;

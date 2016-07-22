@@ -1,0 +1,103 @@
+.tileCell {
+    /*gwt-image: 'miniLogo';*/
+    /*border: double #185DA2;*/
+    width: 250px;
+    height: 100px;
+    margin: 10px 0 0 10px;
+    position: relative;
+    float: left;
+    background-size: 70px;
+    background-position-x: 0px;
+    cursor: hand;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.tileCell:hover {
+    /*background-color: #2989E6;*/
+    background-color: rgb(238,238,238);
+    outline: rgb(208,208,208) solid 2px;
+}
+
+.tileCellSelect {
+    background-color: rgb(238,238,238);
+    outline: rgb(208,208,208) solid 2px;
+}
+
+.tileCell h2 {
+    color: black;
+    margin-top:30px;
+}
+
+.infoMod {
+    position: absolute;
+    bottom: 2px;
+    left: 20px;
+}
+
+.infoMod:hover {
+    background-color: rgb(238,238,238);
+    outline: rgb(208,208,208) solid 2px;
+}
+
+.commentMod {
+    position: absolute;
+    bottom: 4px;
+    left: 45px;
+}
+
+.commentMod:hover {
+    background-color: rgb(238,238,238);
+    outline: rgb(208,208,208) solid 2px;
+}
+
+.nameMod {
+    position: absolute;
+    top: 20px;
+    left: 85px;
+    /*transform: translate(-50%, -50%);*/
+}
+
+.nameMod:hover {
+    text-decoration: underline;
+}
+
+.favoriteMod {
+    position: absolute;
+    bottom: 30px;
+    left: 4px;
+}
+
+.favoriteMod:hover {
+    background-color: rgb(238,238,238);
+    outline: rgb(208,208,208) solid 2px;
+}
+
+.integratorMod {
+    position: absolute;
+    bottom: 2px;
+    left: 5px;
+    max-width: 170px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space:nowrap;
+    visibility: hidden;
+}
+
+.ratingMod {
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    bottom: 5px;
+}
+
+@sprite .workFlow {
+    gwt-image: 'listItems';
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+@sprite .privateApp {
+    gwt-image: 'link';
+    position: absolute;
+}

@@ -64,7 +64,7 @@
 
         <!-- This is the main panel -->
         <container:center layoutData="{centerData}">
-            <appsWidgets:AppsGridView ui:field="appsGridView"/>
+            <appsWidgets:AppsListView ui:field="appsGridView"/>
         </container:center>
 
         <!-- This is the details panel -->

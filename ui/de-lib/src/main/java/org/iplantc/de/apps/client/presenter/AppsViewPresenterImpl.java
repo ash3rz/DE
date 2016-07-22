@@ -1,7 +1,7 @@
 package org.iplantc.de.apps.client.presenter;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
 import org.iplantc.de.apps.client.OntologyHierarchiesView;
@@ -26,13 +26,13 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
 
     protected final AppsView view;
     private final AppCategoriesView.Presenter categoriesPresenter;
-    private final AppsGridView.Presenter appsGridPresenter;
+    private final AppsListView.Presenter appsGridPresenter;
     private final OntologyHierarchiesView.Presenter hierarchiesPresenter;
 
     @Inject
     protected AppsViewPresenterImpl(final AppsViewFactory viewFactory,
                                     final AppCategoriesView.Presenter categoriesPresenter,
-                                    final AppsGridView.Presenter appsGridPresenter,
+                                    final AppsListView.Presenter appsGridPresenter,
                                     final AppsToolbarView.Presenter toolbarPresenter,
                                     final OntologyHierarchiesView.Presenter hierarchiesPresenter) {
         this.categoriesPresenter = categoriesPresenter;
@@ -69,7 +69,7 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
     @Override
     public Grid<App> getAppsGrid() {
         // FIXME Too many levels of misdirection
-        return appsGridPresenter.getView().getGrid();
+        return null;
     }
 
     @Override

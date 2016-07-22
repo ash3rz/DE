@@ -1,0 +1,31 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
+             xmlns:toolbar="urn:import:com.sencha.gxt.widget.core.client.toolbar"
+             xmlns:widget='urn:import:com.sencha.gxt.widget.core.client'
+             xmlns:form='urn:import:com.sencha.gxt.widget.core.client.form'
+>
+
+    <ui:with field="layoutData"
+             type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
+        <ui:attributes width="1" height="1"/>
+    </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="toolBarLayoutData">
+        <ui:attributes width="1" height="-1" />
+    </ui:with>
+    <ui:with field="appearance" type="org.iplantc.de.apps.client.AppsListView.AppsListAppearance"/>
+    <container:VerticalLayoutContainer>
+        <container:child>
+            <toolbar:ToolBar>
+                <toolbar:child>
+                    <toolbar:LabelToolItem label="Sort By: "/>
+                </toolbar:child>
+            </toolbar:ToolBar>
+        </container:child>
+        <container:child layoutData="{layoutData}">
+            <widget:ListView ui:field="listView"
+                             borders="true"
+                             height="100px"
+                             width="100px"/>
+        </container:child>
+    </container:VerticalLayoutContainer>
+</ui:UiBinder>

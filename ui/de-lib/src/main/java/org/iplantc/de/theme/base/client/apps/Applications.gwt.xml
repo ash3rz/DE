@@ -8,8 +8,8 @@
     </replace-with>
 
     <!-- Grid -->
-    <replace-with class="org.iplantc.de.theme.base.client.apps.grid.AppsGridViewDefaultAppearance">
-        <when-type-is class="org.iplantc.de.apps.client.AppsGridView.AppsGridAppearance"/>
+    <replace-with class="org.iplantc.de.theme.base.client.apps.grid.AppsListViewDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.AppsListView.AppsListAppearance"/>
     </replace-with>
 
 
@@ -59,6 +59,14 @@
 
     <replace-with class="org.iplantc.de.theme.base.client.apps.cells.AppIntegratorCellDefaultAppearance">
         <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppIntegratorCell.AppIntegratorCellAppearance"/>
+    </replace-with>
+
+    <replace-with class="org.iplantc.de.theme.base.client.apps.cells.AppTileCellDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppTileCell.AppTileCellAppearance"/>
+    </replace-with>
+
+    <replace-with class="org.iplantc.de.theme.base.client.apps.cells.AppCardCellDefaultAppearance">
+        <when-type-is class="org.iplantc.de.apps.client.views.grid.cells.AppCardCell.AppCardCellAppearance"/>
     </replace-with>
 
     <!-- Submit -->

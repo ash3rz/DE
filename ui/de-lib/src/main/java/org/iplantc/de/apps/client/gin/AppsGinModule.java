@@ -2,7 +2,7 @@ package org.iplantc.de.apps.client.gin;
 
 import org.iplantc.de.apps.client.AppCategoriesView;
 import org.iplantc.de.apps.client.AppDetailsView;
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
 import org.iplantc.de.apps.client.OntologyHierarchiesView;
@@ -24,7 +24,7 @@ import org.iplantc.de.apps.client.views.AppsViewImpl;
 import org.iplantc.de.apps.client.views.categories.AppCategoriesViewImpl;
 import org.iplantc.de.apps.client.views.details.AppDetailsViewImpl;
 import org.iplantc.de.apps.client.views.details.dialogs.AppDetailsDialog;
-import org.iplantc.de.apps.client.views.grid.AppsGridViewImpl;
+import org.iplantc.de.apps.client.views.grid.AppsTileViewImpl;
 import org.iplantc.de.apps.client.views.hierarchies.OntologyHierarchiesViewImpl;
 import org.iplantc.de.apps.client.views.submit.SubmitAppForPublicUseViewImpl;
 import org.iplantc.de.apps.client.views.toolBar.AppsViewToolbarImpl;
@@ -82,9 +82,9 @@ public class AppsGinModule extends AbstractGinModule {
 
         // Grid View
         install(new GinFactoryModuleBuilder()
-                    .implement(AppsGridView.class, AppsGridViewImpl.class)
+                    .implement(AppsListView.class, AppsTileViewImpl.class)
                     .build(AppsGridViewFactory.class));
-        bind(AppsGridView.Presenter.class).to(AppsGridPresenterImpl.class);
+        bind(AppsListView.Presenter.class).to(AppsGridPresenterImpl.class);
 
         // Toolbar View
         install(new GinFactoryModuleBuilder()

@@ -10,11 +10,11 @@
     </replace-with>
 
     <!-- Grid -->
-    <replace-with class="org.iplantc.de.theme.base.client.admin.apps.grid.AdminAppsGridViewDefaultAppearance">
+    <replace-with class="org.iplantc.de.theme.base.client.admin.apps.grid.AdminAppsListViewDefaultAppearance">
         <when-type-is class="org.iplantc.de.admin.apps.client.AdminAppsGridView.Appearance" />
     </replace-with>
 
-    <replace-with class="org.iplantc.de.theme.base.client.admin.apps.grid.AdminAppsGridPresenterDefaultAppearance">
+    <replace-with class="org.iplantc.de.theme.base.client.admin.apps.grid.AdminAppsListPresenterDefaultAppearance">
         <when-type-is class="org.iplantc.de.admin.apps.client.AdminAppsGridView.Presenter.Appearance" />
     </replace-with>
 

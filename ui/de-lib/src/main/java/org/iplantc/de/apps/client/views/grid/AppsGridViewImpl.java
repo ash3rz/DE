@@ -1,6 +1,6 @@
 package org.iplantc.de.apps.client.views.grid;
 
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.BeforeAppSearchEvent;
@@ -39,7 +39,7 @@ import com.sencha.gxt.widget.core.client.tips.QuickTip;
  *
  * @author jstroot
  */
-public class AppsGridViewImpl extends ContentPanel implements AppsGridView,
+public class AppsGridViewImpl extends ContentPanel implements AppsListView,
                                                               SelectionChangedEvent.SelectionChangedHandler<App> {
     interface AppsGridViewImplUiBinder extends UiBinder<Widget, AppsGridViewImpl> { }
 
@@ -51,11 +51,11 @@ public class AppsGridViewImpl extends ContentPanel implements AppsGridView,
     @UiField GridView<App> gridView;
     private final AppColumnModel acm; // Convenience class
 
-    private final AppsGridAppearance appearance;
+    private final AppsListAppearance appearance;
     private String searchRegexPattern;
 
     @Inject
-    AppsGridViewImpl(final AppsGridView.AppsGridAppearance appearance,
+    AppsGridViewImpl(final AppsListView.AppsListAppearance appearance,
                      @Assisted final ListStore<App> listStore) {
         this.appearance = appearance;
         this.listStore = listStore;
@@ -110,11 +110,6 @@ public class AppsGridViewImpl extends ContentPanel implements AppsGridView,
     //</editor-fold>
 
     @Override
-    public Grid<App> getGrid() {
-        return grid;
-    }
-
-    @Override
     public void onAppCategorySelectionChanged(AppCategorySelectionChangedEvent event) {
         // FIXME Move to appearance
         setHeadingText(Joiner.on(" >> ").join(event.getGroupHierarchy()));
@@ -150,6 +145,21 @@ public class AppsGridViewImpl extends ContentPanel implements AppsGridView,
     @Override
     public void onSelectionChanged(SelectionChangedEvent<App> event) {
         fireEvent(new AppSelectionChangedEvent(event.getSelection()));
+    }
+
+    @Override
+    public App getSelectedItem() {
+        return grid.getSelectionModel().getSelectedItem();
+    }
+
+    @Override
+    public void select(App app, boolean keepExisting) {
+        grid.getSelectionModel().select(app, keepExisting);
+    }
+
+    @Override
+    public void deselectAll() {
+        grid.getSelectionModel().deselectAll();
     }
 
     @Override

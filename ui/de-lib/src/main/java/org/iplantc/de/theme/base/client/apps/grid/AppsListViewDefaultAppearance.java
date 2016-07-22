@@ -1,6 +1,6 @@
 package org.iplantc.de.theme.base.client.apps.grid;
 
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.resources.client.messages.IplantDisplayStrings;
 import org.iplantc.de.theme.base.client.apps.AppsMessages;
 
@@ -9,16 +9,16 @@ import com.google.gwt.core.client.GWT;
 /**
  * @author jstroot
  */
-public class AppsGridViewDefaultAppearance implements AppsGridView.AppsGridAppearance {
+public class AppsListViewDefaultAppearance implements AppsListView.AppsListAppearance {
     private final IplantDisplayStrings iplantDisplayStrings;
     private final AppsMessages appsMessages;
 
-    public AppsGridViewDefaultAppearance() {
+    public AppsListViewDefaultAppearance() {
         this(GWT.<IplantDisplayStrings> create(IplantDisplayStrings.class),
              GWT.<AppsMessages> create(AppsMessages.class));
     }
 
-    AppsGridViewDefaultAppearance(final IplantDisplayStrings iplantDisplayStrings,
+    AppsListViewDefaultAppearance(final IplantDisplayStrings iplantDisplayStrings,
                                   final AppsMessages appsMessages) {
         this.iplantDisplayStrings = iplantDisplayStrings;
         this.appsMessages = appsMessages;

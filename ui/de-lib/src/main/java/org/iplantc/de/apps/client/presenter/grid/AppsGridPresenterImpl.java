@@ -1,6 +1,6 @@
 package org.iplantc.de.apps.client.presenter.grid;
 
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.AppUpdatedEvent;
@@ -55,7 +55,7 @@ import java.util.List;
 /**
  * @author jstroot
  */
-public class AppsGridPresenterImpl implements AppsGridView.Presenter,
+public class AppsGridPresenterImpl implements AppsListView.Presenter,
                                               AppNameSelectedEvent.AppNameSelectedEventHandler,
                                               AppRatingSelected.AppRatingSelectedHandler,
                                               AppRatingDeselected.AppRatingDeselectedHandler,
@@ -91,11 +91,11 @@ public class AppsGridPresenterImpl implements AppsGridView.Presenter,
 
             if (getDesiredSelectedApp() != null) {
 
-                view.getGrid().getSelectionModel().select(getDesiredSelectedApp(), false);
+                view.select(getDesiredSelectedApp(), false);
 
             } else if (listStore.size() > 0) {
                 // Select first app
-                view.getGrid().getSelectionModel().select(listStore.get(0), false);
+                view.select(listStore.get(0), false);
             }
             setDesiredSelectedApp(null);
             view.unmask();
@@ -106,14 +106,14 @@ public class AppsGridPresenterImpl implements AppsGridView.Presenter,
     @Inject IplantAnnouncer announcer;
     @Inject AppServiceFacade appService;
     @Inject AppUserServiceFacade appUserService;
-    @Inject AppsGridView.AppsGridAppearance appearance;
+    @Inject AppsListView.AppsListAppearance appearance;
     @Inject AsyncProviderWrapper<CommentsDialog> commentsDialogProvider;
     @Inject AppMetadataServiceFacade metadataFacade;
     @Inject UserInfo userInfo;
     OntologyServiceFacade ontologyService;
     OntologyUtil ontologyUtil;
     private final EventBus eventBus;
-    private final AppsGridView view;
+    private final AppsListView view;
     private App desiredSelectedApp;
 
     @Inject
@@ -172,11 +172,11 @@ public class AppsGridPresenterImpl implements AppsGridView.Presenter,
 
     @Override
     public App getSelectedApp() {
-        return view.getGrid().getSelectionModel().getSelectedItem();
+        return view.getSelectedItem();
     }
 
     @Override
-    public AppsGridView getView() {
+    public AppsListView getView() {
         return view;
     }
 
