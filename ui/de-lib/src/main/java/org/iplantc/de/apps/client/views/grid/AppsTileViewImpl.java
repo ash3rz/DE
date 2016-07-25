@@ -15,6 +15,7 @@ import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.OntologyHierarchySelectionChangedEvent;
 import org.iplantc.de.apps.client.views.grid.cells.AppTileCell;
+import org.iplantc.de.apps.shared.AppsModule;
 import org.iplantc.de.client.models.apps.App;
 import org.iplantc.de.theme.base.client.apps.grid.TileListDefaultAppearance;
 
@@ -129,10 +130,6 @@ public class AppsTileViewImpl extends ContentPanel
         return addHandler(handler, AppRatingSelected.TYPE);
     }
 
-    public ListView<App, App> getListView() {
-        return listView;
-    }
-
     @Override
     public void onAppCategorySelectionChanged(AppCategorySelectionChangedEvent event) {
         // FIXME Move to appearance
@@ -174,8 +171,8 @@ public class AppsTileViewImpl extends ContentPanel
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
-//        listView.ensureDebugId(baseID + AppsModule.Ids.APP_TILES);
-//        appTileCell.setDebugBaseId(baseID + AppsModule.Ids.APP_TILES);
+        listView.ensureDebugId(baseID + AppsModule.Ids.APP_TILES);
+        appTileCell.setDebugBaseId(baseID + AppsModule.Ids.APP_TILES);
     }
 
     @Override

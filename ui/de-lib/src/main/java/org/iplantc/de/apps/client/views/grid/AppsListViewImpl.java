@@ -31,8 +31,6 @@ import com.sencha.gxt.widget.core.client.container.CardLayoutContainer;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
-import java.util.Iterator;
-
 /**
  * @author aramsey
  */
@@ -70,6 +68,7 @@ public class AppsListViewImpl extends CardLayoutContainer implements AppsListVie
         this.gridView.addAppFavoriteSelectedEventHandlers(this);
         this.gridView.addAppSelectionChangedEventHandler(this);
         this.gridView.addAppInfoSelectedEventHandler(this);
+        add(gridView);
 
         this.tileView.addAppNameSelectedEventHandler(this);
         this.tileView.addAppRatingDeselectedHandler(this);
@@ -78,8 +77,9 @@ public class AppsListViewImpl extends CardLayoutContainer implements AppsListVie
         this.tileView.addAppFavoriteSelectedEventHandlers(this);
         this.tileView.addAppSelectionChangedEventHandler(this);
         this.tileView.addAppInfoSelectedEventHandler(this);
+        add(tileView);
 
-        activeView = gridView;
+        activeView = tileView;
         setActiveWidget(activeView);
     }
 
@@ -177,27 +177,24 @@ public class AppsListViewImpl extends CardLayoutContainer implements AppsListVie
 
     @Override
     public void onAppCategorySelectionChanged(AppCategorySelectionChangedEvent event) {
-        Iterator<Widget> iterator = getChildren().iterator();
-        while (iterator.hasNext()) {
-            AppsListView next = (AppsListView) iterator.next();
+        for (Widget widget : getChildren()) {
+            AppsListView next = (AppsListView)widget;
             next.onAppCategorySelectionChanged(event);
         }
     }
 
     @Override
     public void onOntologyHierarchySelectionChanged(OntologyHierarchySelectionChangedEvent event) {
-        Iterator<Widget> iterator = getChildren().iterator();
-        while (iterator.hasNext()) {
-            AppsListView next = (AppsListView) iterator.next();
+        for (Widget widget : getChildren()) {
+            AppsListView next = (AppsListView)widget;
             next.onOntologyHierarchySelectionChanged(event);
         }
     }
 
     @Override
     public void onAppSearchResultLoad(AppSearchResultLoadEvent event) {
-        Iterator<Widget> iterator = getChildren().iterator();
-        while (iterator.hasNext()) {
-            AppsListView next = (AppsListView) iterator.next();
+        for (Widget widget : getChildren()) {
+            AppsListView next = (AppsListView)widget;
             next.onAppSearchResultLoad(event);
         }
     }
@@ -250,5 +247,14 @@ public class AppsListViewImpl extends CardLayoutContainer implements AppsListVie
     @Override
     public Widget asWidget() {
         return this;
+    }
+
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        super.onEnsureDebugId(baseID);
+        for (Widget widget : getChildren()) {
+            AppsListView next = (AppsListView)widget;
+            next.asWidget().ensureDebugId(baseID);
+        }
     }
 }

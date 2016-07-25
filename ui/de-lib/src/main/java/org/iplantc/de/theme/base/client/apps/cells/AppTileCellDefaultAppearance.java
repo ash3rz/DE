@@ -56,10 +56,7 @@ public class AppTileCellDefaultAppearance implements AppTileCell.AppTileCellAppe
 //            sb.appendHtmlConstant("</div>");
 //        }
 //
-//        if (!value.isPublic()) {
-//            sb.append(templates.mod(style.privateApp()));
-//            sb.appendHtmlConstant("</div>");
-//        }
+
     }
 
     @Override

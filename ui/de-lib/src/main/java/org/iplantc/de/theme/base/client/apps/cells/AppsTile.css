@@ -54,6 +54,9 @@
     position: absolute;
     top: 20px;
     left: 85px;
+    float: left;
+    word-break: break-word;
+    width: 130px;
     /*transform: translate(-50%, -50%);*/
 }
 
@@ -100,4 +103,6 @@
 @sprite .privateApp {
     gwt-image: 'link';
     position: absolute;
+    top: 5px;
+    left: 15px;
 }

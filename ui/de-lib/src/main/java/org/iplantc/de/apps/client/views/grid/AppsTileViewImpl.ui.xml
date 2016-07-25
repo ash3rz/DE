@@ -14,13 +14,6 @@
     </ui:with>
     <ui:with field="appearance" type="org.iplantc.de.apps.client.AppsListView.AppsListAppearance"/>
     <container:VerticalLayoutContainer>
-        <container:child>
-            <toolbar:ToolBar>
-                <toolbar:child>
-                    <toolbar:LabelToolItem label="Sort By: "/>
-                </toolbar:child>
-            </toolbar:ToolBar>
-        </container:child>
         <container:child layoutData="{layoutData}">
             <widget:ListView ui:field="listView"
                              borders="true"
