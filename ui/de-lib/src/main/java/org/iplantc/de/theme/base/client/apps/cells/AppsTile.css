@@ -1,7 +1,7 @@
 .tileCell {
     /*gwt-image: 'miniLogo';*/
     /*border: double #185DA2;*/
-    width: 250px;
+    width: 225px;
     height: 100px;
     margin: 10px 0 0 10px;
     position: relative;
@@ -30,8 +30,8 @@
 
 .infoMod {
     position: absolute;
-    bottom: 2px;
-    left: 20px;
+    top: 2px;
+    right: 10px;
 }
 
 .infoMod:hover {
@@ -42,7 +42,7 @@
 .commentMod {
     position: absolute;
     bottom: 4px;
-    left: 45px;
+    left: 50px;
 }
 
 .commentMod:hover {
@@ -63,8 +63,8 @@
 
 .favoriteMod {
     position: absolute;
-    bottom: 30px;
-    left: 4px;
+    bottom: 4px;
+    left: 15px;
 }
 
 .favoriteMod:hover {

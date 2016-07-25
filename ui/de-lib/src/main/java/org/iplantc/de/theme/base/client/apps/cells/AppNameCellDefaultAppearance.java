@@ -117,10 +117,13 @@ public class AppNameCellDefaultAppearance implements AppNameCell.AppNameCellAppe
                        final String textClassName,
                        final String pattern,
                        final String textToolTip,
+                       final boolean separateFavoriteCell,
                        final String debugId) {
         SafeHtml highlightText = SafeHtmlUtils.fromTrustedString(highlightAppearance.highlightText(value.getName(), pattern));
 
-        sb.appendHtmlConstant("&nbsp;");
+        if (!separateFavoriteCell) {
+            sb.appendHtmlConstant("&nbsp;");
+        }
         if(DebugInfo.isDebugIdEnabled()
                && !Strings.isNullOrEmpty(debugId)){
             sb.append(templates.debugCell(textClassName, highlightText, textToolTip, ELEMENT_NAME, debugId));

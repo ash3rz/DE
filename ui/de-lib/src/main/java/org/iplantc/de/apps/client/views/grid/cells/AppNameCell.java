@@ -61,7 +61,7 @@ public class AppNameCell extends AbstractCell<App> implements HasCell<App, App> 
         String appPrivateNameClass();
 
         void render(SafeHtmlBuilder sb, App value, String textClassName, String searchPattern,
-                    String textToolTip, String debugId);
+                    String textToolTip, boolean separateFavoriteCell, String debugId);
 
         String run();
     }
@@ -71,6 +71,7 @@ public class AppNameCell extends AbstractCell<App> implements HasCell<App, App> 
     private String baseID;
     private HasHandlers hasHandlers;
     protected String pattern;
+    private boolean separateFavoriteCell = false;
 
     public AppNameCell() {
         this(GWT.<AppNameCellAppearance> create(AppNameCellAppearance.class));
@@ -86,7 +87,10 @@ public class AppNameCell extends AbstractCell<App> implements HasCell<App, App> 
         if (value == null) {
             return;
         }
-        favoriteCell.render(context, value, sb);
+
+        if (!separateFavoriteCell) {
+            favoriteCell.render(context, value, sb);
+        }
         String textClassName, textToolTip;
 
         if (value.isDisabled()) {
@@ -104,7 +108,7 @@ public class AppNameCell extends AbstractCell<App> implements HasCell<App, App> 
         }
 
         String debugId = baseID + "." + value.getId() + AppsModule.Ids.APP_NAME_CELL;
-        appearance.render(sb, value, textClassName, pattern, textToolTip, debugId);
+        appearance.render(sb, value, textClassName, pattern, textToolTip, separateFavoriteCell, debugId);
     }
 
     @Override
@@ -114,7 +118,10 @@ public class AppNameCell extends AbstractCell<App> implements HasCell<App, App> 
         if ((value == null) || !parent.isOrHasChild(eventTarget)) {
             return;
         }
-        favoriteCell.onBrowserEvent(context, parent, value, event, valueUpdater);
+
+        if (!separateFavoriteCell) {
+            favoriteCell.onBrowserEvent(context, parent, value, event, valueUpdater);
+        }
 
         Element child = findAppNameElement(parent);
         if (child != null && child.isOrHasChild(eventTarget)) {
@@ -159,4 +166,7 @@ public class AppNameCell extends AbstractCell<App> implements HasCell<App, App> 
         return null;
     }
 
+    public void setSeparateFavoriteCell(boolean separateFavoriteCell) {
+        this.separateFavoriteCell = separateFavoriteCell;
+    }
 }

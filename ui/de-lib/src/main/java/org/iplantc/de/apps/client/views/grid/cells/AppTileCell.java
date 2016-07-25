@@ -23,6 +23,7 @@ public class AppTileCell extends CompositeCell<App> {
     }
 
     private static AppNameCell appNameCell;
+    private static AppFavoriteCell appFavoriteCell;
     private static AppInfoCell appInfoCell;
     private static AppCommentCell appCommentCell;
     private static AppRatingCell appRatingCell;
@@ -48,6 +49,8 @@ public class AppTileCell extends CompositeCell<App> {
         List<HasCell<App, ?>> cellList = Lists.newArrayList();
 
         appNameCell = new AppNameCell();
+        appNameCell.setSeparateFavoriteCell(true);
+        appFavoriteCell = new AppFavoriteCell();
         appInfoCell = new AppInfoCell();
         appCommentCell = new AppCommentCell();
         appRatingCell = new AppRatingCell();
@@ -55,6 +58,7 @@ public class AppTileCell extends CompositeCell<App> {
         appCardCell = new AppCardCell();
 
         cellList.add(appNameCell);
+        cellList.add(appFavoriteCell);
         cellList.add(appInfoCell);
         cellList.add(appCommentCell);
         cellList.add(appRatingCell);
@@ -77,6 +81,7 @@ public class AppTileCell extends CompositeCell<App> {
 
     public void setHasHandlers(HasHandlers hasHandlers) {
         appNameCell.setHasHandlers(hasHandlers);
+        appFavoriteCell.setHasHandlers(hasHandlers);
         appInfoCell.setHasHandlers(hasHandlers);
         appCommentCell.setHasHandlers(hasHandlers);
         appRatingCell.setHasHandlers(hasHandlers);
