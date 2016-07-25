@@ -2,6 +2,7 @@ package org.iplantc.de.apps.client;
 
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.BeforeAppSearchEvent;
+import org.iplantc.de.apps.client.events.SwapViewButtonClickedEvent;
 import org.iplantc.de.apps.client.events.selection.AppCategorySelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.AppSelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.CopyAppSelected;
@@ -42,7 +43,8 @@ public interface AppsToolbarView extends IsWidget,
                                          EditWorkflowSelected.HasEditWorkflowSelectedHandlers,
                                          RequestToolSelected.HasRequestToolSelectedHandlers,
                                          ShareAppsSelected.HasShareAppSelectedHandlers,
-                                         OntologyHierarchySelectionChangedEvent.OntologyHierarchySelectionChangedEventHandler {
+                                         OntologyHierarchySelectionChangedEvent.OntologyHierarchySelectionChangedEventHandler,
+                                         SwapViewButtonClickedEvent.HasSwapViewButtonClickedEventHandlers {
 
     interface AppsToolbarAppearance {
 

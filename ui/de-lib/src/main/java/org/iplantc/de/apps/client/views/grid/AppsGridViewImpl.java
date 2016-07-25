@@ -1,5 +1,6 @@
 package org.iplantc.de.apps.client.views.grid;
 
+import org.iplantc.de.apps.client.AppsGridView;
 import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
@@ -39,7 +40,7 @@ import com.sencha.gxt.widget.core.client.tips.QuickTip;
  *
  * @author jstroot
  */
-public class AppsGridViewImpl extends ContentPanel implements AppsListView,
+public class AppsGridViewImpl extends ContentPanel implements AppsGridView,
                                                               SelectionChangedEvent.SelectionChangedHandler<App> {
     interface AppsGridViewImplUiBinder extends UiBinder<Widget, AppsGridViewImpl> { }
 
@@ -166,6 +167,11 @@ public class AppsGridViewImpl extends ContentPanel implements AppsListView,
     public void setSearchPattern(final String searchPattern) {
         this.searchRegexPattern = searchPattern;
         acm.setSearchRegexPattern(searchRegexPattern);
+    }
+
+    @Override
+    public void switchActiveView() {
+        //do nothing
     }
 
     @Override

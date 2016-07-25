@@ -5,6 +5,7 @@ import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.AppUpdatedEvent;
 import org.iplantc.de.apps.client.events.RunAppEvent;
+import org.iplantc.de.apps.client.events.SwapViewButtonClickedEvent;
 import org.iplantc.de.apps.client.events.selection.AppCategorySelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.AppCommentSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppFavoriteSelectedEvent;
@@ -14,7 +15,7 @@ import org.iplantc.de.apps.client.events.selection.AppRatingSelected;
 import org.iplantc.de.apps.client.events.selection.DeleteAppsSelected;
 import org.iplantc.de.apps.client.events.selection.OntologyHierarchySelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.RunAppSelected;
-import org.iplantc.de.apps.client.gin.factory.AppsGridViewFactory;
+import org.iplantc.de.apps.client.gin.factory.AppsListViewFactory;
 import org.iplantc.de.apps.client.presenter.callbacks.DeleteRatingCallback;
 import org.iplantc.de.apps.client.presenter.callbacks.RateAppCallback;
 import org.iplantc.de.client.events.EventBus;
@@ -117,7 +118,7 @@ public class AppsGridPresenterImpl implements AppsListView.Presenter,
     private App desiredSelectedApp;
 
     @Inject
-    AppsGridPresenterImpl(final AppsGridViewFactory viewFactory,
+    AppsGridPresenterImpl(final AppsListViewFactory viewFactory,
                           final ListStore<App> listStore,
                           final EventBus eventBus,
                           OntologyServiceFacade ontologyService) {
@@ -314,5 +315,10 @@ public class AppsGridPresenterImpl implements AppsListView.Presenter,
         } else {
             announcer.schedule(new ErrorAnnouncementConfig(appearance.appLaunchWithoutToolError()));
         }
+    }
+
+    @Override
+    public void onSwapViewButtonClicked(SwapViewButtonClickedEvent event) {
+        view.switchActiveView();
     }
 }

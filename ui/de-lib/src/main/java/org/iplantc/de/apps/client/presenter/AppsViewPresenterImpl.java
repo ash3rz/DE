@@ -63,6 +63,7 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(hierarchiesPresenter);
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsGridPresenter);
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsGridPresenter.getView());
+        toolbarPresenter.getView().addSwapViewButtonClickedEventHandler(appsGridPresenter);
 
     }
 

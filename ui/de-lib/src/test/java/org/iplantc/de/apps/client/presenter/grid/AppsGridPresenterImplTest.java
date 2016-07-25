@@ -10,7 +10,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import org.iplantc.de.apps.client.AppsGridView;
+import org.iplantc.de.apps.client.AppsListView;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.AppUpdatedEvent;
@@ -67,7 +67,7 @@ import java.util.List;
 public class AppsGridPresenterImplTest {
 
     @Mock AppsGridViewFactory viewFactoryMock;
-    @Mock AppsGridView viewMock;
+    @Mock AppsListView viewMock;
 
     @Mock ListStore<App> listStoreMock;
     @Mock StoreAddEvent.StoreAddHandler<App> storeAddHandlerMock;
@@ -77,7 +77,7 @@ public class AppsGridPresenterImplTest {
     @Mock Grid<App> gridMock;
     @Mock GridSelectionModel<App> selectionModelMock;
     @Mock AppUserServiceFacade appServiceMock;
-    @Mock AppsGridView.AppsGridAppearance appearanceMock;
+    @Mock AppsListView.AppsListAppearance appearanceMock;
     @Mock UserInfo userInfoMock;
     @Mock AppUserServiceFacade appUserServiceMock;
     @Mock OntologyServiceFacade ontologyServiceMock;
@@ -95,7 +95,6 @@ public class AppsGridPresenterImplTest {
 
     @Before public void setUp() {
         when(viewFactoryMock.create(Matchers.<ListStore<App>>any())).thenReturn(viewMock);
-        when(viewMock.getGrid()).thenReturn(gridMock);
         when(gridMock.getSelectionModel()).thenReturn(selectionModelMock);
         uut = new AppsGridPresenterImpl(viewFactoryMock,
                                         listStoreMock,
@@ -147,9 +146,7 @@ public class AppsGridPresenterImplTest {
         /*** CALL METHOD UNDER TEST ***/
         uut.getSelectedApp();
 
-        verify(viewMock).getGrid();
-        verify(gridMock).getSelectionModel();
-        verify(selectionModelMock).getSelectedItem();
+        verify(viewMock).getSelectedItem();
 
         verifyNoMoreInteractions(gridMock,
                                  selectionModelMock);

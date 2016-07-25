@@ -3,6 +3,7 @@ package org.iplantc.de.apps.client;
 import org.iplantc.de.apps.client.events.AppFavoritedEvent;
 import org.iplantc.de.apps.client.events.AppSearchResultLoadEvent;
 import org.iplantc.de.apps.client.events.BeforeAppSearchEvent;
+import org.iplantc.de.apps.client.events.SwapViewButtonClickedEvent;
 import org.iplantc.de.apps.client.events.selection.AppCategorySelectionChangedEvent;
 import org.iplantc.de.apps.client.events.selection.AppCommentSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.AppFavoriteSelectedEvent;
@@ -83,7 +84,8 @@ public interface AppsListView extends IsWidget,
                                 AppFavoritedEvent.HasAppFavoritedEventHandlers,
                                 DeleteAppsSelected.DeleteAppsSelectedHandler,
                                 RunAppSelected.RunAppSelectedHandler,
-                                OntologyHierarchySelectionChangedEvent.OntologyHierarchySelectionChangedEventHandler {
+                                OntologyHierarchySelectionChangedEvent.OntologyHierarchySelectionChangedEventHandler,
+                                SwapViewButtonClickedEvent.SwapViewButtonClickedEventHandler {
         App getSelectedApp();
 
         AppsListView getView();
@@ -98,4 +100,6 @@ public interface AppsListView extends IsWidget,
     void setSearchPattern(String searchPattern);
 
     void setHeadingText(String text);
+
+    void switchActiveView();
 }

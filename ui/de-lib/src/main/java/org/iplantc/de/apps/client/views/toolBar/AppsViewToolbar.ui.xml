@@ -26,6 +26,13 @@
 			trackMouse="true" />
 	</ui:with>
 
+	<ui:with
+			field="icons"
+			type="org.iplantc.de.resources.client.IplantResources" />
+	<ui:with
+			field="strings"
+			type="org.iplantc.de.resources.client.messages.IplantDisplayStrings" />
+
 	<toolbar:ToolBar ui:field="toolBar">
 		<toolbar:child layoutData="{boxDataNoFlex}">
 			<button:TextButton ui:field="app_menu"
@@ -83,6 +90,13 @@
 		<toolbar:child layoutData="{boxData}">
 			<MyWidgets:AppSearchField ui:field="appSearch"
 				emptyText="{appearance.searchApps}" />
+		</toolbar:child>
+		<toolbar:child>
+			<button:TextButton
+					ui:field="swapViewBtn"
+					debugId="idBtnSwitchView"
+					text="{strings.swapView}"
+					icon="{icons.copy}" />
 		</toolbar:child>
 	</toolbar:ToolBar>
 </ui:UiBinder>
