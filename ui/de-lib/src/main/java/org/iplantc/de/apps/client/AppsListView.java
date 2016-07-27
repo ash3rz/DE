@@ -66,6 +66,8 @@ public interface AppsListView extends IsWidget,
         String agaveAuthRequiredTitle();
 
         String agaveAuthRequiredMsg();
+
+        String sortLabel();
     }
 
     /**

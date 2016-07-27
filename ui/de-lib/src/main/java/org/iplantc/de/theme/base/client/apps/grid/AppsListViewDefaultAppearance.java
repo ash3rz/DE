@@ -78,4 +78,9 @@ public class AppsListViewDefaultAppearance implements AppsListView.AppsListAppea
     public String agaveAuthRequiredMsg() {
         return iplantDisplayStrings.agaveAuthRequiredMsg();
     }
+
+    @Override
+    public String sortLabel() {
+        return appsMessages.sortLabel();
+    }
 }

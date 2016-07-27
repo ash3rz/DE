@@ -137,4 +137,6 @@ public interface AppsMessages extends Messages {
     String ontologyAttrMatchingFailure();
 
     String privateToolTip();
+
+    String sortLabel();
 }

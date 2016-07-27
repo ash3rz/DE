@@ -61,6 +61,13 @@ public class AppsListViewImpl extends CardLayoutContainer implements AppsListVie
         this.gridView = gridViewFactory.create(listStore);
         this.tileView = tileViewFactory.create(listStore);
 
+        setupHandlers();
+
+        activeView = tileView;
+        setActiveWidget(activeView);
+    }
+
+    void setupHandlers() {
         this.gridView.addAppNameSelectedEventHandler(this);
         this.gridView.addAppRatingDeselectedHandler(this);
         this.gridView.addAppRatingSelectedHandler(this);
@@ -78,9 +85,6 @@ public class AppsListViewImpl extends CardLayoutContainer implements AppsListVie
         this.tileView.addAppSelectionChangedEventHandler(this);
         this.tileView.addAppInfoSelectedEventHandler(this);
         add(tileView);
-
-        activeView = tileView;
-        setActiveWidget(activeView);
     }
 
     public void switchActiveView() {

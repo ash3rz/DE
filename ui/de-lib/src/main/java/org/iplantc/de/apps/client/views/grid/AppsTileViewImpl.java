@@ -21,17 +21,21 @@ import org.iplantc.de.theme.base.client.apps.grid.TileListDefaultAppearance;
 
 import com.google.common.base.Joiner;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.data.shared.SortDir;
+import com.sencha.gxt.data.shared.Store;
 import com.sencha.gxt.data.shared.StringLabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.ListView;
@@ -39,6 +43,7 @@ import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * @author aramsey
@@ -52,8 +57,35 @@ public class AppsTileViewImpl extends ContentPanel
     private static final AppsGridViewImplUiBinder ourUiBinder =
             GWT.create(AppsGridViewImplUiBinder.class);
 
+    class AppRatingComparator implements Comparator<App> {
+
+        @Override
+        public int compare(App o1, App o2) {
+            if (o1.getRating().getAverageRating() < o2.getRating().getAverageRating()) return -1;
+            if (o1.getRating().getAverageRating() > o2.getRating().getAverageRating()) return 1;
+            return 0;
+        }
+    }
+
+    class AppNameComparator implements Comparator<App> {
+
+        @Override
+        public int compare(App o1, App o2) {
+            return o1.getName().compareToIgnoreCase(o2.getName());
+        }
+    }
+
+    class AppIntegratorNameComparator implements Comparator<App> {
+
+        @Override
+        public int compare(App o1, App o2) {
+            return o1.getIntegratorName().compareToIgnoreCase(o2.getIntegratorName());
+        }
+    }
+
     ListStore<App> listStore;
     @UiField ListView<App, App> listView;
+    @UiField SimpleComboBox<String> sortBox;
     @UiField(provided = true) AppsListView.AppsListAppearance appearance;
     private TileListDefaultAppearance<App> listAppearance;
     private AppTileCell appTileCell;
@@ -67,6 +99,7 @@ public class AppsTileViewImpl extends ContentPanel
         this.listStore = listStore;
         this.listAppearance = listAppearance;
         this.appTileCell = appTileCell;
+
         appTileCell.setHasHandlers(this);
 
         setWidget(ourUiBinder.createAndBindUi(this));
@@ -79,8 +112,8 @@ public class AppsTileViewImpl extends ContentPanel
     SimpleComboBox<String> createSortBox() {
         SimpleComboBox<String> comboBox = new SimpleComboBox<>(new StringLabelProvider<>());
         comboBox.add(Arrays.asList(appearance.nameColumnLabel(),
-                                   appearance.integratedByColumnLabel(),
-                                   appearance.ratingColumnLabel()));
+                                   appearance.ratingColumnLabel(),
+                                   appearance.integratedByColumnLabel()));
         comboBox.setValue(appearance.nameColumnLabel());
         return comboBox;
     }
@@ -88,6 +121,26 @@ public class AppsTileViewImpl extends ContentPanel
     @UiFactory
     ListView<App, App> createListView() {
         return new ListView<>(listStore, new IdentityValueProvider<App>(), listAppearance);
+    }
+
+    @UiHandler("sortBox")
+    void onSortBoxSelection(SelectionEvent<String> event) {
+        mask();
+        listStore.clearSortInfo();
+        listStore.addSortInfo(getSortInfo());
+        unmask();
+    }
+
+    public Store.StoreSortInfo<App> getSortInfo() {
+        String sortField = sortBox.getCurrentValue();
+
+        if (sortField.equals(appearance.ratingColumnLabel())) {
+            return new Store.StoreSortInfo<App>(new AppRatingComparator(), SortDir.DESC);
+        } else if (sortField.equals(appearance.nameColumnLabel())){
+            return new Store.StoreSortInfo<App>(new AppNameComparator(), SortDir.ASC);
+        } else {
+            return new Store.StoreSortInfo<App>(new AppIntegratorNameComparator(), SortDir.ASC);
+        }
     }
 
     @Override
