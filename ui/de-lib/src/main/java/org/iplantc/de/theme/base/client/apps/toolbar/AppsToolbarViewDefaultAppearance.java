@@ -121,6 +121,16 @@ public class AppsToolbarViewDefaultAppearance implements AppsToolbarView.AppsToo
     }
 
     @Override
+    public String refresh() {
+        return iplantDisplayStrings.refresh();
+    }
+
+    @Override
+    public ImageResource refreshIcon() {
+        return iplantResources.refresh();
+    }
+
+    @Override
     public String warning() {
         return iplantDisplayStrings.warning();
     }

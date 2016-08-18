@@ -15,6 +15,7 @@ import org.iplantc.de.apps.client.events.selection.DeleteAppsSelected;
 import org.iplantc.de.apps.client.events.selection.EditAppSelected;
 import org.iplantc.de.apps.client.events.selection.EditWorkflowSelected;
 import org.iplantc.de.apps.client.events.selection.OntologyHierarchySelectionChangedEvent;
+import org.iplantc.de.apps.client.events.selection.RefreshAppsSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.RequestToolSelected;
 import org.iplantc.de.apps.client.events.selection.RunAppSelected;
 import org.iplantc.de.apps.client.events.selection.ShareAppsSelected;
@@ -50,6 +51,7 @@ import com.sencha.gxt.widget.core.client.box.ConfirmMessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutData;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.menu.Item;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
@@ -71,6 +73,7 @@ public class AppsViewToolbarImpl extends Composite implements AppsToolbarView {
     Menu sharingMenu;
     @UiField
     TextButton shareMenuButton;
+    @UiField TextButton refreshButton;
     @UiField
     MenuItem appRun;
     @UiField
@@ -180,6 +183,11 @@ public class AppsViewToolbarImpl extends Composite implements AppsToolbarView {
     @Override
     public HandlerRegistration addShareAppSelectedHandler(ShareAppsSelected.ShareAppsSelectedHandler handler) {
         return addHandler(handler, ShareAppsSelected.TYPE);
+    }
+
+    @Override
+    public HandlerRegistration addRefreshAppsSelectedEventHandler(RefreshAppsSelectedEvent.RefreshAppsSelectedEventHandler handler) {
+        return addHandler(handler, RefreshAppsSelectedEvent.TYPE);
     }
 
     // </editor-fold>
@@ -340,6 +348,8 @@ public class AppsViewToolbarImpl extends Composite implements AppsToolbarView {
         sharePublic.ensureDebugId(baseID + Ids.MENU_ITEM_SHARE_APP + Ids.MENU_ITEM_SHARE_APP_PUBLIC);
         shareCollab.ensureDebugId(baseID + Ids.MENU_ITEM_SHARE_APP + Ids.MENU_ITEM_SHARE_APP_COLLAB);
 
+        refreshButton.ensureDebugId(baseID + Ids.MENU_ITEM_REFRESH);
+
         wf_menu.ensureDebugId(baseID + Ids.MENU_ITEM_WF);
         wfRun.ensureDebugId(baseID + Ids.MENU_ITEM_WF + Ids.MENU_ITEM_USE_WF);
         createWorkflow.ensureDebugId(baseID + Ids.MENU_ITEM_WF + Ids.MENU_ITEM_CREATE_WF);
@@ -480,5 +490,10 @@ public class AppsViewToolbarImpl extends Composite implements AppsToolbarView {
     @UiHandler("shareCollab")
     void shareWithCollaborator(SelectionEvent<Item> event) {
         fireEvent(new ShareAppsSelected(currentSelection));
+    }
+
+    @UiHandler("refreshButton")
+    void refreshButtonClicked(SelectEvent event) {
+        fireEvent(new RefreshAppsSelectedEvent());
     }
 }

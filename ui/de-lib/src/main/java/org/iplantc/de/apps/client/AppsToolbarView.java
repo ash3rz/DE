@@ -12,6 +12,7 @@ import org.iplantc.de.apps.client.events.selection.DeleteAppsSelected;
 import org.iplantc.de.apps.client.events.selection.EditAppSelected;
 import org.iplantc.de.apps.client.events.selection.EditWorkflowSelected;
 import org.iplantc.de.apps.client.events.selection.OntologyHierarchySelectionChangedEvent;
+import org.iplantc.de.apps.client.events.selection.RefreshAppsSelectedEvent;
 import org.iplantc.de.apps.client.events.selection.RequestToolSelected;
 import org.iplantc.de.apps.client.events.selection.RunAppSelected;
 import org.iplantc.de.apps.client.events.selection.ShareAppsSelected;
@@ -42,7 +43,8 @@ public interface AppsToolbarView extends IsWidget,
                                          EditWorkflowSelected.HasEditWorkflowSelectedHandlers,
                                          RequestToolSelected.HasRequestToolSelectedHandlers,
                                          ShareAppsSelected.HasShareAppSelectedHandlers,
-                                         OntologyHierarchySelectionChangedEvent.OntologyHierarchySelectionChangedEventHandler {
+                                         OntologyHierarchySelectionChangedEvent.OntologyHierarchySelectionChangedEventHandler,
+                                         RefreshAppsSelectedEvent.HasRefreshAppsSelectedEventHandlers {
 
     interface AppsToolbarAppearance {
 
@@ -95,6 +97,10 @@ public interface AppsToolbarView extends IsWidget,
         String share();
 
         ImageResource shareAppIcon();
+
+        String refresh();
+
+        ImageResource refreshIcon();
     }
 
     interface Presenter extends BeforeLoadEvent.HasBeforeLoadHandlers<FilterPagingLoadConfig>,

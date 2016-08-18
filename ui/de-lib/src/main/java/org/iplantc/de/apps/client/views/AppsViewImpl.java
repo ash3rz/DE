@@ -19,6 +19,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 import com.sencha.gxt.widget.core.client.Composite;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.tree.Tree;
 
 /**
@@ -30,7 +31,8 @@ public class AppsViewImpl extends Composite implements AppsView {
     }
 
     @UiField(provided = true) final AppsToolbarView toolBar;
-    @UiField DETabPanel categoryTabs;
+    @UiField(provided = true) DETabPanel categoryTabs;
+    @UiField ContentPanel categoryPanel;
     AppCategoriesView.Presenter categoriesPresenter;
     OntologyHierarchiesView.Presenter hierarchiesPresenter;
 
@@ -48,8 +50,14 @@ public class AppsViewImpl extends Composite implements AppsView {
         this.appsGridView = gridPresenter.getView();
         this.toolBar = toolbarPresenter.getView();
 
+        this.categoryTabs = createDETabPanel();
+
         initWidget(uiBinder.createAndBindUi(this));
-        categoryTabs.addSelectionHandler(new SelectionHandler<Widget>() {
+    }
+
+    DETabPanel createDETabPanel() {
+        DETabPanel panel = new DETabPanel();
+        panel.addSelectionHandler(new SelectionHandler<Widget>() {
             @Override
             public void onSelection(SelectionEvent<Widget> event) {
                 Widget selectedItem = event.getSelectedItem();
@@ -60,6 +68,7 @@ public class AppsViewImpl extends Composite implements AppsView {
                 }
             }
         });
+        return panel;
     }
 
     @Override
@@ -75,6 +84,19 @@ public class AppsViewImpl extends Composite implements AppsView {
     @Override
     public void hideWorkflowMenu() {
         toolBar.hideWorkflowMenu();
+    }
+
+    /**
+     * Clearing out the tabs could be simplified to using the TabPanel's close()
+     * method, but on close, another tab is selected with no method for suppressing
+     * selection events.  In the case of the HPC tab, HPC apps are automatically fetched once
+     * the tab is selected.
+     */
+    public void createNewTabPanel() {
+        categoryPanel.clear();
+        categoryTabs = createDETabPanel();
+
+        categoryPanel.add(categoryTabs);
     }
 
     @Override

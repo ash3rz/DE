@@ -52,4 +52,6 @@ public interface AppsView extends IsWidget,
 
     void hideWorkflowMenu();
 
+    void createNewTabPanel();
+
 }

@@ -80,6 +80,11 @@
                     </button:menu>
               </button:TextButton>
           </toolbar:child>
+		<toolbar:child>
+			<button:TextButton ui:field="refreshButton"
+							   text="{appearance.refresh}"
+							   icon="{appearance.refreshIcon}"/>
+		</toolbar:child>
 		<toolbar:child layoutData="{boxData}">
 			<MyWidgets:AppSearchField ui:field="appSearch"
 				emptyText="{appearance.searchApps}" />

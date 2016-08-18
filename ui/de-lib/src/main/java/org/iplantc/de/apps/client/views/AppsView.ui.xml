@@ -55,7 +55,7 @@
 
         <!-- This is the navigation panel -->
         <container:west layoutData="{westData}">
-            <gxt:ContentPanel headingText="{appearance.viewCategoriesHeader}">
+            <gxt:ContentPanel ui:field="categoryPanel" headingText="{appearance.viewCategoriesHeader}">
                 <de:DETabPanel ui:field="categoryTabs">
 
                 </de:DETabPanel>

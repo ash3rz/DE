@@ -5,6 +5,7 @@ import org.iplantc.de.apps.client.AppsGridView;
 import org.iplantc.de.apps.client.AppsToolbarView;
 import org.iplantc.de.apps.client.AppsView;
 import org.iplantc.de.apps.client.OntologyHierarchiesView;
+import org.iplantc.de.apps.client.events.selection.RefreshAppsSelectedEvent;
 import org.iplantc.de.apps.client.gin.factory.AppsViewFactory;
 import org.iplantc.de.client.models.HasId;
 import org.iplantc.de.client.models.apps.App;
@@ -22,7 +23,8 @@ import com.sencha.gxt.widget.core.client.grid.Grid;
  *
  * @author jstroot
  */
-public class AppsViewPresenterImpl implements AppsView.Presenter {
+public class AppsViewPresenterImpl implements AppsView.Presenter,
+                                              RefreshAppsSelectedEvent.RefreshAppsSelectedEventHandler {
 
     protected final AppsView view;
     private final AppCategoriesView.Presenter categoriesPresenter;
@@ -63,6 +65,7 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(hierarchiesPresenter);
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsGridPresenter);
         toolbarPresenter.getView().addAppSearchResultLoadEventHandler(appsGridPresenter.getView());
+        toolbarPresenter.getView().addRefreshAppsSelectedEventHandler(this);
 
     }
 
@@ -115,4 +118,11 @@ public class AppsViewPresenterImpl implements AppsView.Presenter {
         view.asWidget().ensureDebugId(baseId);
     }
 
+    @Override
+    public void onRefreshAppsSelected(RefreshAppsSelectedEvent event) {
+        view.createNewTabPanel();
+        DETabPanel categoryTabPanel = view.getCategoryTabPanel();
+        categoriesPresenter.go(null, categoryTabPanel);
+        hierarchiesPresenter.go(categoryTabPanel);
+    }
 }
