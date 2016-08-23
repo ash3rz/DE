@@ -42,6 +42,7 @@ public class AdminAppNameCellDefaultAppearance extends AppNameCellDefaultAppeara
                          resources.css().appPrivate(),
                          searchPattern,
                          displayStrings.editApp(),
+                         false,
                          null);
         } else {
             super.render(sb,

@@ -233,6 +233,14 @@ public class AppsListViewImpl extends CardLayoutContainer implements AppsListVie
         activeView.setSearchPattern(searchPattern);
     }
 
+    @Override
+    public void setHeadingText(String text) {
+        for (Widget widget : getChildren()) {
+            AppsListView next = (AppsListView)widget;
+            next.setHeadingText(text);
+        }
+    }
+
     @UiFactory
     ColumnModel<App> createColumnModel() {
         return new AppColumnModel(appearance);
